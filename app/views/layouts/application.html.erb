@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Capstone</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+    <%= link_to "Sign in with Facebook", user_facebook_omniauth_authorize_path %>
+
+  </head>
+
+  <% flash.each do |name, message| %>
+	  <div class="alert alert-<%= name %> alert-dismissible" role="alert">
+	    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+	    <%= message %>
+	  </div>
+	<% end %>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>
