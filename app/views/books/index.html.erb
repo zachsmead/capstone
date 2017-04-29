@@ -1,0 +1,15 @@
+<% @books.each do |book| %>
+	<div class="col-md-4">
+		<div>
+			<a href="<%= book.url %>"><%= book.title %></a>
+		</div>
+
+		<div>
+			<%= form_tag "/book_likes", method: :post do %>
+				<input type="hidden" name="book_id" value="<%= book.id %>">
+				<input type="submit" value="Like">
+			<% end %>
+		</div>
+
+	</div>
+<% end %>
