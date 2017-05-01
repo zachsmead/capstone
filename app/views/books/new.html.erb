@@ -3,3 +3,10 @@
 	<input type="text" name="url" placeholder="URL"><br />
 	<input type="submit" value="Create"><br />
 <% end %>
+
+<br /><br />
+
+<%= form_tag books_path, enctype: 'multipart/form-data' do %>
+	<%= file_field_tag :file %>
+	<%= submit_tag 'Upload book' %>
+<% end %>

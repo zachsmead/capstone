@@ -21,8 +21,35 @@ class BooksController < ApplicationController
 	end
 
 	def create
-		@book = Book.create(title: params[:title], url: params[:url])
-		redirect_to "/"
+
+		# Make an object in your bucket for your upload
+		# filename = File.basename(params[:file])
+
+		file = File.read(params[:file])
+
+		puts file
+
+		obj = S3_BUCKET.objects[params[:file].original_filename]
+
+		puts "*" * 100
+		puts obj.inspect
+		puts "*" * 100
+
+		# Upload the file
+		obj.write(
+			file: params[:file], # we get this param from the form_tag in books/new.html.erb
+			acl: :public_read
+		)
+
+		# Create an object for the upload
+		@book = Book.new(title: obj.key, url: obj.public_url)
+
+		if @book.save
+			redirect_to books_path, success: 'File successfully uploaded'
+		else
+			flash.now[:notice] = 'There was an error'
+			render :new
+		end
 	end
 
 	def like
