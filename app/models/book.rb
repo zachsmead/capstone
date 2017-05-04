@@ -52,7 +52,7 @@ class Book < ApplicationRecord
 			'are',
 			'me',
 			'one',
-			'there',
+			'their',
 			'so',
 			'an',
 			'said',
@@ -422,9 +422,10 @@ class Book < ApplicationRecord
 			hashified_words << { text: word_freq_pair[0], size: word_freq_pair[1] }
 		end
 
-		return hashified_words
+		javascript_hash = "var words = #{hashified_words}"
 
-		# puts (book_hash.sort_by { |word, freq| freq }).reverse
+		return javascript_hash
+
 	end
 
 end

@@ -1,7 +1,6 @@
 class BooksController < ApplicationController
 
 	def index
-		Book.breakdown_test
 		if params[:liked]
 			@books = current_user.books
 		else
@@ -41,6 +40,7 @@ class BooksController < ApplicationController
 		puts params[:file]
 		puts "*" * 100
 		title = params[:file].original_filename
+		title_without_extensions = File.basename(title, '.txt')
 
 		uploaded_book = S3_BUCKET.objects[("books/" + title)]
 
@@ -50,9 +50,10 @@ class BooksController < ApplicationController
 			acl: :public_read
 		)
 
-		# Create an object for the upload
-		# @book = Book.new(title: obj.key, url: obj.public_url)
-		@book = Book.new(title: title, url: obj.public_url)
+		# @book = Book.new(title: uploaded_book.key, url: uploaded_book.public_url)
+
+		# Step 2. Create a row in our own database to represent the book
+		@book = Book.new(title: title, url: uploaded_book.public_url)
 
 		if @book.save
 			redirect_to books_path, success: 'File successfully uploaded'
@@ -61,14 +62,25 @@ class BooksController < ApplicationController
 			render :new
 		end
 
-		# Step 2. Make the book_cloud in S3 (just a hash of word frequencies)
+		# Step 3. Make the book_cloud in S3 (just a hash of word frequencies)
+		# Start by grabbing the book plaintext
+		@book_text = Unirest.get(
+			@book.url,
+			headers: {
+				"Accept" => "text/plain"
+			}
+		).body
 
-		# book_cloud = S3_BUCKET.objects[("book_clouds/" + title)]
+		# Run the breakdown method which converts the book to a word-count
+		@book_frequencies = Book.breakdown_test(@book_text)
 
-		# book_cloud.write(
-		# 	file: 
-		# )
+		# Make a javascript file in the bucket
+		book_javascript = S3_BUCKET.objects.create("book_clouds/" + title_without_extensions + '.js', @book_frequencies)
+		book_javascript.acl = :public_read
 
+		
+
+		
 	end
 
 	
