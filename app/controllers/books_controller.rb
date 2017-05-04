@@ -78,7 +78,8 @@ class BooksController < ApplicationController
 		book_javascript = S3_BUCKET.objects.create("book_clouds/" + title_without_extensions + '.js', @book_frequencies)
 		book_javascript.acl = :public_read
 
-		
+		# Step 4. Update the book object with the book_cloud_url
+		@book.update(book_cloud_url: book_javascript.public_url)
 
 		
 	end
