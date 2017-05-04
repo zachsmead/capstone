@@ -23,13 +23,14 @@ class BooksController < ApplicationController
 	def create
 
 		# Make an object in your bucket for your upload
-		# filename = File.basename(params[:file])
 
-		file = File.read(params[:file])
+		# file = File.read(params[:file])
 
-		puts file
+		# puts file.inspect
 
-		obj = S3_BUCKET.objects[params[:file].original_filename]
+		
+
+		obj = S3_BUCKET.objects[("books/" + params[:file].original_filename)]
 
 		puts "*" * 100
 		puts obj.inspect
@@ -37,7 +38,7 @@ class BooksController < ApplicationController
 
 		# Upload the file
 		obj.write(
-			file: params[:file], # we get this param from the form_tag in books/new.html.erb
+			file: params[:file], # we get this param from the file_field_tag in books/new.html.erb
 			acl: :public_read
 		)
 
