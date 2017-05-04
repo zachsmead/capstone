@@ -1,1 +1,26 @@
-<%= @book_frequencies %>
+<head>
+    <title>Word Cloud</title>
+    <script src="https://s3-us-west-1.amazonaws.com/projectgutenbergtest/assets/javascripts/d3.js" charset="utf-8"></script>
+    <script src="https://s3-us-west-1.amazonaws.com/projectgutenbergtest/assets/javascripts/d3.layout.cloud.js"></script>
+    <script src="https://s3-us-west-1.amazonaws.com/projectgutenbergtest/assets/javascripts/d3.wordcloud.js"></script>
+    <script src="<%= @book.book_cloud_url %>"></script>
+  </head>
+  <body style="text-align: center">
+    <h1>Word Cloud</h1>
+    <div id='wordcloud'></div>
+    <p>This is a word cloud of the first two chapters of Oliver Twist. Some words are clickable.</p>
+    <p><a href="https://github.com/wvengen/d3-wordcloud">https://github.com/wvengen/d3-wordcloud</a></p>
+    <script>
+// word frequencies of first two chapters of Oliver Twist
+
+
+      d3.wordcloud()
+        .size([500, 300])
+        .fill(d3.scale.ordinal().range(["#884400", "#448800", "#888800", "#444400"]))
+        .words(words)
+        .onwordclick(function(d, i) {
+          if (d.href) { window.location = d.href; }
+        })
+        .start();
+    </script>
+  </body>

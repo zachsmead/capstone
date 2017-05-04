@@ -14,19 +14,6 @@ class BooksController < ApplicationController
 
 	def show
 		@book = Book.find_by(id: params[:id])
-
-		@book_text = Unirest.get(
-			@book.url,
-			headers: {
-				"Accept" => "text/plain"
-			}
-		).body
-
-		# puts @book_text
-
-		@book_frequencies = Book.breakdown_test(@book_text)
-
-
 	end
 
 	def new
