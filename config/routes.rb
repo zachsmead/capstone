@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   # get "/books" => "books#index"
   # get "/books/new" => "books#new"
   # post "/books" => "books#create"
-  # get "/viewer/:id" => "books#show"
+  # get "/books/:id" => "books#show"
 
   get "/users/list" => "follows#index"
   post "/follows" => "follows#create"
