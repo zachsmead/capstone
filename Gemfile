@@ -9,6 +9,7 @@ end
 gem 'rails', '~> 5.0.2'
 gem 'unirest'
 gem 'aws-sdk', '~> 1'
+gem 'd3-rails', '~> 4.1'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server

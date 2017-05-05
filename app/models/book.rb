@@ -395,6 +395,7 @@ class Book < ApplicationRecord
 			'became',
 			'become',
 			'ill',
+			'im',
 			'coming',
 			'really',
 			'rest',
@@ -405,6 +406,7 @@ class Book < ApplicationRecord
 
 		book_hash = {}
 		hashified_words = []
+		javascript_hash_string = "var words = ["
 
 		book_array.each do |word|
 			if boring_words.include? word
@@ -418,11 +420,25 @@ class Book < ApplicationRecord
 
 		book_hash = book_hash.sort_by { |word, freq| -freq }
 
+		# string way
+
+		# book_hash.each do |word_freq_pair|
+		# 	javascript_hash_string += "{ text: '#{word_freq_pair[0]}', size: #{word_freq_pair[1]} },"
+		# end
+
+		# javascript_hash_string[javascript_hash_string.length - 1] = ""
+		# javascript_hash_string += "]"
+		# return javascript_hash_string
+
+		# hash way
+
 		book_hash.each do |word_freq_pair|
-			hashified_words << { text: word_freq_pair[0], size: word_freq_pair[1] }
+			unless word_freq_pair[1] <= 1
+				hashified_words << { text: word_freq_pair[0], size: word_freq_pair[1]}
+			end
 		end
 
-		javascript_hash = "var words = #{hashified_words}"
+		javascript_hash = "var words = #{hashified_words.to_json}"
 
 		return javascript_hash
 
