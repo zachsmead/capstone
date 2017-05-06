@@ -389,7 +389,13 @@ class Book < ApplicationRecord
 			'different',
 			'making',
 			'copyright',
-			'distribution'
+			'distribution',
+			'1e8',
+			'1e7',
+			'1f3',
+			'h',
+			'b',
+			'4'
 		]
 
 		book_hash = {}
