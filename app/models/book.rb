@@ -382,20 +382,25 @@ class Book < ApplicationRecord
 			'become',
 			'ill',
 			'im',
+			'ive',
+			'id',
+			'your',
+			'yours',
 			'coming',
 			'really',
 			'rest',
 			'mean',
 			'different',
 			'making',
+			'yours',
 			'copyright',
 			'distribution',
-			'1e8',
-			'1e7',
-			'1f3',
+			'ebook',
+			'ebooks',
 			'h',
 			'b',
-			'4'
+			'4',
+			'sh'
 		]
 
 		book_hash = {}
