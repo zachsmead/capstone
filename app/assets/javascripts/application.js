@@ -14,5 +14,7 @@
 //= require jquery_ujs
 //= require turbolinks
 //= require d3
+//= require d3.wordcloud
+//= require d3.layout.cloud
 //= require_tree .
 //= require bootstrap.min
