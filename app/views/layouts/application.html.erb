@@ -9,12 +9,12 @@
 
     <div class="text-center">
       <% if current_user %>
-        <%= link_to "Sign out", "/users/sign_out" %><br />
-        <%= link_to "Users", "/users/list" %><br />
-        <%= link_to "New Book", "/books/new" %><br />
-        <%= link_to "Books", "/books" %><br />
-        <%= link_to "Your books", "/books?liked=self" %><br />
-        <%= link_to "Your friends' books", "/books?liked=followed" %><br />
+        <%= link_to "Sign out", "/users/sign_out" %> |
+        <%= link_to "Users", "/users/list" %> |
+        <%= link_to "New Book", "/books/new" %> |
+        <%= link_to "Books", "/books" %> |
+        <%= link_to "Your books", "/books?liked=self" %> |
+        <%= link_to "Your friends' books", "/books?liked=followed" %> |
       <% else %>
         <%= link_to "Sign in with Facebook", user_facebook_omniauth_authorize_path %>
       <% end %>
