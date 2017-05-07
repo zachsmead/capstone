@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require d3
+//= require d3.tip
 //= require d3.wordcloud
 //= require d3.layout.cloud
 //= require_tree .

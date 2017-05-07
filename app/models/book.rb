@@ -278,7 +278,6 @@ class Book < ApplicationRecord
 			'money',
 			'next',
 			'poor',
-			'death',
 			'stood',
 			'form',
 			'within',
@@ -320,7 +319,6 @@ class Book < ApplicationRecord
 			'person',
 			'high',
 			'read',
-			'city',
 			'already',
 			'received',
 			'fact',
@@ -341,7 +339,6 @@ class Book < ApplicationRecord
 			'return',
 			'leave',
 			'air',
-			'nature',
 			'answered',
 			'either',
 			'law',
@@ -360,19 +357,16 @@ class Book < ApplicationRecord
 			'number',
 			'therefore',
 			'hour',
-			'friends',
 			'held',
 			'free',
-			'war',
 			'during',
 			'several',
-			'business',
 			'whether',
 			'er',
 			'manner',
 			'second',
 			'reason',
-			'replied',
+			'replied', #371
 			'united',
 			'call',
 			'general',
@@ -380,9 +374,8 @@ class Book < ApplicationRecord
 			'behind',
 			'became',
 			'become',
-			'ill',
+			'ill',#387
 			'im',
-			'ive',
 			'id',
 			'your',
 			'yours',
@@ -391,12 +384,59 @@ class Book < ApplicationRecord
 			'rest',
 			'mean',
 			'different',
-			'making',
-			'yours',
-			'copyright',
+			'making',#402
+			'hold', #443
+			'spoke', #471
+			'ive',#515
+			'didnt',#542
+			'laid', #557
+			'copyright',#560
+			'doing', #561
+			'opened', #566
+			'makes', #579
+			'ago',#614
+			'yourself', #607
+			'wont', #673
+			'ways', #875
+			'speaking', #829
+			'reply', #968
+			'id', #969
+			'hes', #1065
+			'couldnt',#1099
+			'isnt', #1113
+			'em',#1147
+			'yes',#1157
+			'theres',#1238
+			'trademark',
+			'refund',
 			'distribution',
+			'yours',
+			'anyone', #1291
+			'youll',#1445
+			'doesnt', #1687
+			'havent', #1845
+			'everybody', #1872
+			'youve',#1904
+			'youre', #unknown
+			'hers',#2168
+			'whats', #2435
+			'links',#2467
+			'online',
+			'web',
+			'tis',#2285
+			'youd',#2413
+			'hadnt', #2526
 			'ebook',
 			'ebooks',
+			'theyre', #3151
+			'someone', #3157
+			'theirs',#3982
+			'hasnt',#4590
+			'shed', #5749
+			'theyd', #6254
+			'shant', #6514
+			'lets'#7524
+			'itll',#7902
 			'h',
 			'b',
 			'4',

@@ -7,6 +7,7 @@
 <br /><br />
 
 <%= form_tag books_path, enctype: 'multipart/form-data' do %>
+	<input type="text" name="title" placeholder="Title"><br />
 	<%= file_field_tag :file %>
 	<%= submit_tag 'Upload book' %>
 <% end %>

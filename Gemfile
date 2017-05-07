@@ -5,11 +5,14 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.2'
 gem 'unirest'
 gem 'aws-sdk', '~> 1'
 gem 'd3-rails', '~> 4.1'
+gem 'd3-tip-rails'
+gem 'nokogiri'
 gem 'seed_dump'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
