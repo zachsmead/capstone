@@ -8,9 +8,9 @@ class Book < ApplicationRecord
 	has_many :genres, through: :book_genres
 	has_many :book_genres
 
-	def self.breakdown_test(text)
+	def self.breakdown_test(text, type)
 		
-		book_array = text.downcase.gsub(/[^a-z0-9\s]/i, '').split(" ")
+		book_array = text.downcase.gsub(/[^a-z\s]/i, '').split(" ")
 		# puts book_array
 
 		boring_words = [
@@ -413,6 +413,7 @@ class Book < ApplicationRecord
 			'hes', #1065
 			'couldnt',#1099
 			'isnt', #1113
+			'dont', #unknown
 			'em',#1147
 			'yes',#1157
 			'theres',#1238
@@ -446,7 +447,7 @@ class Book < ApplicationRecord
 			'shed', #5749
 			'theyd', #6254
 			'shant', #6514
-			'lets'#7524
+			'lets',#7524
 			'itll',#7902
 			'h',
 			'b',
@@ -484,8 +485,12 @@ class Book < ApplicationRecord
 		# hash way
 
 		book_hash.each do |word_freq_pair|
-			unless word_freq_pair[1] <= 1
-				hashified_words << { text: word_freq_pair[0], size: word_freq_pair[1]}
+			if type == 'book'
+				unless word_freq_pair[1] <= 1
+					hashified_words << { text: word_freq_pair[0], size: word_freq_pair[1]}
+				end
+			elsif type == 'page'
+					hashified_words << { text: word_freq_pair[0], size: word_freq_pair[1]}
 			end
 		end
 

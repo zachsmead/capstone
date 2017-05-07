@@ -24,10 +24,6 @@ class BooksController < ApplicationController
 		# Make an object in your bucket for your upload
 
 		if params[:file]
-
-			puts "*" * 100
-			puts params[:file]
-			puts "*" * 100
 			title = params[:file].original_filename
 			title_without_extensions = File.basename(title, '.txt')
 
@@ -61,10 +57,12 @@ class BooksController < ApplicationController
 			).body
 
 			# Run the breakdown method which converts the book to a word-count
-			@book_frequencies = Book.breakdown_test(@book_text)
+			@book_frequencies = Book.breakdown_test(@book_text, 'book')
 
 			# Make a javascript file in the bucket
-			book_javascript = S3_BUCKET.objects.create("book_clouds/" + title_without_extensions + '.js', @book_frequencies)
+			book_javascript = S3_BUCKET.objects.create(
+				"book_clouds/" + title_without_extensions + '_' + @book.id.to_s + '.js', @book_frequencies
+			)
 			book_javascript.acl = :public_read
 
 			# Step 4. Update the book object with the book_cloud_url
@@ -72,15 +70,19 @@ class BooksController < ApplicationController
 
 		elsif params[:url] && params[:title]
 			title = params[:title]
-			url = params[:url]
+			
+			if params[:url].include?('https://')
+				url = params[:url]
+			else
+				url = 'https://' + params[:url]
+			end
 
-			# Declare an object for the text of params[:url]
-			html = Nokogiri::HTML(open url)
-			url_text = html.at('body').inner_text
+			# Step 1. Declare object 'page' and 'page_text' for the text of params[:url]
+			page = Nokogiri::HTML(open url)
+			page_text = page.at('body').inner_text
+			s3_title = page.at('title').inner_text[0..45].parameterize('_')
 
-			p url_text
-
-			# try to make a new book in database
+			# Step 2. try to make a new book in database
 			@book = Book.new(title: title, url: url)
 
 			if @book.save
@@ -90,34 +92,19 @@ class BooksController < ApplicationController
 				render :new
 			end
 
-			@book_frequencies = Book.breakdown_test(url_text)
+			# Step 3. make the page's wordcloud
+			# Run the breakdown method which converts the page to a word-count
+			# call the method with big = false, so we count every word on the page.
+			@book_frequencies = Book.breakdown_test(page_text, 'page')
 
-			book_javascript = S3_BUCKET.objects.create("book_clouds/" + title_without_extensions + '.js', @book_frequencies)
+			# Make a javascript file in the bucket, give it a unique name from the book object id in our db
+			book_javascript = S3_BUCKET.objects.create(
+				"book_clouds/" + s3_title + '_' + @book.id.to_s + '.js', @book_frequencies
+			)
 			book_javascript.acl = :public_read
 
 			# Step 4. Update the book object with the book_cloud_url
 			@book.update(book_cloud_url: book_javascript.public_url)
-			
-			# html_data = open('http://web.archive.org/web/20090220003702/http://www.sitepoint.com/').read
-			# nokogiri_object = Nokogiri::HTML(html_data)
-			# tagcloud_elements = nokogiri_object.xpath("//ul[@class='tagcloud']/li/a")
-
-			# tagcloud_elements.each do |tagcloud_element|
-			#   puts tagcloud_element.text
-			# end
-
-			# tagcloud_elements.each do |tagcloud_element|
-			#   puts tagcloud_element.to_html
-			# end
-
-			# tagcloud_elements.each do |tagcloud_element|
-			#   puts tagcloud_element.parent
-			#   puts tagcloud_element.children
-			#   puts tagcloud_element.next_sibling
-			#   puts tagcloud_element.previous_sibling
-			# end
-
-			# puts tagcloud_elements
 
 		# end if statement
 		end
