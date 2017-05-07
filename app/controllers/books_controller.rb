@@ -70,27 +70,54 @@ class BooksController < ApplicationController
 			# Step 4. Update the book object with the book_cloud_url
 			@book.update(book_cloud_url: book_javascript.public_url)
 
-		elsif params[:url]
-			html_data = open('http://web.archive.org/web/20090220003702/http://www.sitepoint.com/').read
-			nokogiri_object = Nokogiri::HTML(html_data)
-			tagcloud_elements = nokogiri_object.xpath("//ul[@class='tagcloud']/li/a")
+		elsif params[:url] && params[:title]
+			title = params[:title]
+			url = params[:url]
+
+			# Declare an object for the text of params[:url]
+			html = Nokogiri::HTML(open url)
+			url_text = html.at('body').inner_text
+
+			p url_text
+
+			# try to make a new book in database
+			@book = Book.new(title: title, url: url)
+
+			if @book.save
+				redirect_to books_path, success: 'File successfully uploaded'
+			else
+				flash.now[:notice] = 'There was an error'
+				render :new
+			end
+
+			@book_frequencies = Book.breakdown_test(url_text)
+
+			book_javascript = S3_BUCKET.objects.create("book_clouds/" + title_without_extensions + '.js', @book_frequencies)
+			book_javascript.acl = :public_read
+
+			# Step 4. Update the book object with the book_cloud_url
+			@book.update(book_cloud_url: book_javascript.public_url)
+			
+			# html_data = open('http://web.archive.org/web/20090220003702/http://www.sitepoint.com/').read
+			# nokogiri_object = Nokogiri::HTML(html_data)
+			# tagcloud_elements = nokogiri_object.xpath("//ul[@class='tagcloud']/li/a")
 
 			# tagcloud_elements.each do |tagcloud_element|
 			#   puts tagcloud_element.text
 			# end
 
-			tagcloud_elements.each do |tagcloud_element|
-			  puts tagcloud_element.to_html
-			end
+			# tagcloud_elements.each do |tagcloud_element|
+			#   puts tagcloud_element.to_html
+			# end
 
-			tagcloud_elements.each do |tagcloud_element|
-			  puts tagcloud_element.parent
-			  puts tagcloud_element.children
-			  puts tagcloud_element.next_sibling
-			  puts tagcloud_element.previous_sibling
-			end
+			# tagcloud_elements.each do |tagcloud_element|
+			#   puts tagcloud_element.parent
+			#   puts tagcloud_element.children
+			#   puts tagcloud_element.next_sibling
+			#   puts tagcloud_element.previous_sibling
+			# end
 
-			puts tagcloud_elements
+			# puts tagcloud_elements
 
 		# end if statement
 		end

@@ -385,6 +385,7 @@ class Book < ApplicationRecord
 			'mean',
 			'different',
 			'making',#402
+			'terms',
 			'hold', #443
 			'cant', #462
 			'spoke', #471
