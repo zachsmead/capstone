@@ -269,7 +269,7 @@ class Book < ApplicationRecord
 			'themselves',
 			'used',
 			'rather',
-			'began',
+			'began', #264
 			'present',
 			'voice',
 			'others',
@@ -386,7 +386,9 @@ class Book < ApplicationRecord
 			'different',
 			'making',#402
 			'hold', #443
+			'cant', #462
 			'spoke', #471
+			'saying', #478
 			'ive',#515
 			'didnt',#542
 			'laid', #557
@@ -397,33 +399,41 @@ class Book < ApplicationRecord
 			'ago',#614
 			'yourself', #607
 			'wont', #673
+			'including', #686
+			'please', #696
+			'stopped', #737
+			'begin', #858
 			'ways', #875
 			'speaking', #829
+			'trademark', #924
 			'reply', #968
 			'id', #969
+			'stop', #1001
 			'hes', #1065
 			'couldnt',#1099
 			'isnt', #1113
 			'em',#1147
 			'yes',#1157
 			'theres',#1238
-			'trademark',
 			'refund',
 			'distribution',
 			'yours',
 			'anyone', #1291
 			'youll',#1445
+			'wasnt', #1618
 			'doesnt', #1687
 			'havent', #1845
 			'everybody', #1872
 			'youve',#1904
 			'youre', #unknown
 			'hers',#2168
+			'chapter', #2328
 			'whats', #2435
 			'links',#2467
 			'online',
 			'web',
 			'tis',#2285
+			'inches', #2379
 			'youd',#2413
 			'hadnt', #2526
 			'ebook',
@@ -440,7 +450,8 @@ class Book < ApplicationRecord
 			'h',
 			'b',
 			'4',
-			'sh'
+			'sh',
+			'sat' #past 10000
 		]
 
 		book_hash = {}
