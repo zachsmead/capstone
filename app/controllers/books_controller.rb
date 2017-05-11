@@ -15,14 +15,15 @@ class BooksController < ApplicationController
 	def show
 		@book = Book.find_by(id: params[:id])
 
-		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze"
-		take_from = "?version=2017-02-27&url=https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/"
+		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
+		read_location = "&url=https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/"
 		title = "alice_in_wonderland.txt"
 		api_params = "&features=keywords,entities&entities.emotion=true&entities.sentiment=true&keywords.emotion=true&keywords.sentiment=true"
-		full_query = api_location + take_from + title + api_params
+		full_query = api_location + read_location + title + api_params
+
 		
-		@test = Unirest.get('https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27&url=https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/alice_in_wonderland.txt&features=keywords,entities&entities.emotion=true&entities.sentiment=true&keywords.emotion=true&keywords.sentiment=true',	
-			auth: {:user => '#{NLU_USERNAME}', :password => '#{NLU_PASSWORD}'}, 
+		@test = Unirest.get(full_query,	
+			auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
 			headers: { "Accept" => "application/json"}
 			# parameters: [
 			# 	# url: 'https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/alice_in_wonderland.txt'
