@@ -30,6 +30,8 @@ class BooksController < ApplicationController
 			# 	# features: {:concepts => {:limit => 8}, :emotions => true}
 			# ]
 		).body
+
+		Book.nlu_analysis(@book.url)
 	end
 
 	def new
@@ -73,7 +75,7 @@ class BooksController < ApplicationController
 			).body
 
 			# Run the breakdown method which converts the book to a word-count
-			@book_frequencies = Book.breakdown_test(@book_text, 'book')
+			@book_frequencies = Book.breakdown(@book_text, 'book')
 
 			# Make a javascript file in the bucket
 			book_javascript = S3_BUCKET.objects.create(
@@ -110,8 +112,8 @@ class BooksController < ApplicationController
 
 			# Step 3. make the page's wordcloud
 			# Run the breakdown method which converts the page to a word-count
-			# call the method with big = false, so we count every word on the page.
-			@book_frequencies = Book.breakdown_test(page_text, 'page')
+			# call the method with type = 'page', so we count every word on the page.
+			@book_frequencies = Book.breakdown(page_text, 'page')
 
 			# Make a javascript file in the bucket, give it a unique name from the book object id in our db
 			book_javascript = S3_BUCKET.objects.create(
