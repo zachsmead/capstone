@@ -22,16 +22,16 @@ class BooksController < ApplicationController
 		full_query = api_location + read_location + title + api_params
 
 		
-		@test = Unirest.get(full_query,	
-			auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
-			headers: { "Accept" => "application/json"}
-			# parameters: [
-			# 	# url: 'https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/alice_in_wonderland.txt'
-			# 	# features: {:concepts => {:limit => 8}, :emotions => true}
-			# ]
-		).body
+		# @test = Unirest.get(full_query,	
+		# 	auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
+		# 	headers: { "Accept" => "application/json"}
+		# 	# parameters: [
+		# 	# 	# url: 'https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/alice_in_wonderland.txt'
+		# 	# 	# features: {:concepts => {:limit => 8}, :emotions => true}
+		# 	# ]
+		# ).body
 
-		Book.nlu_analysis(@book.url)
+		# Book.nlu_analysis(@book.url)
 	end
 
 	def new

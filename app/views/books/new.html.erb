@@ -1,13 +1,23 @@
-<%= form_tag "/books", method: :post do %>
-	<input type="text" name="title" placeholder="Title"><br />
-	<input type="text" name="url" placeholder="URL"><br />
-	<input type="submit" value="Create"><br />
-<% end %>
+<div class="header-box">
+	<h1>Create a new wordcloud</h1>
+</div>
 
-<br /><br />
+<div class="new-book-page-alignment">
+	<div class="col-md-6 col-centered text-center">
+		<%= form_tag "/books", method: :post do %>
+			<input type="text" name="title" placeholder="Title"><br />
+			<input type="text" name="url" placeholder="URL"><br />
+			<input type="submit" value="Create"><br />
+		<% end %>
 
-<%= form_tag books_path, enctype: 'multipart/form-data' do %>
-	<input type="text" name="title" placeholder="Title"><br />
-	<%= file_field_tag :file %>
-	<%= submit_tag 'Upload book' %>
-<% end %>
+		<br />
+		- or -
+		<br /><br />
+
+		<%= form_tag books_path, enctype: 'multipart/form-data' do %>
+			<input type="text" name="title" placeholder="Title"><br />
+			<div class="new-book-file-block"><%= file_field_tag :file %></div>
+			<%= submit_tag 'Upload book' %>
+		<% end %>
+	</div>
+</div>
