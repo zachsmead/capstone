@@ -8,6 +8,85 @@ class Book < ApplicationRecord
 	has_many :genres, through: :book_genres
 	has_many :book_genres
 
+	def self.create_s3_object(params)
+		# We want this method to take in a file - params[:file].
+		# We want this method to return a title, and a url that the controller can access.
+
+		# Step 1. Make the book in S3
+		# Make an object in your bucket for your upload
+
+		# title = params[:file].original_filename
+		book_attributes_hash = {}
+		book_attributes_hash[:title] = params[:file].original_filename # 1st important thing to return
+		title_without_extensions = File.basename(params[:title], '.txt')
+		random_number = rand.to_s[2..6]
+
+		uploaded_book = S3_BUCKET.objects[("books/" + book_attributes_hash[:title] + '_' + random_number)]
+
+		# Upload the file
+		uploaded_book.write(
+			file: params[:file], # we get this param from the file_field_tag in books/new.html.erb
+			acl: :public_read
+		)
+
+		book_attributes_hash[:book_url] = uploaded_book.public_url # 2nd important thing to return
+
+		return book_attributes_hash
+		# @book = Book.new(title: params[:title], url: params[:book_url])
+
+		# if @book.save
+		# 	redirect_to books_path, success: 'File successfully uploaded'
+		# else
+		# 	flash.now[:notice] = 'There was an error'
+		# 	render :new
+		# end
+
+		# Step 3. Make the book_cloud in S3 (just a hash of word frequencies)
+		# Start by grabbing the book plaintext
+		# @book_text = Unirest.get(
+		# 	params[:book_url],
+		# 	headers: {
+		# 		"Accept" => "text/plain"
+		# 	}
+		# ).body
+
+
+		# Run the breakdown method which converts the book to a word-count
+		# @book_frequencies = Book.breakdown(@book_text, 'book')
+
+		# book_javascript = S3_BUCKET.objects.create(
+		# 	"book_clouds/" + title_without_extensions + '_' + @book.id.to_s + '.js', @book_frequencies
+		# )
+		# book_javascript.acl = :public_read
+
+		# # Step 4. Update the book object with the book_cloud_url
+		# book_attributes[:book_cloud_url] = book_javascript.public_url
+		# @book.update(book_cloud_url: book_javascript.public_url)
+
+	end
+
+	def self.create_s3_wordcount(book)
+		@book_text = Unirest.get(
+			book.url,
+			headers: {
+				"Accept" => "text/plain"
+			}
+		).body
+
+		@book_frequencies = Book.breakdown(@book_text, 'book')
+		title_without_extensions = File.basename(book.title, '.txt')
+		p title_without_extensions
+
+		book_javascript = S3_BUCKET.objects.create(
+			"book_clouds/" + title_without_extensions + '_' + book.id.to_s + '.js', @book_frequencies
+		)
+		book_javascript.acl = :public_read
+
+		# Step 4. Update the book object with the book_cloud_url
+		return book_javascript.public_url
+		# @book.update(book_cloud_url: book_javascript.public_url)
+	end
+
 	def self.breakdown(text, type)
 		
 		book_array = text.downcase.gsub(/[^a-z\s]/i, '').split(" ")

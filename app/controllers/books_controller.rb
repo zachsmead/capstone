@@ -42,21 +42,26 @@ class BooksController < ApplicationController
 		# Make an object in your bucket for your upload
 
 		if params[:file]
-			title = params[:file].original_filename
-			title_without_extensions = File.basename(title, '.txt')
+			result_book_attributes_hash = Book.create_s3_object(params) # takes in params, returns hash of relevant attrs
+			# title = params[:file].original_filename
+			# title_without_extensions = File.basename(title, '.txt')
 
-			uploaded_book = S3_BUCKET.objects[("books/" + title)]
+			# uploaded_book = S3_BUCKET.objects[("books/" + title)]
 
-			# Upload the file
-			uploaded_book.write(
-				file: params[:file], # we get this param from the file_field_tag in books/new.html.erb
-				acl: :public_read
-			)
+			# # Upload the file
+			# uploaded_book.write(
+			# 	file: params[:file], # we get this param from the file_field_tag in books/new.html.erb
+			# 	acl: :public_read
+			# ) # up to here has been moved to book.rb model
 
 			# @book = Book.new(title: uploaded_book.key, url: uploaded_book.public_url)
 
 			# Step 2. Create a row in our own database to represent the book
-			@book = Book.new(title: title, url: uploaded_book.public_url)
+			@book = Book.new(title: result_book_attributes_hash[:title], url: result_book_attributes_hash[:book_url])
+
+			result_book_wordcount_url = Book.create_s3_wordcount(@book)
+
+			@book.update(book_cloud_url: result_book_wordcount_url)
 
 			if @book.save
 				redirect_to books_path, success: 'File successfully uploaded'
@@ -67,24 +72,25 @@ class BooksController < ApplicationController
 
 			# Step 3. Make the book_cloud in S3 (just a hash of word frequencies)
 			# Start by grabbing the book plaintext
-			@book_text = Unirest.get(
-				@book.url,
-				headers: {
-					"Accept" => "text/plain"
-				}
-			).body
+			# @book_text = Unirest.get(
+			# 	@book.url,
+			# 	headers: {
+			# 		"Accept" => "text/plain"
+			# 	}
+			# ).body
 
-			# Run the breakdown method which converts the book to a word-count
-			@book_frequencies = Book.breakdown(@book_text, 'book')
 
-			# Make a javascript file in the bucket
-			book_javascript = S3_BUCKET.objects.create(
-				"book_clouds/" + title_without_extensions + '_' + @book.id.to_s + '.js', @book_frequencies
-			)
-			book_javascript.acl = :public_read
+			# # Run the breakdown method which converts the book to a word-count
+			# @book_frequencies = Book.breakdown(@book_text, 'book')
 
-			# Step 4. Update the book object with the book_cloud_url
-			@book.update(book_cloud_url: book_javascript.public_url)
+			# # Make a javascript file in the bucket
+			# book_javascript = S3_BUCKET.objects.create(
+			# 	"book_clouds/" + title_without_extensions + '_' + @book.id.to_s + '.js', @book_frequencies
+			# )
+			# book_javascript.acl = :public_read
+
+			# # Step 4. Update the book object with the book_cloud_url
+			# @book.update(book_cloud_url: book_javascript.public_url)
 
 		elsif params[:url] && params[:title]
 			title = params[:title]
