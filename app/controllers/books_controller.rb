@@ -42,22 +42,14 @@ class BooksController < ApplicationController
 		# Make an object in your bucket for your upload
 
 		if params[:file] && params[:title]
-			book_attributes_hash = Book.create_s3_object(params) # takes in params, returns hash of relevant attrs
+			book_url = Book.create_s3_object(params) # takes in params, stores text as s3 obj, returns a url for the obj
 
-			# Step 2. Create a row in our own database to represent the book
-			@book = Book.new(title: book_attributes_hash[:title], url: book_attributes_hash[:book_url])
+			@book = Book.new(title: params[:title], url: book_url)
 			@book.save # save the book so it has an id when we pass it to the wordcount json builder
 
 			book_json_url = Book.create_book_wordcount(@book)
 
 			@book.update(book_cloud_url: book_json_url)
-
-			if @book.save
-				redirect_to books_path, success: 'File successfully uploaded'
-			else
-				flash.now[:notice] = 'There was an error'
-				render :new
-			end
 
 		elsif params[:url] && params[:title] # this means that a webpage url was given
 			title = params[:title]
@@ -71,15 +63,15 @@ class BooksController < ApplicationController
 			book_json_url = Book.create_webpage_wordcount(@book)
 
 			@book.update(book_cloud_url: book_json_url)
-			
-			if @book.save
-				redirect_to books_path, success: 'File successfully uploaded'
-			else
-				flash.now[:notice] = 'There was an error'
-				render :new
-			end
-			
 		end # end if statement
+		
+		if @book.save
+			redirect_to books_path, success: 'File successfully uploaded'
+		else
+			flash.now[:notice] = 'There was an error'
+			render :new
+		end
+
 	end
 
 	

@@ -12,14 +12,10 @@ class Book < ApplicationRecord
 		# We want this method to:
 		# 1. take the params hash,
 		# 2. Make a s3 storage object named/located by the params,
-		# 3. return a title and a url that the controller can access.
+		# 3. return a url that the controller can save with the book.
 
-		# Step 1. Make the book in S3
-		# Make an object in your bucket for your upload
-
-		# title = params[:file].original_filename
 		book_attributes_hash = {}
-		book_attributes_hash[:title] = params[:file].original_filename # 1st important thing to return
+		# book_attributes_hash[:title] = params[:file].original_filename # 1st important thing to return
 		title_without_extensions = File.basename(params[:title], '.txt')
 		random_number = rand.to_s[2..6]
 
@@ -29,13 +25,11 @@ class Book < ApplicationRecord
 
 		# Upload the file
 		uploaded_book.write(
-			file: params[:file], # we get this param from the file_field_tag in books/new.html.erb
+			file: params[:file], # we get this param from the file_field_tag in views/books/new.html.erb
 			acl: :public_read
 		)
 
-		book_attributes_hash[:book_url] = uploaded_book.public_url # 2nd important thing to return
-
-		return book_attributes_hash
+		return uploaded_book.public_url # 2nd important thing to return
 
 	end
 

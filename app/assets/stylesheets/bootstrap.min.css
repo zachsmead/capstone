@@ -53,8 +53,14 @@ h1 {
 	padding: 30px;
 }
 
-.index-box {
-	margin: 10px;
+.index-big-box {
+	width: 1500px;
+	text-align: center;
+	background-color: red;
+}
+
+.index-small-box {
+	margin: 5px;
 	padding: 30px;
 	text-align: center;
 	background-color: #429ef4;

@@ -1,18 +1,21 @@
-<% @books.each do |book| %>
-	<div class="col-md-3 index-box">
-		<div class="box-text">
-			<a class="index-link" href="<%= book.url %>"><%= book.title %></a><br /><br />
-			<a class="index-link" href="/books/<%= book.id %>">View Wordcloud</a>
+<div class="index-big-box col-centered">
+	<% @books.each do |book| %>
+		<div class="col-lg-2 index-small-box">
+			<div class="box-text">
+				<a class="index-link" href="<%= book.url %>"><%= book.title.upcase %></a><br /><br />
+				<a class="index-link" href="/books/<%= book.id %>">View Wordcloud</a>
+			</div>
+
+			<br />
+
+			<div class="box-text">
+				<%= form_tag "/book_likes", method: :post do %>
+					<input type="hidden" name="book_id" value="<%= book.id %>">
+					<input type="submit" value="Like">
+				<% end %>
+			</div>
+
 		</div>
+	<% end %>
+</div>
 
-		<br />
-
-		<div class="box-text">
-			<%= form_tag "/book_likes", method: :post do %>
-				<input type="hidden" name="book_id" value="<%= book.id %>">
-				<input type="submit" value="Like">
-			<% end %>
-		</div>
-
-	</div>
-<% end %>

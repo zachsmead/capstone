@@ -1,6 +1,6 @@
 <% @users.each do |user| %>
 	<div class="col-md-3 index-block">
-		<div class="index-box">
+		<div class="index-small-box">
 			<%= user.email %>
 			<% unless user.id == @current_user_id %>
 				<%= form_tag "/follows", method: :post do %>
