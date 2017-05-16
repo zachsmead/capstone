@@ -9,8 +9,10 @@ class Book < ApplicationRecord
 	has_many :book_genres
 
 	def self.create_s3_object(params)
-		# We want this method to take in a file - params[:file].
-		# We want this method to return a title, and a url that the controller can access.
+		# We want this method to:
+		# 1. take the params hash,
+		# 2. Make a s3 storage object named/located by the params,
+		# 3. return a title and a url that the controller can access.
 
 		# Step 1. Make the book in S3
 		# Make an object in your bucket for your upload
@@ -21,7 +23,9 @@ class Book < ApplicationRecord
 		title_without_extensions = File.basename(params[:title], '.txt')
 		random_number = rand.to_s[2..6]
 
-		uploaded_book = S3_BUCKET.objects[("books/" + book_attributes_hash[:title] + '_' + random_number)]
+		uploaded_book = S3_BUCKET.objects[(
+			"books/" + title_without_extensions + '_' + random_number + '.txt'
+		)]
 
 		# Upload the file
 		uploaded_book.write(
@@ -32,40 +36,10 @@ class Book < ApplicationRecord
 		book_attributes_hash[:book_url] = uploaded_book.public_url # 2nd important thing to return
 
 		return book_attributes_hash
-		# @book = Book.new(title: params[:title], url: params[:book_url])
-
-		# if @book.save
-		# 	redirect_to books_path, success: 'File successfully uploaded'
-		# else
-		# 	flash.now[:notice] = 'There was an error'
-		# 	render :new
-		# end
-
-		# Step 3. Make the book_cloud in S3 (just a hash of word frequencies)
-		# Start by grabbing the book plaintext
-		# @book_text = Unirest.get(
-		# 	params[:book_url],
-		# 	headers: {
-		# 		"Accept" => "text/plain"
-		# 	}
-		# ).body
-
-
-		# Run the breakdown method which converts the book to a word-count
-		# @book_frequencies = Book.breakdown(@book_text, 'book')
-
-		# book_javascript = S3_BUCKET.objects.create(
-		# 	"book_clouds/" + title_without_extensions + '_' + @book.id.to_s + '.js', @book_frequencies
-		# )
-		# book_javascript.acl = :public_read
-
-		# # Step 4. Update the book object with the book_cloud_url
-		# book_attributes[:book_cloud_url] = book_javascript.public_url
-		# @book.update(book_cloud_url: book_javascript.public_url)
 
 	end
 
-	def self.create_s3_wordcount(book)
+	def self.create_book_wordcount(book)
 		@book_text = Unirest.get(
 			book.url,
 			headers: {
@@ -77,14 +51,45 @@ class Book < ApplicationRecord
 		title_without_extensions = File.basename(book.title, '.txt')
 		p title_without_extensions
 
-		book_javascript = S3_BUCKET.objects.create(
+		book_json = S3_BUCKET.objects.create(
 			"book_clouds/" + title_without_extensions + '_' + book.id.to_s + '.js', @book_frequencies
 		)
-		book_javascript.acl = :public_read
+		book_json.acl = :public_read
 
-		# Step 4. Update the book object with the book_cloud_url
-		return book_javascript.public_url
-		# @book.update(book_cloud_url: book_javascript.public_url)
+		return book_json.public_url # return the url of this wordcloud so we can update book in the controller
+
+	end
+
+	def self.fix_url(url)
+		if url.include?('https://') # add 'https://' so the computer can read it properly
+			fixed_url = url
+		else
+			fixed_url = 'https://' + url
+		end
+
+		return fixed_url
+	end
+
+	def self.create_webpage_wordcount(book)
+		url = book.url # the url we're going to scrape from
+
+		page = Nokogiri::HTML(open url)
+		page_text = page.at('body').inner_text
+
+		s3_title = page.at('title').inner_text[0..45].parameterize('_') # set a title based on the webpage title
+
+		# next, make the page's wordcloud
+		# Run the breakdown method which converts the page to a word-count hash
+		# call breakdown with type = 'page', so we count every word on the page.
+		book_frequencies = Book.breakdown(page_text, 'page')
+
+		# Make a javascript file in the bucket, give it a unique name using book object's id
+		book_json = S3_BUCKET.objects.create(
+			"book_clouds/" + s3_title + '_' + book.id.to_s + '.js', book_frequencies
+		)
+		book_json.acl = :public_read
+
+		return book_json.public_url # return the url of this wordcloud so we can update book in the controller
 	end
 
 	def self.breakdown(text, type)
