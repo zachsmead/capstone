@@ -1,36 +1,109 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Capstone</title>
     <%= csrf_meta_tags %>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
+    <!-- Bootstrap core CSS -->
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="/css/mdb.min.css" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link href="/css/style.css" rel="stylesheet">
+    <%= stylesheet_link_tag    'application', media: 'all' %>
+    <%= javascript_include_tag 'application' %>
+</head>
 
-    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+<body>
 
-    <div class="text-center">
-      <% if current_user %>
-        <%= link_to "Sign out", "/users/sign_out" %> |
-        <%= link_to "Users", "/users/list" %> |
-        <%= link_to "New Book", "/books/new" %> |
-        <%= link_to "Books", "/books" %> 
-        <!-- <%= link_to "Your books", "/books?liked=self" %> |
-        <%= link_to "Your friends' books", "/books?liked=followed" %>  -->
-      <% else %>
-        <%= link_to "Login", "/users/sign_in" %> |
-        <%= link_to "Facebook Login", user_facebook_omniauth_authorize_path %>
-      <% end %>
-    </div>
+  <!--Navbar-->
+  <nav class="navbar navbar-toggleable-md navbar-dark bg-primary">
+      <div class="container">
+          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarNav1" aria-controls="navbarNav1" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand" href="#">
+              <strong>OpenBooks</strong>
+          </a>
+          <div class="collapse navbar-collapse" id="navbarNav1">
+              <ul class="navbar-nav mr-auto">
+                  <% if current_user %>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/users/sign_out">Sign out<span class="sr-only">(current)</span></a>
+                      </li>
+                      <li class="nav-item dropdown btn-group">
+                          <a class="nav-link dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= current_user.email %></a>
+                          <div class="dropdown-menu dropdown" aria-labelledby="dropdownMenu1">
+                              <a class="dropdown-item" href="/users/sign_out">Sign out</a>
+                              <a class="dropdown-item" href="/users/list">View Other Users</a>
+                          </div>
+                      </li>
 
-  </head>
+                      <li class="nav-item dropdown btn-group">
+                          <a class="nav-link dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Books</a>
+                          <div class="dropdown-menu dropdown" aria-labelledby="dropdownMenu1">
+                              <a class="dropdown-item" href="/books/new">New Book</a>
+                              <a class="dropdown-item">Featured</a>
+                              <a class="dropdown-item" href="/books">List All</a>
+                          </div>
+                      </li>
+                  <% else %>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/users/sign_in">Login</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="<%=user_facebook_omniauth_authorize_path%>">Login with Facebook</a>
+                      </li>
+                  <% end %>
+
+              </ul>
+              <form class="form-inline waves-effect waves-light">
+                  <input class="form-control" type="text" placeholder="Search">
+              </form>
+          </div>
+      </div>
+  </nav>
+
+          <%= link_to "Sign out", "/users/sign_out" %> |
+          <%= link_to "Users", "/users/list" %> |
+          <%= link_to "New Book", "/books/new" %> |
+          <%= link_to "Books", "/books" %> 
+          <!-- <%= link_to "Your books", "/books?liked=self" %> |
+          <%= link_to "Your friends' books", "/books?liked=followed" %>  -->
+
+          <%= link_to "Login", "/users/sign_in" %> |
+          <%= link_to "Facebook Login", user_facebook_omniauth_authorize_path %>
 
   <% flash.each do |name, message| %>
-	  <div class="alert alert-<%= name %> alert-dismissible" role="alert">
-	    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-	    <%= message %>
-	  </div>
-	<% end %>
+    <div class="alert alert-<%= name %> alert-dismissible" role="alert">
+      <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+      <%= message %>
+    </div>
+  <% end %>
 
-  <body>
-    <%= yield %>
-  </body>
+
+    <!-- Start your project here-->
+    <div style="height: 100vh">
+        <div class="flex-center flex-column">
+          <%= yield %>
+        </div>
+    </div>
+    <!-- /Start your project here-->
+
+    <!-- SCRIPTS -->
+    <!-- JQuery -->
+    <script type="text/javascript" src="/js/jquery-3.1.1.min.js"></script>
+    <!-- Bootstrap tooltips -->
+    <script type="text/javascript" src="/js/tether.min.js"></script>
+    <!-- Bootstrap core JavaScript -->
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <!-- MDB core JavaScript -->
+    <script type="text/javascript" src="/js/mdb.min.js"></script>
+</body>
+
 </html>
