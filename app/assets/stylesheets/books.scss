@@ -28,7 +28,12 @@
 
 .row {
 	padding-top: 15px;
-	padding-bottom: 15px;
+	padding-bottom: 0px;
 	padding-left: 15px;
 	padding-right: 15px;
+}
+
+.card-block {
+	padding: 10px;
+	margin: 0px;
 }

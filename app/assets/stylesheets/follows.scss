@@ -1,3 +1,39 @@
 // Place all the styles related to the Follows controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.flex-center {
+	webkit-justify-content: flex-start; 
+  justify-content: flex-start; 
+  -webkit-align-items: stretch; 
+  align-items: stretch; 
+}
+
+.like-button-span {
+	float: right;
+}
+
+.like-button {
+
+}
+
+.btn-primary {
+	padding: 10px;
+	font-family: Lucida;
+}
+
+.btn-default {
+	padding: 10px;
+}
+
+.row {
+	padding-top: 15px;
+	padding-bottom: 0px;
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+.card-block {
+	padding: 10px;
+	margin: 0px;
+}
