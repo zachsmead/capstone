@@ -1,26 +1,46 @@
 <% @books.each_slice(3) do |three_books| %>
-
-	<div class="row text-center">
-
+	<div class="row">
 		<% three_books.each do |book| %>
-		
-			<div class="col-sm-3 index-small-box">
-				<div class="box-text">
-					<a class="index-link" href="<%= book.url %>"><%= book.title.upcase %></a><br /><br />
-					<a class="index-link" href="/books/<%= book.id %>">View Wordcloud</a>
-				</div>
+			<!-- <div class="box-text">
+				<%= form_tag "/book_likes", method: :post do %>
+					<input type="hidden" name="book_id" value="<%= book.id %>">
+					<input type="submit" value="Like">
+				<% end %>
+			</div> -->
 
-				<br />
+			<div class="col-md-4">
+					<!--Card-->
+					<div class="card card-block">
+					    <!--Card content-->
+					    <div>
+					        <!--Title-->
+					        <h4 class="card-title"><a href="<%= book.url %>"><%= book.title.upcase %></a></h4>
+					        <!--Text-->
+					        <!-- <p class="card-text"></p> -->
+					        <!-- <a href="/books/<%= book.id %>" class="btn btn-primary btn-lg">WORDCLOUD</a> -->
+					        <%= form_tag "/books/#{book.id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
+										<input type="submit" class="btn btn-primary like-button" value="WORDCLOUD">
+					        <% end %>
+					        <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px;", method: :post do %>
+										<input type="hidden" name="book_id" value="<%= book.id %>">
+										<input type="submit" class="btn btn-default like-button" value="LIKE">
+									<% end %>
 
-				<div class="box-text">
-					<%= form_tag "/book_likes", method: :post do %>
-						<input type="hidden" name="book_id" value="<%= book.id %>">
-						<input type="submit" value="Like">
-					<% end %>
-				</div>
+					        <!-- <a href="#" class="btn btn-primary">LIKE</a> -->
+					    </div>
+					    <!--/.Card content-->
 
+					</div>
+					<!--/.Card-->
 			</div>
+
 		<% end %>
+
 	</div>
+
 <% end %>
+
+
+
+
 

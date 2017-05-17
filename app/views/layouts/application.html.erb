@@ -33,9 +33,6 @@
           <div class="collapse navbar-collapse" id="navbarNav1">
               <ul class="navbar-nav mr-auto">
                   <% if current_user %>
-                      <li class="nav-item">
-                          <a class="nav-link" href="/users/sign_out">Sign out<span class="sr-only">(current)</span></a>
-                      </li>
                       <li class="nav-item dropdown btn-group">
                           <a class="nav-link dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><%= current_user.email %></a>
                           <div class="dropdown-menu dropdown" aria-labelledby="dropdownMenu1">
@@ -48,7 +45,8 @@
                           <a class="nav-link dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Books</a>
                           <div class="dropdown-menu dropdown" aria-labelledby="dropdownMenu1">
                               <a class="dropdown-item" href="/books/new">New Book</a>
-                              <a class="dropdown-item">Featured</a>
+                              <a class="dropdown-item" href="/books?liked=followed">Featured</a>
+                              <a class="dropdown-item" href="/books?liked=self">Liked</a>
                               <a class="dropdown-item" href="/books">List All</a>
                           </div>
                       </li>
@@ -57,7 +55,7 @@
                           <a class="nav-link" href="/users/sign_in">Login</a>
                       </li>
                       <li class="nav-item">
-                          <a class="nav-link" href="<%=user_facebook_omniauth_authorize_path%>">Login with Facebook</a>
+                          <a class="nav-link" href="<%=user_facebook_omniauth_authorize_path%>">Facebook Login</a>
                       </li>
                   <% end %>
 
@@ -69,15 +67,6 @@
       </div>
   </nav>
 
-          <%= link_to "Sign out", "/users/sign_out" %> |
-          <%= link_to "Users", "/users/list" %> |
-          <%= link_to "New Book", "/books/new" %> |
-          <%= link_to "Books", "/books" %> 
-          <!-- <%= link_to "Your books", "/books?liked=self" %> |
-          <%= link_to "Your friends' books", "/books?liked=followed" %>  -->
-
-          <%= link_to "Login", "/users/sign_in" %> |
-          <%= link_to "Facebook Login", user_facebook_omniauth_authorize_path %>
 
   <% flash.each do |name, message| %>
     <div class="alert alert-<%= name %> alert-dismissible" role="alert">
