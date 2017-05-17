@@ -10,20 +10,20 @@
 						    <!--Card content-->
 						    <div>
 						        <!--Title-->
-						        <h4 class="card-title"><a href="#"><%= user.email %></a></h4>
+						        <h4 class="card-title"><a href="#"><%= user.email.upcase %></a></h4>
 						        <!--Text-->
 						        <!-- <p class="card-text"></p> -->
 						        <% if !(user.id == @current_user_id) %>
+											<%= form_tag "/users/#{user.id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
+												<input type="submit" class="btn btn-primary" value="PROFILE">
+											<% end %>
 											<%= form_tag "/follows", style:"display: inline-block; padding-top: 15px;", method: :post do %>
 												<input type="hidden" name="followee_id" value="<%=user.id%>">
-												<input type="submit" lass="btn btn-primary" value="FOLLOW">
-											<% end %>
-											<%= form_tag "/users/#{user.id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
-												<input type="submit" lass="btn btn-default" value="PROFILE">
+												<input type="submit" class="btn btn-default" value="FOLLOW">
 											<% end %>
 										<% else %>
 											<%= form_tag "/users/#{@current_user_id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
-												<input type="submit" lass="btn btn-default" value="PROFILE">
+												<input type="submit" class="btn btn-primary" value="PROFILE">
 											<% end %>
 										<% end %>
 						        <!-- <a href="#" class="btn btn-primary">LIKE</a> -->

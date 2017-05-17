@@ -13,13 +13,14 @@
 	float: right;
 }
 
-.like-button {
-
+input {
+	font-family: Roboto,sans-serif;
 }
+
 
 .btn-primary {
 	padding: 10px;
-	font-family: Lucida;
+	font-family: "Lucida Sans Typewriter", "Lucida Console", monaco, "Bitstream Vera Sans Mono", monospace;
 }
 
 .btn-default {
@@ -34,6 +35,10 @@
 }
 
 .card-block {
-	padding: 10px;
-	margin: 0px;
+	padding-top: 15px;
+	padding-bottom: 0px;
+	padding-left: 15px;
+	padding-right: 15px;
+	margin-left: 5px;
+	margin-right: 5px;
 }
