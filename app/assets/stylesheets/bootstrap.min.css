@@ -48,21 +48,34 @@ h1 {
 }
 
 /* books index */
-.index-block {
+
+.row-center {
+  text-align: center;
+}
+
+.col-center {
+  display: inline-block;
+  float: none;
+}
+
+/*.index-block {
 	margin: 10px;
 	padding: 30px;
-}
+}*/
 
-.index-big-box {
-	width: 1500px;
+/*.index-big-box {
+	width: 1400px;
 	text-align: center;
 	background-color: red;
-}
+}*/
 
 .index-small-box {
+	display: inline-block;
+  float: none;
+	text-align: center;
 	margin: 5px;
 	padding: 30px;
-	text-align: center;
+	min-height: 100px;
 	background-color: #429ef4;
 }
 
