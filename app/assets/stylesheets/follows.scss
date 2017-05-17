@@ -20,7 +20,6 @@ input {
 
 .btn-primary {
 	padding: 10px;
-	font-family: "Lucida Sans Typewriter", "Lucida Console", monaco, "Bitstream Vera Sans Mono", monospace;
 }
 
 .btn-default {
@@ -34,11 +33,6 @@ input {
 	padding-right: 15px;
 }
 
-.card-block {
-	padding-top: 15px;
-	padding-bottom: 0px;
-	padding-left: 15px;
-	padding-right: 15px;
-	margin-left: 5px;
-	margin-right: 5px;
+.col-md-4 {
+	padding: 3px;
 }
