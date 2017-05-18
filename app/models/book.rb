@@ -571,6 +571,8 @@ class Book < ApplicationRecord
 		book_array.each do |word|
 			if boring_words.include? word
 				next
+			elsif word.length > 15
+				next
 			elsif book_hash[word]
 				book_hash[word] += 1
 			else
