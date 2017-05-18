@@ -2,28 +2,6 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.flex-center {
-	webkit-justify-content: flex-start; 
-  justify-content: flex-start; 
-  -webkit-align-items: stretch; 
-  align-items: stretch; 
-}
-
-.like-button-span {
-	float: right;
-}
-
-input {
-	font-family: Roboto,sans-serif;
-}
-
-.row {
-	padding-top: 15px;
-	padding-bottom: 0px;
-	padding-left: 15px;
-	padding-right: 15px;
-}
-
 .user-card {
 	background-color: #f7f7f7;
 	padding: 15px;

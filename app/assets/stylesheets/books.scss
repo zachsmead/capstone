@@ -55,6 +55,10 @@ input {
 	padding: 10px;
 }
 
+.btn-lime {
+	padding: 10px;
+}
+
 .btn-default {
 	padding: 10px;
 }
@@ -64,16 +68,20 @@ input {
 }
 
 .col-md-4 {
+	length: 100%;
 	padding: 6px;
+	margin-top: 0px;
 	margin-left: 0px;
 	margin-right: 0px;
 }
 
 .row {
-	padding-top: 15px;
+	width: 100%;
+	padding-top: 0px;
 	padding-bottom: 0px;
 	padding-left: 15px;
 	padding-right: 15px;
+	margin-top: 10px;
 }
 
 

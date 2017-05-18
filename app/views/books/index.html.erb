@@ -13,7 +13,7 @@
 					        <!-- <p class="card-text"></p> -->
 					        <!-- <a href="/books/<%= book.id %>" class="btn btn-primary btn-lg">WORDCLOUD</a> -->
 					        <%= form_tag "/books/#{book.id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
-										<input type="submit" class="btn btn-primary btn-rounded" value="WORDCLOUD">
+										<input type="submit" class="btn btn-primary" value="WORDCLOUD">
 					        <% end %>
 					        <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px;", method: :post do %>
 										<input type="hidden" name="book_id" value="<%= book.id %>">
