@@ -1,11 +1,13 @@
 <head>
-    <title>Word Cloud</title>
+    <title><%= @book.title %></title>
     <script src="<%= @book.book_cloud_url %>"></script>
     
     <!-- <script src="https://s3-us-west-1.amazonaws.com/projectgutenbergtest/book_clouds/pride_and_prejudice.js"></script> -->
 </head>
   <body style="text-align: center">
-    <h1>Word Cloud</h1>
+    <div class="header-box">
+      <h1><a class="header-link" href="<%= @book.url %>"><%= @book.title.upcase %></a></h1>
+    </div>
 
     <div id="text-analysis">
         <%= @test %>
@@ -42,16 +44,16 @@
 
     
     <script>// make a wordcloud id in css</script>
-    <div id='wordcloud'></div>
 
-    <p><a href="https://github.com/wvengen/d3-wordcloud">https://github.com/wvengen/d3-wordcloud</a></p>
+    <div id="wordcloud"></div>
+
     <script>
       d3.wordcloud()
-        .size([1270, 400])
+        .size([1200, 380])
         .spiral('archimedean')
         .scale('sqrt')
         .font('times')
-        .fill(d3.scale.ordinal().range(["#0d0144", "#1a0a63", "#35228e", "#513cb2", "#7d69db"]))
+        .fill(d3.scale.ordinal().range(["#4016fc", "#1a0a63", "#35228e", "#513cb2", "#7d69db"]))
         .words(words)
         .onwordclick(function(d, i) {
           d3.tip().show();

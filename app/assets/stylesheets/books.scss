@@ -2,6 +2,26 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
+body {
+	background-color: #8db3ef;
+}
+
+.header-box {
+	margin-top: 20px;
+}
+
+.header-link {
+	color: white;
+}
+
+#wordcloud {
+	background-color: white;
+	padding-top: 15px;
+	padding-bottom: 0px;
+	margin: 20px;
+	margin-top: 20px;
+}
+
 .flex-center {
 	webkit-justify-content: flex-start; 
   justify-content: flex-start; 
@@ -27,6 +47,12 @@ input {
 	padding-right: 20px;*/
 }
 
+.col-md-4 {
+	padding: 6px;
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
 .row {
 	padding-top: 15px;
 	padding-bottom: 0px;
@@ -40,4 +66,12 @@ input {
 	margin-bottom: 0px;
 	margin-left: 10px;
 	margin-right: 10px;
+}
+
+.book-card {
+	/*background-color: #7abbcc;*/
+}
+
+.book-title {
+	color: white;
 }

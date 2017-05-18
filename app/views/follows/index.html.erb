@@ -6,11 +6,11 @@
 
 			<div class="col-md-4">
 						<!--Card-->
-						<div class="card card-block">
+						<div class="card card-block user-card">
 						    <!--Card content-->
 						    <div>
 						        <!--Title-->
-						        <h4 class="card-title"><a href="#"><%= user.email.upcase %></a></h4>
+						        <h4 class="card-title user-title"><a href="#"><%= user.email.upcase %></a></h4>
 						        <!--Text-->
 						        <!-- <p class="card-text"></p> -->
 						        <% if !(user.id == @current_user_id) %>
