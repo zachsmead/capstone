@@ -41,7 +41,11 @@ class BooksController < ApplicationController
 		# Step 1. Make the book in S3
 		# Make an object in your bucket for your upload
 
-		if params[:file] && params[:title]
+		if !(params[:title])
+			params[:title] = File.basename(params[:file].original_filename, '.txt') || params[:url]
+		end
+
+		if params[:file] # this means that a file was uploaded
 			book_url = Book.create_s3_object(params) # takes in params, stores text as s3 obj, returns a url for the obj
 
 			@book = Book.new(title: params[:title], url: book_url)
@@ -51,7 +55,7 @@ class BooksController < ApplicationController
 
 			@book.update(book_cloud_url: book_json_url)
 
-		elsif params[:url] && params[:title] # this means that a webpage url was given
+		elsif params[:url] # this means that a webpage url was given
 			title = params[:title]
 			url = params[:url]
 

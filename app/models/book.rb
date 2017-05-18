@@ -16,7 +16,7 @@ class Book < ApplicationRecord
 
 		book_attributes_hash = {}
 		# book_attributes_hash[:title] = params[:file].original_filename # 1st important thing to return
-		title_without_extensions = File.basename(params[:title], '.txt')
+		title_without_extensions = File.basename(params[:title], '.txt').parameterize('_')
 		random_number = rand.to_s[2..6]
 
 		uploaded_book = S3_BUCKET.objects[(
@@ -67,29 +67,35 @@ class Book < ApplicationRecord
 	end
 
 
-	def self.create_webpage_wordcount(book)
-		url = book.url # the url we're going to scrape from
+	def self.create_webpage_wordcount(page)
+		url = page.url # the url we're going to scrape from
 
-		page = Nokogiri::HTML(open url)
-		page_text = page.at('body').inner_text
+		if url.starts_with?("https://www.reddit.com") || url.starts_with?("www.reddit.com") && url.include?("/comments/")
+			webpage_text = Book.reddit_get_main_comment(url)
+			s3_title = page.title
+		else
+			webpage = Nokogiri::HTML(open url)
+			webpage_text = webpage.at('body').inner_text
 
-		s3_title = page.at('title').inner_text[0..45].parameterize('_') # set a title based on the webpage title
+			s3_title = webpage.at('title').inner_text[0..45].parameterize('_') # set a title based on the webwebpage title
 
-		# next, make the page's wordcloud
-		# Run the breakdown method which converts the page to a word-count hash
-		# call breakdown with type = 'page', so we count every word on the page.
-		book_frequencies = Book.breakdown(page_text, 'page')
+		end
 
-		# Make a javascript file in the bucket, give it a unique name using book object's id
-		book_json = S3_BUCKET.objects.create(
-			"book_clouds/" + s3_title + '_' + book.id.to_s + '.js', book_frequencies
-		)
-		book_json.acl = :public_read
+			# next, make the webpage's wordcloud
+			# Run the breakdown method which converts the webpage to a word-count hash
+			# call breakdown with type = 'webpage', so we count every word on the webpage.
+			page_frequencies = Book.breakdown(webpage_text, 'page')
 
-		return book_json.public_url # return the url of this wordcloud so we can update book in the controller
+			# Make a javascript file in the bucket, give it a unique name using book object's id
+			frequency_count_json = S3_BUCKET.objects.create(
+				"book_clouds/" + s3_title + '_' + page.id.to_s + '.js', page_frequencies
+			)
+			frequency_count_json.acl = :public_read
+			return frequency_count_json.public_url # return the url of this wordcloud so we can update book in the controller
+
 	end
 
-	def self.reddit_get_main_comment(url)
+	def self.reddit_get_main_comment(url) # get the main comment and start recursively grabbing comments
 		input = Unirest.get(url + '.json').body[1]["data"]["children"]
 		string = ""
 
@@ -98,10 +104,8 @@ class Book < ApplicationRecord
 
 	def self.reddit_comments(comment_array)
 		local_string = ""
-		counter = 0
 		comment_array.each do |comment|
-			local_string += comment["data"]["body"] if comment["data"]["body"]
-			counter += 1
+			local_string += (comment["data"]["body"] + " ") if comment["data"]["body"]
 
 			if comment["data"]["replies"] && !(comment["data"]["replies"].empty?)
 				local_string += Book.reddit_comments(comment["data"]["replies"]["data"]["children"])
@@ -562,7 +566,7 @@ class Book < ApplicationRecord
 
 		book_hash = {}
 		hashified_words = []
-		javascript_hash_string = "var words = ["
+		# javascript_hash_string = "var words = ["
 
 		book_array.each do |word|
 			if boring_words.include? word
