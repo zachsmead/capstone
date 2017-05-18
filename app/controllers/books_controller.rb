@@ -38,17 +38,22 @@ class BooksController < ApplicationController
 	end
 
 	def create
-		# Step 1. Make the book in S3
-		# Make an object in your bucket for your upload
 
-		if !(params[:title])
-			params[:title] = File.basename(params[:file].original_filename, '.txt') || params[:url]
+		if params[:file] && params[:title] == ""
+			params[:title] = File.basename(params[:file].original_filename, '.txt')
+		elsif params[:url] && params[:title] == ""
+			webpage = Nokogiri::HTML(open params[:url])
+			params[:title] = '"' + webpage.at('title').inner_text
 		end
 
+		params[:card_title] = params[:title].truncate(27) + ' "'
+
+		# Step 1. Make the book in S3
+		# Make an object in your bucket for your upload
 		if params[:file] # this means that a file was uploaded
 			book_url = Book.create_s3_object(params) # takes in params, stores text as s3 obj, returns a url for the obj
 
-			@book = Book.new(title: params[:title], url: book_url)
+			@book = Book.new(title: params[:title], card_title: params[:card_title], url: book_url)
 			@book.save # save the book so it has an id when we pass it to the wordcount json builder
 
 			book_json_url = Book.create_book_wordcount(@book)
@@ -61,7 +66,7 @@ class BooksController < ApplicationController
 
 			fixed_url = Book.fix_url(url)
 
-			@book = Book.new(title: title, url: fixed_url)
+			@book = Book.new(title: title, card_title: params[:card_title], url: fixed_url)
 			@book.save
 
 			book_json_url = Book.create_webpage_wordcount(@book)

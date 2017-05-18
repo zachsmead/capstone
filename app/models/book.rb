@@ -72,7 +72,7 @@ class Book < ApplicationRecord
 
 		if url.starts_with?("https://www.reddit.com") || url.starts_with?("www.reddit.com") && url.include?("/comments/")
 			webpage_text = Book.reddit_get_main_comment(url)
-			s3_title = page.title
+			s3_title = page.title.gsub(/[^a-z\s]/i, '')
 		else
 			webpage = Nokogiri::HTML(open url)
 			webpage_text = webpage.at('body').inner_text
