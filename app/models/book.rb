@@ -33,6 +33,7 @@ class Book < ApplicationRecord
 
 	end
 
+
 	def self.create_book_wordcount(book)
 		@book_text = Unirest.get(
 			book.url,
@@ -54,6 +55,7 @@ class Book < ApplicationRecord
 
 	end
 
+
 	def self.fix_url(url)
 		if url.include?('https://') # add 'https://' so the computer can read it properly
 			fixed_url = url
@@ -63,6 +65,7 @@ class Book < ApplicationRecord
 
 		return fixed_url
 	end
+
 
 	def self.create_webpage_wordcount(book)
 		url = book.url # the url we're going to scrape from
@@ -85,6 +88,29 @@ class Book < ApplicationRecord
 
 		return book_json.public_url # return the url of this wordcloud so we can update book in the controller
 	end
+
+	def self.reddit_get_main_comment(url)
+		input = Unirest.get(url + '.json').body[1]["data"]["children"]
+		string = ""
+
+		return Book.reddit_comments(input)
+	end
+
+	def self.reddit_comments(comment_array)
+		local_string = ""
+		counter = 0
+		comment_array.each do |comment|
+			local_string += comment["data"]["body"] if comment["data"]["body"]
+			counter += 1
+
+			if comment["data"]["replies"] && !(comment["data"]["replies"].empty?)
+				local_string += Book.reddit_comments(comment["data"]["replies"]["data"]["children"])
+			end
+		end
+
+		return local_string
+	end
+
 
 	def self.breakdown(text, type)
 		
@@ -578,7 +604,7 @@ class Book < ApplicationRecord
 
 	end # end method self.breakdown
 
-	def self.nlu_analysis(input_location)
+	def self.nlu_analysis(comment_array_location)
 		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
 		read_location = "&url=https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/"
 		title = "alice_in_wonderland.txt"
