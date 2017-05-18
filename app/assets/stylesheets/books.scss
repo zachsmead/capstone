@@ -7,19 +7,24 @@ body {
 }
 
 .header-box {
-	margin-top: 20px;
+	margin-top: 30px;
+	margin-bottom: 10px;
 }
 
 .header-link {
-	color: white;
+	color: #000282;
+	font-weight: normal;
 }
 
 #wordcloud {
-	background-color: white;
-	padding-top: 15px;
-	padding-bottom: 0px;
+	background-color: #f7f7f7;
+	padding: 0px;
+	padding-top: 18px;
+	padding-bottom: 10px;
+	padding-left: 10px;
+	padding-right: 10px;
 	margin: 20px;
-	margin-top: 20px;
+	margin-top: 10px;
 }
 
 .flex-center {
@@ -37,14 +42,24 @@ input {
 	font-family: Roboto,sans-serif;
 }
 
-.like-button {
-}
 
 .btn {
 	/*font-family: "Lucida Sans Typewriter", "Lucida Console", monaco, "Bitstream Vera Sans Mono", monospace;
 	padding: 10px;
 	padding-left: 20px;
 	padding-right: 20px;*/
+}
+
+.btn-primary {
+	padding: 10px;
+}
+
+.btn-default {
+	padding: 10px;
+}
+
+.btn-danger {
+	padding: 10px;
 }
 
 .col-md-4 {
@@ -60,16 +75,14 @@ input {
 	padding-right: 15px;
 }
 
-.card-block {
+
+.book-card {
+	background-color: #f7f7f7;
 	padding: 15px;
 	margin-top: 0px;
 	margin-bottom: 0px;
 	margin-left: 10px;
 	margin-right: 10px;
-}
-
-.book-card {
-	/*background-color: #7abbcc;*/
 }
 
 .book-title {

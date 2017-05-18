@@ -15,15 +15,15 @@
 						        <!-- <p class="card-text"></p> -->
 						        <% if !(user.id == @current_user_id) %>
 											<%= form_tag "/users/#{user.id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
-												<input type="submit" class="btn btn-primary" value="PROFILE">
+												<input type="submit" class="btn btn-primary btn-rounded" value="PROFILE">
 											<% end %>
 											<%= form_tag "/follows", style:"display: inline-block; padding-top: 15px;", method: :post do %>
 												<input type="hidden" name="followee_id" value="<%=user.id%>">
-												<input type="submit" class="btn btn-default" value="FOLLOW">
+												<input type="submit" class="btn btn-danger btn-rounded" value="FOLLOW">
 											<% end %>
 										<% else %>
 											<%= form_tag "/users/#{@current_user_id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
-												<input type="submit" class="btn btn-primary" value="PROFILE">
+												<input type="submit" class="btn btn-primary btn-rounded" value="PROFILE">
 											<% end %>
 										<% end %>
 						        <!-- <a href="#" class="btn btn-primary">LIKE</a> -->
