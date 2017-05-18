@@ -1,26 +1,71 @@
-<h2>Log in</h2>
+<!--Form with header-->
+<div class="card">
+    <div class="card-block">
 
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-  <div class="field">
-    <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
-  </div>
-
-  <div class="field">
-    <%= f.label :password %><br />
-    <%= f.password_field :password, autocomplete: "off" %>
-  </div>
-
-  <% if devise_mapping.rememberable? -%>
-    <div class="field">
-      <%= f.check_box :remember_me %>
-      <%= f.label :remember_me %>
+  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+    <div class="md-form">
+      <i class="fa fa-envelope prefix"></i>
+      <input type="text" name="email" id="form2" class="form-control">
+      <label for="form2">Your email</label>
     </div>
-  <% end -%>
 
-  <div class="actions">
-    <%= f.submit "Log in" %>
-  </div>
-<% end %>
+    <div class="md-form">
+        <i class="fa fa-lock prefix"></i>
+        <input type="password" id="form4" class="form-control">
+        <label for="form4">Your password</label>
+    </div>
 
-<%= render "devise/shared/links" %>
+
+
+    <div class="field">
+      <%= f.label :email %><br />
+      <%= f.email_field :email, autofocus: true %>
+    </div>
+
+    <div class="field">
+      <%= f.label :password %><br />
+      <%= f.password_field :password, autocomplete: "off" %>
+    </div>
+
+    <% if devise_mapping.rememberable? -%>
+      <div class="field">
+        <%= f.check_box :remember_me %>
+        <%= f.label :remember_me %>
+      </div>
+    <% end -%>
+
+    <div class="actions">
+      <%= f.submit "Log in" %>
+    </div>
+  <% end %>
+
+  <%= render "devise/shared/links" %>
+
+
+        <!--Header-->
+        <div class="form-header  purple darken-4">
+            <h3><i class="fa fa-lock"></i> Login:</h3>
+        </div>
+
+        <!--Body-->
+        
+
+        
+
+        <div class="text-center">
+            <button class="btn btn-deep-purple">Login</button>
+        </div>
+
+    </div>
+
+    <!--Footer-->
+    <div class="modal-footer">
+        <div class="options">
+            <p>Not a member? <a href="#">Sign Up</a></p>
+            <p>Forgot <a href="#">Password?</a></p>
+        </div>
+    </div>
+
+</div>
+<!--/Form with header-->
+

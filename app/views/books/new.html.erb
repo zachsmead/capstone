@@ -2,7 +2,7 @@
 	<h1>Create a new wordcloud</h1>
 </div>
 
-<div class="new-book-page-alignment">
+<!-- <div class="new-book-page-alignment">
 	<div class="col-md-6 col-centered text-center">
 		<%= form_tag "/books", method: :post do %>
 			<input type="text" name="title" placeholder="Title"><br />
@@ -20,57 +20,97 @@
 			<%= submit_tag 'Upload book' %>
 		<% end %>
 	</div>
-</div>
+</div> -->
 
-<div class="col-md-4">
+<div class="col-md-4 book-new-form">
 	<div class="card">
 	    <div class="card-block">
-
 	        <!--Header-->
 	        <div class="text-center">
-	            <h3><i class="fa fa-lock"></i>webpage</h3>
+	            <h3><i class=""></i>webpage</h3>
 	            <hr class="mt-2 mb-2">
+
 	            <%= form_tag "/books", method: :post do %>
 	            	<div class="md-form">
-			            <!-- <i class="fa fa-edit prefix" aria-hidden="true"></i> -->
 									<i class="fa fa-edit prefix" aria-hidden="true"></i>
-									<input type="text" class="" name="title" placeholder="Title"><br />
-									<i class="fa fa-at prefix" aria-hidden="true"></i>
-									<input type="text" name="url" placeholder="URL"><br />
-									<button type="submit" class="btn btn-lime">Go!</button><br />
+									<input type="text" name="title" id="title-form" class="">
+									<label for="title-form">Title</label>
 								</div>
+
+								<div class="md-form">
+									<i class="fa fa-at prefix" aria-hidden="true"></i>
+									<input type="text" name="url" id="url-form" class="">
+									<label for="url-form">URL</label>
+								</div>
+
+								<button type="submit" class="btn btn-lime">Go!</button>
 							<% end %>
-
-							<!-- <div class="md-form">
-		            <i class="fa fa-envelope prefix"></i>
-		            <input type="text" id="form2" class="form-control">
-		            <label for="form2">Your email</label>
-			        </div> -->
 	        </div>
-
-	        <!--Body-->
-	        <!-- <div class="md-form">
-	            <i class="fa fa-envelope prefix"></i>
-	            <input type="text" id="form2" class="form-control">
-	            <label for="form2">Your email</label>
-	        </div> -->
-
-	        <!-- <div class="md-form">
-	            <i class="fa fa-lock prefix"></i>
-	            <input type="password" id="form4" class="form-control">
-	            <label for="form4">Your password</label>
-	        </div> -->
-
-	        <div class="text-center">
-	            <button class="btn btn-lime">Go!</button>
-	        </div>
-
 	    </div>
-
 	    <!--Footer-->
-	    
-
 	</div>
 	<!--/Form without header-->
 </div>
+
+<div class="col-md-4 book-new-form">
+	<div class="card">
+	    <div class="card-block">
+	        <!--Header-->
+	        <div class="text-center">
+	            <h3><i class=""></i>upload text</h3>
+	            <hr class="mt-2 mb-2">
+
+	            <%= form_tag books_path, enctype: 'multipart/form-data' do %>
+	            	<div class="md-form">
+									<input type="text" name="title" placeholder="Title"><br />
+									<div class=""><%= file_field_tag :file %></div>
+									<%= submit_tag 'Upload book' %>
+								</div>
+							<% end %>
+
+	            <%= form_tag "/books", method: :post do %>
+	            	<div class="md-form">
+									<i class="fa fa-edit prefix" aria-hidden="true"></i>
+									<input type="text" name="title" id="title-form" class="">
+									<label for="title-form">Title</label>
+								</div>
+
+								<div class="md-form">
+									<i class="fa fa-at prefix" aria-hidden="true"></i>
+									<input type="text" name="url" id="url-form" class="">
+									<label for="url-form">URL</label>
+								</div>
+
+								<button type="submit" class="btn btn-lime">Go!</button>
+							<% end %>
+	        </div>
+	    </div>
+	    <!--Footer-->
+	</div>
+	<!--/Form without header-->
+</div>
+
+
+<div class="row">
+    <div class="col-md-8 mb-2">
+        <div class="md-form">
+            <label for="event_title">Event Title</label>
+            <input name="event_title" type="text" id="event_title">
+        </div>
+    </div>
+    <div class="col-md-4 mb-2">
+        <div class="file-field">
+						<div class="btn btn-danger waves-effect">                
+						<span>Select Banner</span>
+            <input type="file">
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path validate" type="text" placeholder="Upload Banner File">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
