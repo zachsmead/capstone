@@ -39,14 +39,14 @@ class BooksController < ApplicationController
 
 	def create
 
-		if params[:file] && params[:title] == ""
+		if params[:file] && params[:title] == "" # check for title. if there isn't one, make one.
 			params[:title] = File.basename(params[:file].original_filename, '.txt')
 		elsif params[:url] && params[:title] == ""
 			webpage = Nokogiri::HTML(open params[:url])
-			params[:title] = '"' + webpage.at('title').inner_text
+			params[:title] = webpage.at('title').inner_text
 		end
 
-		params[:card_title] = params[:title].truncate(27) + ' "'
+		params[:card_title] = params[:title].truncate(27)
 
 		# Step 1. Make the book in S3
 		# Make an object in your bucket for your upload
