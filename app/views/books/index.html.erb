@@ -1,38 +1,40 @@
-<% @books.each_slice(3) do |three_books| %>
-	<div class="row">
-		<% three_books.each do |book| %>
+<div style="margin-top: 6px;">
+	<% @books.each_slice(3) do |three_books| %>
+		<div class="row">
+			<% three_books.each do |book| %>
 
-			<div class="col-md-4">
-					<!--Card-->
-					<div class="card card-block book-card">
-					    <!--Card content-->
-					    <div>
-					        <!--Title-->
-					        <h4 class="card-title book-title"><a href="<%= book.url %>"><%= book.card_title.upcase %></a></h4>
-					        <!--Text-->
-					        <!-- <p class="card-text"></p> -->
-					        <!-- <a href="/books/<%= book.id %>" class="btn btn-primary btn-lg">WORDCLOUD</a> -->
-					        <%= form_tag "/books/#{book.id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
-										<input type="submit" class="btn btn-primary" value="WORDCLOUD">
-					        <% end %>
-					        <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px;", method: :post do %>
-										<input type="hidden" name="book_id" value="<%= book.id %>">
-										<input type="submit" class="btn btn-danger btn-rounded" value="LIKE">
-									<% end %>
+				<div class="col-md-4">
+						<!--Card-->
+						<div class="card card-block book-card">
+						    <!--Card content-->
+						    <div>
+						        <!--Title-->
+						        <h4 class="card-title book-title"><a href="<%= book.url %>"><%= book.card_title.upcase %></a></h4>
+						        <!--Text-->
+						        <!-- <p class="card-text"></p> -->
+						        <!-- <a href="/books/<%= book.id %>" class="btn btn-primary btn-lg">WORDCLOUD</a> -->
+						        <%= form_tag "/books/#{book.id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
+											<input type="submit" class="btn btn-primary" value="WORDCLOUD">
+						        <% end %>
+						        <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px;", method: :post do %>
+											<input type="hidden" name="book_id" value="<%= book.id %>">
+											<input type="submit" class="btn btn-danger btn-rounded" value="LIKE">
+										<% end %>
 
-					        <!-- <a href="#" class="btn btn-primary">LIKE</a> -->
-					    </div>
-					    <!--/.Card content-->
+						        <!-- <a href="#" class="btn btn-primary">LIKE</a> -->
+						    </div>
+						    <!--/.Card content-->
 
-					</div>
-					<!--/.Card-->
-			</div>
+						</div>
+						<!--/.Card-->
+				</div>
 
-		<% end %>
+			<% end %>
 
-	</div>
+		</div>
 
-<% end %>
+	<% end %>
+</div>
 
 
 

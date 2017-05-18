@@ -21,3 +21,56 @@
 		<% end %>
 	</div>
 </div>
+
+<div class="col-md-4">
+	<div class="card">
+	    <div class="card-block">
+
+	        <!--Header-->
+	        <div class="text-center">
+	            <h3><i class="fa fa-lock"></i>webpage</h3>
+	            <hr class="mt-2 mb-2">
+	            <%= form_tag "/books", method: :post do %>
+	            	<div class="md-form">
+			            <!-- <i class="fa fa-edit prefix" aria-hidden="true"></i> -->
+									<i class="fa fa-edit prefix" aria-hidden="true"></i>
+									<input type="text" class="" name="title" placeholder="Title"><br />
+									<i class="fa fa-at prefix" aria-hidden="true"></i>
+									<input type="text" name="url" placeholder="URL"><br />
+									<button type="submit" class="btn btn-lime">Go!</button><br />
+								</div>
+							<% end %>
+
+							<!-- <div class="md-form">
+		            <i class="fa fa-envelope prefix"></i>
+		            <input type="text" id="form2" class="form-control">
+		            <label for="form2">Your email</label>
+			        </div> -->
+	        </div>
+
+	        <!--Body-->
+	        <!-- <div class="md-form">
+	            <i class="fa fa-envelope prefix"></i>
+	            <input type="text" id="form2" class="form-control">
+	            <label for="form2">Your email</label>
+	        </div> -->
+
+	        <!-- <div class="md-form">
+	            <i class="fa fa-lock prefix"></i>
+	            <input type="password" id="form4" class="form-control">
+	            <label for="form4">Your password</label>
+	        </div> -->
+
+	        <div class="text-center">
+	            <button class="btn btn-lime">Go!</button>
+	        </div>
+
+	    </div>
+
+	    <!--Footer-->
+	    
+
+	</div>
+	<!--/Form without header-->
+</div>
+

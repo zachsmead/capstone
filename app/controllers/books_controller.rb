@@ -40,7 +40,7 @@ class BooksController < ApplicationController
 	def create
 
 		if params[:file] && params[:title] == "" # check for title. if there isn't one, make one.
-			params[:title] = File.basename(params[:file].original_filename, '.txt')
+			params[:title] = File.basename(params[:file].original_filename, '.txt').parameterize('_')
 		elsif params[:url] && params[:title] == ""
 			webpage = Nokogiri::HTML(open params[:url])
 			params[:title] = webpage.at('title').inner_text
