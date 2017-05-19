@@ -39,22 +39,47 @@ class BooksController < ApplicationController
 
 	def create
 
-		if params == nil
-			flash[:danger] = "Please choose a url or file"
-			redirect_to "/books/new"
+		# binding.pry
+		
+		if params[:form_identifier] == "url"
+			puts "Conditional URL identifier"
+			if params[:url] == ""
+				puts "URL isnt here"
+				flash[:danger] = "Please choose a url or file"
+				redirect_to "/books/new"
+				return
+			end
+		elsif params[:form_identifier] == "file"
+			puts "Conditional File identifier"
+			if params[:file] == nil
+				puts "File not there"
+				flash[:danger] = "Please choose a url or file"
+				redirect_to "/books/new"
+				return
+			end
 		end
 
 		if params[:file] && params[:title] == "" # check for title. if there isn't one, make one.
 			params[:title] = File.basename(params[:file].original_filename, '.txt').parameterize('_')
+		elsif (params[:url] && params[:title] == "" && params[:url].starts_with?("https://www.reddit.com") || params[:url].starts_with?("www.reddit.com") && params[:url].include?("/comments/"))
+			webpage = Nokogiri::HTML(
+				open(
+					params[:url],
+					"User-Agent" => "OpenBooks"
+				) 
+			)
+			params[:title] = webpage.at('title').inner_text
 		elsif params[:url] && params[:title] == ""
 			webpage = Nokogiri::HTML(open params[:url])
 			params[:title] = webpage.at('title').inner_text
 		end
 
+
+
 		params[:card_title] = params[:title].truncate(27)
 
-		# Step 1. Make the book in S3
-		# Make an object in your bucket for your upload
+
+
 		if params[:file] # this means that a file was uploaded
 			book_url = Book.create_s3_object(params) # takes in params, stores text as s3 obj, returns a url for the obj
 

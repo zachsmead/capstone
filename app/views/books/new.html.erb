@@ -12,7 +12,7 @@
 		            <hr class="mt-2 mb-2">
 
 		            <%= form_tag "/books", method: :post do %>
-
+			            <%= hidden_field_tag "form_identifier", "url" %>
 		            	<div class="md-form book-url-md-form">
 										<i class="fa fa-edit prefix" aria-hidden="true"></i>
 										<input type="text" name="title" id="title-form" class="">
@@ -45,6 +45,7 @@
 		            <%= form_tag books_path, enctype: 'multipart/form-data' do %>
 
 		            	<div class="md-form book-upload-md-form">
+		            		<%= hidden_field_tag "form_identifier", "file" %>
 										<!-- <input type="text" name="title" placeholder="Title"><br /> -->
 										<i class="fa fa-edit prefix" aria-hidden="true"></i>
 										<input type="text" name="title" id="file-title-form" class="">

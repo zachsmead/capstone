@@ -71,14 +71,12 @@ class Book < ApplicationRecord
 		url = page.url # the url we're going to scrape from
 
 		if url.starts_with?("https://www.reddit.com") || url.starts_with?("www.reddit.com") && url.include?("/comments/")
-			webpage_text = Book.reddit_get_main_comment(url)
-			s3_title = page.title.gsub(/[^a-z\s]/i, '')
+			webpage_text = Book.reddit_start_get_recursion(url)
+			s3_title = page.title.gsub(/[^a-z\s]/i, '').parameterize('_')
 		else
 			webpage = Nokogiri::HTML(open url)
 			webpage_text = webpage.at('body').inner_text
-
 			s3_title = webpage.at('title').inner_text[0..45].parameterize('_') # set a title based on the webwebpage title
-
 		end
 
 			# next, make the webpage's wordcloud
@@ -95,15 +93,24 @@ class Book < ApplicationRecord
 
 	end
 
-	def self.reddit_get_main_comment(url) # get the main comment and start recursively grabbing comments
-		input = Unirest.get(url + '.json').body[1]["data"]["children"]
-		string = ""
+	def self.reddit_start_get_recursion(url) # get the main comment and start recursively grabbing comments
 
-		return Book.reddit_comments(input)
+		input = Unirest.get(url + '.json').body
+		output_string = ""
+
+		if input[0]["data"]["children"][0]["data"]["selftext"]
+			self_post = input[0]["data"]["children"][0]["data"]["selftext"]
+			output_string += self_post
+		end
+
+		output_string += Book.reddit_comments(input[1]["data"]["children"])
+
+		return output_string
 	end
 
 	def self.reddit_comments(comment_array)
 		local_string = ""
+
 		comment_array.each do |comment|
 			local_string += (comment["data"]["body"] + " ") if comment["data"]["body"]
 
