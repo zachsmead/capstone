@@ -39,6 +39,11 @@ class BooksController < ApplicationController
 
 	def create
 
+		if params == nil
+			flash[:danger] = "Please choose a url or file"
+			redirect_to "/books/new"
+		end
+
 		if params[:file] && params[:title] == "" # check for title. if there isn't one, make one.
 			params[:title] = File.basename(params[:file].original_filename, '.txt').parameterize('_')
 		elsif params[:url] && params[:title] == ""
@@ -78,7 +83,7 @@ class BooksController < ApplicationController
 			redirect_to books_path, success: 'File successfully uploaded'
 		else
 			flash.now[:notice] = 'There was an error'
-			render :new
+			redirect_to "/books/new"
 		end
 
 	end

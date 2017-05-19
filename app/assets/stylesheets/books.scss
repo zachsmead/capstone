@@ -66,7 +66,9 @@ input {
 }
 
 .btn-default {
-	padding: 10px;
+	padding: 15px;
+	padding-left: 30px;
+	padding-right: 30px;
 }
 
 .btn-danger {
@@ -89,6 +91,36 @@ input {
 	margin-top: 0px;
 	margin-left: 0px;
 	margin-right: 0px;
+}
+
+.book-new-column {
+	margin-left: 50px;
+	margin-right: 50px;
+	margin-bottom: 50px;
+}
+
+.book-url-card {
+	min-height: 350px;
+	margin-right: 2px;
+	margin-left: 2px;
+}
+
+.book-upload-card {
+	min-height: 350px;
+	margin-right: 2px;
+	margin-left: 2px;
+}
+
+.book-url-md-form {
+	/* sets padding for input textboxes */
+	margin-right: 5px;
+}
+
+.book-upload-md-form {
+	/* sets padding for input textboxes */
+	margin-top: 20px;
+	margin-bottom: 87px;
+	margin-right: 5px;
 }
 
 .row {

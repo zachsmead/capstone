@@ -1,113 +1,71 @@
-<div class="header-box">
+<div class="header-box" style="margin-left: 50px;">
 	<h1>Create a new wordcloud</h1>
 </div>
 
-<!-- <div class="new-book-page-alignment">
-	<div class="col-md-6 col-centered text-center">
-		<%= form_tag "/books", method: :post do %>
-			<input type="text" name="title" placeholder="Title"><br />
-			<input type="text" name="url" placeholder="URL"><br />
-			<input type="submit" value="Create"><br />
-		<% end %>
+<div class="row">
+	<div class="col-md-5 book-new-column">
+		<div class="card">
+		    <div class="card-block book-url-card">
+		        <!--Header-->
+		        <div class="text-center">
+		            <h3><i class=""></i>webpage</h3>
+		            <hr class="mt-2 mb-2">
 
-		<br />
-		- or -
-		<br /><br />
+		            <%= form_tag "/books", method: :post do %>
 
-		<%= form_tag books_path, enctype: 'multipart/form-data' do %>
-			<input type="text" name="title" placeholder="Title"><br />
-			<div class="new-book-file-block"><%= file_field_tag :file %></div>
-			<%= submit_tag 'Upload book' %>
-		<% end %>
-	</div>
-</div> -->
-
-<div class="col-md-4 book-new-form">
-	<div class="card">
-	    <div class="card-block">
-	        <!--Header-->
-	        <div class="text-center">
-	            <h3><i class=""></i>webpage</h3>
-	            <hr class="mt-2 mb-2">
-
-	            <%= form_tag "/books", method: :post do %>
-	            	<div class="md-form">
-									<i class="fa fa-edit prefix" aria-hidden="true"></i>
-									<input type="text" name="title" id="title-form" class="">
-									<label for="title-form">Title</label>
-								</div>
-
-								<div class="md-form">
-									<i class="fa fa-at prefix" aria-hidden="true"></i>
-									<input type="text" name="url" id="url-form" class="">
-									<label for="url-form">URL</label>
-								</div>
-
-								<button type="submit" class="btn btn-lime">Go!</button>
-							<% end %>
-	        </div>
-	    </div>
-	    <!--Footer-->
-	</div>
-	<!--/Form without header-->
-</div>
-
-<div class="col-md-4 book-new-form">
-	<div class="card">
-	    <div class="card-block">
-	        <!--Header-->
-	        <div class="text-center">
-	            <h3><i class=""></i>upload text</h3>
-	            <hr class="mt-2 mb-2">
-
-	            <%= form_tag books_path, enctype: 'multipart/form-data' do %>
-	            	<div class="md-form">
-									<input type="text" name="title" placeholder="Title"><br />
-									<div class="">
-										<!-- <%= file_field_tag :file, class: "btn btn-lime" %> -->
-										<input type="file" name="file" class="hidden-file" id="choose-file" value="hidden file button">
-										<button type="button" class="btn btn-default" id="activate-file-choose">Choose a file</button>
+		            	<div class="md-form book-url-md-form">
+										<i class="fa fa-edit prefix" aria-hidden="true"></i>
+										<input type="text" name="title" id="title-form" class="">
+										<label for="title-form">Title</label>
 									</div>
-									<!-- <%= submit_tag 'Upload book' %> -->
+
+									<div class="md-form book-new-md-form">
+										<i class="fa fa-at prefix" aria-hidden="true"></i>
+										<input type="text" name="url" id="url-form" class="">
+										<label for="url-form">URL</label>
+									</div>
+
 									<button type="submit" class="btn btn-lime">Go!</button>
-								</div>
-							<% end %>
-
-	            <%= form_tag "/books", method: :post do %>
-	            	<div class="md-form">
-									<i class="fa fa-edit prefix" aria-hidden="true"></i>
-									<input type="text" name="title" id="title-form" class="">
-									<label for="title-form">Title</label>
-								</div>
-							<% end %>
-
-	        </div>
-	    </div>
-	    <!--Footer-->
+								<% end %>
+		        </div>
+		    </div>
+		    <!--Footer-->
+		</div>
+		<!--/Form without header-->
 	</div>
-	<!--/Form without header-->
-</div>
 
+	<div class="col-md-5 book-new-column">
+		<div class="card">
+		    <div class="card-block book-upload-card">
+		        <!--Header-->
+		        <div class="text-center">
+		            <h3><i class=""></i>upload text</h3>
+		            <hr class="mt-2 mb-2">
 
-<!-- <div class="row">
-    <div class="col-md-8 mb-2">
-        <div class="md-form">
-            <label for="event_title">Event Title</label>
-            <input name="event_title" type="text" id="event_title">
-        </div>
-    </div>
-    <div class="col-md-4 mb-2">
-        <div class="file-field">
-						<div class="btn btn-danger waves-effect">                
-						<span>Select Banner</span>
-            <input type="file">
-            </div>
-            <div class="file-path-wrapper">
-                <input class="file-path validate" type="text" placeholder="Upload Banner File">
-            </div>
-        </div>
-    </div>
-</div> -->
+		            <%= form_tag books_path, enctype: 'multipart/form-data' do %>
+
+		            	<div class="md-form book-upload-md-form">
+										<!-- <input type="text" name="title" placeholder="Title"><br /> -->
+										<i class="fa fa-edit prefix" aria-hidden="true"></i>
+										<input type="text" name="title" id="file-title-form" class="">
+										<label for="file-title-form">Title</label>
+									</div>
+										
+									<div class="hidden-file-div">
+										<input type="file" name="file" class="hidden-file" id="choose-file" value="hidden file button">
+									</div>
+
+									<button type="button" class="btn btn-default" id="activate-file-choose">Choose a file</button>
+									<button type="submit" class="btn btn-lime">Go!</button>
+
+								<% end %>
+		        </div>
+		    </div>
+		    <!--Footer-->
+		</div>
+		<!--/Form without header-->
+	</div>
+
 
 <script type="text/javascript">
 	$("#activate-file-choose").click(function() {
