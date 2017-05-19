@@ -8,6 +8,25 @@ body {
 
 
 .header-box {
+	/*color: #4a4777;*/
+	word-wrap: break-word;
+	padding-left: 70px;
+	padding-right: 70px;
+	margin-top: 30px;
+	margin-bottom: 10px;
+}
+
+.index-header-box {
+	/*color: #4a4777;*/
+	word-wrap: break-word;
+	padding-left: 70px;
+	padding-right: 70px;
+	margin-top: 50px;
+	margin-bottom: 60px;
+}
+
+.header-box {
+	/*color: #4a4777;*/
 	word-wrap: break-word;
 	padding-left: 70px;
 	padding-right: 70px;
@@ -18,13 +37,36 @@ body {
 .new-book-header-box {
 	text-align: center;
 	color: default;
-	margin-top: 30px;
+	margin-top: 50px;
 	margin-bottom: 60px;
 }
 
+.header-subsection-divider {
+	display: inline-block; 
+	padding-left: 15px; 
+	color: #34347a;
+}
+
+.header-subsection {
+	display: inline-block; 
+	padding-left: 15px; 
+	color: #2e2e60;
+}
+
+
 .header-link {
-	color: #000282;
-	font-weight: normal;
+	color: #f7f7f7;
+	font-weight: thin;
+
+	-moz-transition:color .2s ease-in;
+  -o-transition:color .2s ease-in;
+  -webkit-transition:color .2s ease-in;
+  transition: all .2s ease-in;
+
+}
+
+.header-link:hover {
+	color: #eaeaea;
 }
 
 #wordcloud {
