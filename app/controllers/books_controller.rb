@@ -41,7 +41,7 @@ class BooksController < ApplicationController
 
 		# binding.pry
 		
-		# validations - checks if there is a file or url present
+		# validations - checks if there is a file or url present. uses hidden_field_tag :form_identifier in new.html.erb
 		if params[:form_identifier] == "url"
 			puts "Conditional URL identifier"
 			if params[:url] == ""
@@ -62,7 +62,7 @@ class BooksController < ApplicationController
 
 		if params[:file] && params[:title] == "" # check for title. if there isn't one, make one.
 			params[:title] = File.basename(params[:file].original_filename, '.txt').parameterize('_')
-		elsif (params[:url] && params[:title] == "" && params[:url].starts_with?("https://www.reddit.com") || params[:url].starts_with?("www.reddit.com") && params[:url].include?("/comments/"))
+		elsif (params[:url] && params[:title] == "") && params[:url].starts_with?("https://www.reddit.com") || (params[:url].starts_with?("www.reddit.com") && params[:url].include?("/comments/"))
 			webpage = Nokogiri::HTML(
 				open(
 					params[:url],
