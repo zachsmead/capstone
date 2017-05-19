@@ -41,6 +41,7 @@ class BooksController < ApplicationController
 
 		# binding.pry
 		
+		# validations - checks if there is a file or url present
 		if params[:form_identifier] == "url"
 			puts "Conditional URL identifier"
 			if params[:url] == ""
@@ -105,7 +106,7 @@ class BooksController < ApplicationController
 		end # end if statement
 		
 		if @book.save
-			redirect_to books_path, success: 'File successfully uploaded'
+			redirect_to "/books/#{@book.id}", success: 'File successfully uploaded'
 		else
 			flash.now[:notice] = 'There was an error'
 			redirect_to "/books/new"
