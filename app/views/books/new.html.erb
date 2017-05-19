@@ -63,8 +63,13 @@
 	            <%= form_tag books_path, enctype: 'multipart/form-data' do %>
 	            	<div class="md-form">
 									<input type="text" name="title" placeholder="Title"><br />
-									<div class=""><%= file_field_tag :file %></div>
-									<%= submit_tag 'Upload book' %>
+									<div class="">
+										<!-- <%= file_field_tag :file, class: "btn btn-lime" %> -->
+										<input type="file" name="file" class="hidden-file" id="choose-file" value="hidden file button">
+										<button type="button" class="btn btn-default" id="activate-file-choose">Choose a file</button>
+									</div>
+									<!-- <%= submit_tag 'Upload book' %> -->
+									<button type="submit" class="btn btn-lime">Go!</button>
 								</div>
 							<% end %>
 
@@ -74,15 +79,8 @@
 									<input type="text" name="title" id="title-form" class="">
 									<label for="title-form">Title</label>
 								</div>
-
-								<div class="md-form">
-									<i class="fa fa-at prefix" aria-hidden="true"></i>
-									<input type="text" name="url" id="url-form" class="">
-									<label for="url-form">URL</label>
-								</div>
-
-								<button type="submit" class="btn btn-lime">Go!</button>
 							<% end %>
+
 	        </div>
 	    </div>
 	    <!--Footer-->
@@ -91,7 +89,7 @@
 </div>
 
 
-<div class="row">
+<!-- <div class="row">
     <div class="col-md-8 mb-2">
         <div class="md-form">
             <label for="event_title">Event Title</label>
@@ -109,8 +107,14 @@
             </div>
         </div>
     </div>
-</div>
+</div> -->
 
+<script type="text/javascript">
+	$("#activate-file-choose").click(function() {
+    $("#choose-file").click();
+    console.log("activated");
+	})
+</script>
 
 
 
