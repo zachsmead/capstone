@@ -14,11 +14,11 @@
 						        <!-- <p class="card-text"></p> -->
 						        <!-- <a href="/books/<%= book.id %>" class="btn btn-primary btn-lg">WORDCLOUD</a> -->
 						        <%= form_tag "/books/#{book.id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
-											<input type="submit" class="btn btn-primary" value="WORDCLOUD">
+											<button type="submit" class="btn btn-lime book-button-long">WORDCLOUD</button>
 						        <% end %>
 						        <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px;", method: :post do %>
 											<input type="hidden" name="book_id" value="<%= book.id %>">
-											<input type="submit" class="btn btn-danger btn-rounded" value="LIKE">
+											<button type="submit" class="btn btn-danger book-button-short">LIKE</button>
 										<% end %>
 
 						        <!-- <a href="#" class="btn btn-primary">LIKE</a> -->
