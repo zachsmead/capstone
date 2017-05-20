@@ -42,32 +42,9 @@ class Book < ApplicationRecord
 			'anger' => 0
 		}
 
-		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
-		
-		if book.scraped_content_url != nil
-			read_location = "&url=" + book.scraped_content_url 
-		else
-			read_location = "&url=" + book.url 
-		end
-
-		api_params = "&features=keywords,entities&entities.emotion=true&entities.sentiment=true&keywords.emotion=true&keywords.sentiment=true"
-		
-		full_query = api_location + read_location + api_params
-
-		# puts full_query
-
-		query_results = Unirest.get(full_query,	
-			auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
-			headers: { "Accept" => "application/json"}
-			# parameters: [
-			# 	# url: 'https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/alice_in_wonderland.txt'
-			# 	# features: {:concepts => {:limit => 8}, :emotions => true}
-			# ]
-		).body
+		query_results = Unirest.get(book.analysis_url).body
 
 		query_results['keywords'].each do | keyword | # loop through all keywords in the result
-
-
 			if !emotions_summary['sentiment'] # add up all the keywords' relevance-weighted sentiment
 				emotions_summary['sentiment'] = keyword['sentiment']['score'] * keyword['relevance']
 			else
@@ -84,13 +61,12 @@ class Book < ApplicationRecord
 					end
 				end
 			end
-
 		end # end query_results['keywords'].each loop
 
 
 
 		emotions_summary.each do | emotion, score | # finally, average all the emotion scores
-			emotions_summary[emotion] = (score / query_results['keywords'].length) * 10
+			emotions_summary[emotion] = (score / query_results['keywords'].length)
 		end
 
 		return emotions_summary
@@ -121,8 +97,10 @@ class Book < ApplicationRecord
 			# ]
 		).body
 
+		puts query_results
+
 		analysis_json = S3_BUCKET.objects.create(
-			"book_clouds/" + book.title + '_' + book.id.to_s + '.js', @book_frequencies
+			"analysis/" + book.title.parameterize('_') + '_' + book.id.to_s + '.js', query_results
 		)
 		analysis_json.acl = :public_read
 

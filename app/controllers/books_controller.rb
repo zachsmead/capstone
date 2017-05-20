@@ -14,8 +14,17 @@ class BooksController < ApplicationController
 
 	def show
 		@book = Book.find_by(id: params[:id])
+
+		# this method .updates @book.analysis_url if it doesn't already have a value
+
+		if !@book.analysis_url
+			analysis_url = Book.store_nlu_analysis(@book)
+			Book.update(analysis_url: analysis_url)
+			@emotions_summary = Book.nlu_analysis(@book)
+		else
+			@emotions_summary = Book.nlu_analysis(@book)
+		end
 		
-		@test = Book.nlu_analysis(@book)
 	end
 
 	def new
