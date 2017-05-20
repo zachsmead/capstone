@@ -165,7 +165,8 @@ class Book < ApplicationRecord
 		).body
 	end
 
-	def self.twitter_build_auth_string(auth) # creates a parameter string for all auth params, this will be converted again.
+	def self.twitter_auth_string(auth) # creates a parameter string for all auth params, this will be converted again.
+		# https://dev.twitter.com/oauth/overview/creating-signatures
 		output_string = ""
 
 		auth.each_with_index do |(key, value), index|
@@ -178,6 +179,20 @@ class Book < ApplicationRecord
 				output_string += '&'
 			end
 		end
+
+		return output_string
+	end
+
+	def self.twitter_signature_base_string(url, auth_string)
+		# https://dev.twitter.com/oauth/overview/creating-signatures
+		output_string = ""
+		http_method = "GET"
+
+		output_string += http_method
+		output_string += "&"
+		output_string += CGI.escape(url)
+		output_string += "&"
+		output_string += CGI.escape(auth_string)
 
 		return output_string
 	end
