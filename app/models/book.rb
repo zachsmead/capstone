@@ -8,7 +8,7 @@ class Book < ApplicationRecord
 	has_many :genres, through: :book_genres
 	has_many :book_genres
 
-	def self.create_s3_object(params)
+	def self.s3_text_upload(params)
 		# We want this method to:
 		# 1. take the params hash,
 		# 2. Make a s3 storage object named/located by the params,
@@ -32,6 +32,24 @@ class Book < ApplicationRecord
 		return uploaded_book.public_url # 2nd important thing to return
 
 	end
+
+	def self.nlu_analysis(comment_array_location)
+		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
+		read_location = "&url=https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/"
+		title = "alice_in_wonderland.txt"
+		api_params = "&features=keywords,entities&entities.emotion=true&entities.sentiment=true&keywords.emotion=true&keywords.sentiment=true"
+		full_query = api_location + read_location + title + api_params
+
+		@test = Unirest.get(full_query,	
+			auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
+			headers: { "Accept" => "application/json"}
+			# parameters: [
+			# 	# url: 'https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/alice_in_wonderland.txt'
+			# 	# features: {:concepts => {:limit => 8}, :emotions => true}
+			# ]
+		).body
+
+	end # end method self.nlu_analysis
 
 
 	def self.create_book_wordcount(book)
@@ -734,22 +752,6 @@ class Book < ApplicationRecord
 
 	end # end method self.breakdown
 
-	def self.nlu_analysis(comment_array_location)
-		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
-		read_location = "&url=https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/"
-		title = "alice_in_wonderland.txt"
-		api_params = "&features=keywords,entities&entities.emotion=true&entities.sentiment=true&keywords.emotion=true&keywords.sentiment=true"
-		full_query = api_location + read_location + title + api_params
 
-		@test = Unirest.get(full_query,	
-			auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
-			headers: { "Accept" => "application/json"}
-			# parameters: [
-			# 	# url: 'https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/alice_in_wonderland.txt'
-			# 	# features: {:concepts => {:limit => 8}, :emotions => true}
-			# ]
-		).body
-
-	end # end method self.nlu_analysis
 
 end

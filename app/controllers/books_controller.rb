@@ -16,20 +16,27 @@ class BooksController < ApplicationController
 		@book = Book.find_by(id: params[:id])
 
 		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
-		read_location = "&url=https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/"
-		title = "alice_in_wonderland.txt"
+		
+		if @book.scraped_content_url != nil
+			read_location = "&url=" + @book.scraped_content_url 
+		else
+			read_location = "&url=" + @book.url 
+		end
+
 		api_params = "&features=keywords,entities&entities.emotion=true&entities.sentiment=true&keywords.emotion=true&keywords.sentiment=true"
-		full_query = api_location + read_location + title + api_params
+		
+		full_query = api_location + read_location + api_params
+
 
 		
-		# @test = Unirest.get(full_query,	
-		# 	auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
-		# 	headers: { "Accept" => "application/json"}
-		# 	# parameters: [
-		# 	# 	# url: 'https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/alice_in_wonderland.txt'
-		# 	# 	# features: {:concepts => {:limit => 8}, :emotions => true}
-		# 	# ]
-		# ).body
+		@test = Unirest.get(full_query,	
+			auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
+			headers: { "Accept" => "application/json"}
+			# parameters: [
+			# 	# url: 'https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/alice_in_wonderland.txt'
+			# 	# features: {:concepts => {:limit => 8}, :emotions => true}
+			# ]
+		).body
 
 		# Book.nlu_analysis(@book.url)
 	end
@@ -85,7 +92,7 @@ class BooksController < ApplicationController
 
 
 		if params[:file] # this means that a file was uploaded
-			book_url = Book.create_s3_object(params) # takes in params, stores text as s3 obj, returns a url for the obj
+			book_url = Book.s3_text_upload(params) # takes in params, stores text as s3 obj, returns a url for the obj
 
 			@book = Book.new(title: params[:title], card_title: params[:card_title], url: book_url)
 			@book.save # save the book so it has an id when we pass it to the wordcount json builder
