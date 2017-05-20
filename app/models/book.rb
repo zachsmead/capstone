@@ -122,15 +122,6 @@ class Book < ApplicationRecord
 		return local_string
 	end
 
-	# def self.twitter_config
-	# 	@twitter_client = Twitter::Client.new do |config|
-	# 	  config.consumer_key = ENV['TWITTER_CONSUMER_KEY']
-	# 	  config.consumer_secret = ENV['TWITTER_CONSUMER_SECRET']
-	# 	  config.access_token = ENV['TWITTER_ACCESS_TOKEN]']
-	# 	  config.access_token_secret = ENV['TWITTER_ACCESS_SECRET']
-	# 	end
-	# end
-
 	def self.twitter_get_tweets(username)
 		# @twitter_client.user_timeline(username)
 
@@ -142,17 +133,6 @@ class Book < ApplicationRecord
 
 		tweets = Unirest.get(full_query, 
 			headers: {'Authorization' => Book.twitter_request_auth_header}
-			# auth: {
-			# 	:include_entities => true,
-			# 	:oauth_consumer_key => ENV['TWITTER_CONSUMER_KEY'], 
-			# 	:oauth_nonce => [*('a'..'z'),*('0'..'9')].shuffle[0,50].join, # just a random string to distinguish calls.
-			# 	# ^ Twitter will use this value to determine whether a request has been submitted multiple times.
-			# 	:oauth_signature => Book.twitter_create_oauth_signature,
-			# 	:oauth_signature_method => 'HMAC-SHA1',
-			# 	:oauth_timestamp => Time.now.to_i, # gives a special time format - google 'Unix Epoch'
-			# 	:oauth_token => ENV['TWITTER_ACCESS_TOKEN'],
-			# 	:oauth_version => '1.0'
-			# }
 		).body
 	end
 
@@ -191,6 +171,7 @@ class Book < ApplicationRecord
 		url = 'https://api.twitter.com/1.1/statuses/user_timeline.json'
 
 		auth = {
+			'include_entities' => true,
 			'oauth_consumer_key' => ENV['TWITTER_CONSUMER_KEY'], 
 			'oauth_nonce' => [*('a'..'z'),*('0'..'9')].shuffle[0,50].join, # just a random string to distinguish calls.
 			# ^ Twitter will use this value to determine whether a request has been submitted multiple times.
