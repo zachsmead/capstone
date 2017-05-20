@@ -74,7 +74,7 @@ class BooksController < ApplicationController
 			@book = Book.new(title: params[:title], card_title: params[:card_title], url: book_url)
 			@book.save # save the book so it has an id when we pass it to the wordcount json builder
 
-			book_json_url = Book.create_book_wordcount(@book)
+			book_json_url = Book.s3_text_upload_json(@book)
 
 			@book.update(book_cloud_url: book_json_url)
 
@@ -87,9 +87,13 @@ class BooksController < ApplicationController
 			@book = Book.new(title: title, card_title: params[:card_title], url: fixed_url)
 			@book.save
 
-			book_json_url = Book.create_webpage_wordcount(@book)
+			attributes = Book.s3_web_content_json(@book)
 
-			@book.update(book_cloud_url: book_json_url)
+			@book.update(
+				book_cloud_url: attributes[:book_cloud_url],
+				scraped_content_url: attributes[:scraped_content_url]
+			)
+
 		end # end if statement
 		
 		if @book.save

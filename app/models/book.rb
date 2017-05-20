@@ -58,7 +58,7 @@ class Book < ApplicationRecord
 	end # end method self.nlu_analysis
 
 
-	def self.create_book_wordcount(book)
+	def self.s3_text_upload_json(book) # make a wordcount json in s3 for uploaded text input
 		@book_text = Unirest.get(
 			book.url,
 			headers: {
@@ -91,8 +91,11 @@ class Book < ApplicationRecord
 	end
 
 
-	def self.create_webpage_wordcount(page)
+	def self.s3_web_content_json(page) 		# make a wordcount json in s3 for web content input
+																				# => NOTE: also saves a s3 text file for scraped content
+
 		url = page.url # the url we're going to scrape from
+		attributes = {}
 
 		if url.starts_with?("https://www.reddit.com") || url.starts_with?("www.reddit.com") && url.include?("/comments/")
 			webpage_text = Book.reddit_start_get_recursion(url)
@@ -102,7 +105,6 @@ class Book < ApplicationRecord
 			webpage_text = webpage.at('body').inner_text
 			s3_title = webpage.at('title').inner_text[0..45].parameterize('_') # set a title based on the webwebpage title
 		end
-
 		
 		page_frequencies = Book.breakdown(webpage_text, 'page')
 
@@ -111,8 +113,20 @@ class Book < ApplicationRecord
 			"book_clouds/" + s3_title + '_' + page.id.to_s + '.js', page_frequencies
 		)
 		frequency_count_json.acl = :public_read
-		return frequency_count_json.public_url # return the url of this wordcloud so we can update book in the controller
 
+		attributes[:book_cloud_url] = frequency_count_json.public_url # return the url of this wordcloud so we can update book in the controller
+		attributes[:scraped_content_url] = Book.s3_store_scraped_content(s3_title, page.id, webpage_text) 
+		# ^ run the method s3_store_scraped_content to store the scraped content, which also returns the public url of that stored object
+
+		return attributes
+	end
+
+	def self.s3_store_scraped_content(s3_title, number, content_string)
+		stored_string = S3_BUCKET.objects.create(
+			"scraped_content/" + s3_title + '_' + number.to_s + '.txt', content_string
+		)
+		stored_string.acl = :public_read
+		return stored_string.public_url 
 	end
 
 	def self.reddit_start_get_recursion(url) # get the main comment and start recursively grabbing comments
