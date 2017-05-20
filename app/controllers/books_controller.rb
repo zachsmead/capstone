@@ -22,10 +22,9 @@ class BooksController < ApplicationController
 	end
 
 	def create
-
-		# binding.pry
 		
-		# validations - checks if there is a file or url present. uses hidden_field_tag :form_identifier in new.html.erb
+		# validations 
+		# checks if there is a file or url present. uses hidden_field_tag :form_identifier in new.html.erb
 		if params[:form_identifier] == "url"
 			puts "Conditional URL identifier"
 			if params[:url] == ""

@@ -65,10 +65,6 @@ class Book < ApplicationRecord
 			# ]
 		).body
 
-		puts "*" * 100
-		p query_results['keywords'].length
-		puts "*" * 100
-
 		query_results['keywords'].each do | keyword | # loop through all keywords in the result
 
 
@@ -101,6 +97,38 @@ class Book < ApplicationRecord
 
 	end # end method self.nlu_analysis
 
+	def self.store_nlu_analysis(book)
+		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
+		
+		if book.scraped_content_url
+			read_location = "&url=" + book.scraped_content_url 
+		else
+			read_location = "&url=" + book.url 
+		end
+
+		api_params = "&features=keywords,entities&entities.emotion=true&entities.sentiment=true&keywords.emotion=true&keywords.sentiment=true"
+		
+		full_query = api_location + read_location + api_params
+
+		# puts full_query
+
+		query_results = Unirest.get(full_query,	
+			auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
+			headers: { "Accept" => "application/json"}
+			# parameters: [
+			# 	# url: 'https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/alice_in_wonderland.txt'
+			# 	# features: {:concepts => {:limit => 8}, :emotions => true}
+			# ]
+		).body
+
+		analysis_json = S3_BUCKET.objects.create(
+			"book_clouds/" + book.title + '_' + book.id.to_s + '.js', @book_frequencies
+		)
+		analysis_json.acl = :public_read
+
+		return analysis_json.public_url
+	end
+
 
 	def self.s3_text_upload_json(book) # make a wordcount json in s3 for uploaded text input
 		@book_text = Unirest.get(
@@ -120,7 +148,6 @@ class Book < ApplicationRecord
 		book_json.acl = :public_read
 
 		return book_json.public_url # return the url of this wordcloud so we can update book in the controller
-
 	end
 
 
@@ -139,15 +166,16 @@ class Book < ApplicationRecord
 																				# => NOTE: also saves a s3 text file for scraped content
 
 		url = page.url # the url we're going to scrape from
+		s3_title = page.title
 		attributes = {}
 
 		if url.starts_with?("https://www.reddit.com") || url.starts_with?("www.reddit.com") && url.include?("/comments/")
 			webpage_text = Book.reddit_start_get_recursion(url)
-			s3_title = page.title.gsub(/[^a-z\s]/i, '').parameterize('_')
+			# s3_title = page.title.gsub(/[^a-z\s]/i, '').parameterize('_')
 		else
 			webpage = Nokogiri::HTML(open url)
 			webpage_text = webpage.at('body').inner_text
-			s3_title = webpage.at('title').inner_text[0..45].parameterize('_') # set a title based on the webwebpage title
+			# s3_title = webpage.at('title').inner_text[0..45].parameterize('_') # set a title based on the webpage title
 		end
 		
 		page_frequencies = Book.breakdown(webpage_text, 'page')
@@ -159,15 +187,16 @@ class Book < ApplicationRecord
 		frequency_count_json.acl = :public_read
 
 		attributes[:book_cloud_url] = frequency_count_json.public_url # return the url of this wordcloud so we can update book in the controller
-		attributes[:scraped_content_url] = Book.s3_store_scraped_content(s3_title, page.id, webpage_text) 
+		attributes[:scraped_content_url] = Book.s3_store_scraped_content(s3_title, page, webpage_text) 
 		# ^ run the method s3_store_scraped_content to store the scraped content, which also returns the public url of that stored object
 
 		return attributes
 	end
 
-	def self.s3_store_scraped_content(s3_title, number, content_string)
+
+	def self.s3_store_scraped_content(s3_title, page, content_string)
 		stored_string = S3_BUCKET.objects.create(
-			"scraped_content/" + s3_title + '_' + number.to_s + '.txt', content_string
+			"scraped_content/" + s3_title + '_' + page.id.to_s + '.txt', content_string
 		)
 		stored_string.acl = :public_read
 		return stored_string.public_url 
