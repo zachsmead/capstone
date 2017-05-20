@@ -1,47 +1,41 @@
-<div class="header-box">
-	<h1>Users</h1>
-</div>
+<% @users.each_slice(3) do |three_users| %>
 
-<div class="col-md-12" style="margin-bottom: 100px;">
-	<% @users.each_slice(3) do |three_users| %>
+	<div class="row">
 
-		<div class="row">
+		<% three_users.each do |user|%>
 
-			<% three_users.each do |user|%>
-
-				<div class="col-md-4">
-							<!--Card-->
-							<div class="card card-block user-card" style="margin-top: 30px;">
-							    <!--Card content-->
-							    <div>
-							        <!--Title-->
-							        <h4 class="card-title user-title"><a href="#"><%= user.email %></a></h4>
-							        <!--Text-->
-							        <!-- <p class="card-text"></p> -->
-							        <% if !(user.id == @current_user_id) %>
-												<%= form_tag "/users/#{user.id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
-													<button type="submit" class="btn btn-primary user-button-long">PROFILE</button>
-												<% end %>
-												<%= form_tag "/follows", style:"display: inline-block; padding-top: 15px;", method: :post do %>
-													<input type="hidden" name="followee_id" value="<%=user.id%>">
-													<button type="submit" class="btn btn-danger user-button-short">FOLLOW</button>
-												<% end %>
-											<% else %>
-												<%= form_tag "/users/#{@current_user_id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
-													<button type="submit" class="btn btn-primary user-button-long">PROFILE</button>
-												<% end %>
+			<div class="col-md-4">
+						<!--Card-->
+						<div class="card card-block user-card">
+						    <!--Card content-->
+						    <div>
+						        <!--Title-->
+						        <h4 class="card-title user-title"><a href="#"><%= user.email %></a></h4>
+						        <!--Text-->
+						        <!-- <p class="card-text"></p> -->
+						        <% if !(user.id == @current_user_id) %>
+											<%= form_tag "/users/#{user.id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
+												<button type="submit" class="btn btn-primary user-button-long">PROFILE</button>
 											<% end %>
-							        <!-- <a href="#" class="btn btn-primary">LIKE</a> -->
-							    </div>
-							    <!--/.Card content-->
+											<%= form_tag "/follows", style:"display: inline-block; padding-top: 15px;", method: :post do %>
+												<input type="hidden" name="followee_id" value="<%=user.id%>">
+												<button type="submit" class="btn btn-danger user-button-short">FOLLOW</button>
+											<% end %>
+										<% else %>
+											<%= form_tag "/users/#{@current_user_id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
+												<button type="submit" class="btn btn-primary user-button-long">PROFILE</button>
+											<% end %>
+										<% end %>
+						        <!-- <a href="#" class="btn btn-primary">LIKE</a> -->
+						    </div>
+						    <!--/.Card content-->
 
-							</div>
-							<!--/.Card-->
-					</div>
-				
-			<% end %>
+						</div>
+						<!--/.Card-->
+				</div>
+			
+		<% end %>
 
-		</div>
+	</div>
 
-	<% end %>
-</div>
+<% end %>

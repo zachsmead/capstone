@@ -62,20 +62,17 @@ class BooksController < ApplicationController
 
 		if params[:file] && params[:title] == "" # check for title. if there isn't one, make one.
 			params[:title] = File.basename(params[:file].original_filename, '.txt').parameterize('_')
+		elsif (params[:url] && params[:title] == "") && params[:url].starts_with?("https://www.reddit.com") || (params[:url].starts_with?("www.reddit.com") && params[:url].include?("/comments/"))
+			webpage = Nokogiri::HTML(
+				open(
+					params[:url],
+					"User-Agent" => "OpenBooks"
+				) 
+			)
+			params[:title] = webpage.at('title').inner_text
 		elsif params[:url] && params[:title] == ""
-			if params[:url].starts_with?("https://www.reddit.com") || (params[:url].starts_with?("www.reddit.com") && params[:url].include?("/comments/"))
-				webpage = Nokogiri::HTML(
-					open(
-						params[:url],
-						"User-Agent" => "OpenBooks"
-					) 
-				)
-				webpage = Nokogiri::HTML(open params[:url])
-				params[:title] = webpage.at('title').inner_text
-			else
-				webpage = Nokogiri::HTML(open params[:url])
-				params[:title] = webpage.at('title').inner_text
-			end
+			webpage = Nokogiri::HTML(open params[:url])
+			params[:title] = webpage.at('title').inner_text
 		end
 
 
