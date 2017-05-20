@@ -14,6 +14,7 @@ gem 'd3-rails', '~> 4.1'
 gem 'd3-tip-rails'
 gem 'nokogiri'
 gem 'seed_dump'
+# gem 'twitter'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
