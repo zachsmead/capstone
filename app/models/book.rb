@@ -30,11 +30,17 @@ class Book < ApplicationRecord
 		)
 
 		return uploaded_book.public_url # 2nd important thing to return
-
 	end
 
 	def self.nlu_analysis(book)
-		emotions_summary = {}
+		emotions_summary = {
+			'sentiment' => 0,
+			'sadness' => 0,
+			'joy' => 0,
+			'fear' => 0,
+			'disgust' => 0,
+			'anger' => 0
+		}
 
 		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
 		
@@ -48,7 +54,7 @@ class Book < ApplicationRecord
 		
 		full_query = api_location + read_location + api_params
 
-		puts full_query
+		# puts full_query
 
 		query_results = Unirest.get(full_query,	
 			auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
@@ -59,32 +65,36 @@ class Book < ApplicationRecord
 			# ]
 		).body
 
+		puts "*" * 100
+		p query_results['keywords'].length
+		puts "*" * 100
+
 		query_results['keywords'].each do | keyword | # loop through all keywords in the result
 
 
-			if !emotions_summary['sentiment'] # add up all the keywords' sentiment
-				emotions_summary['sentiment'] = keyword['sentiment']['score']
+			if !emotions_summary['sentiment'] # add up all the keywords' relevance-weighted sentiment
+				emotions_summary['sentiment'] = keyword['sentiment']['score'] * keyword['relevance']
 			else
-				emotions_summary['sentiment'] = keyword['sentiment']['score']
+				emotions_summary['sentiment'] += keyword['sentiment']['score'] * keyword['relevance']
 			end
 
-			puts "*" * 100
-			p emotions_summary
-			puts "*" * 100
 
-			if keyword['emotion'] # if the keyword has an emotion hash
-				keyword['emotion'].each do | emotion, value | # add those all up too
+			if keyword['emotion'] 													# if the keyword has an emotion hash,
+				keyword['emotion'].each do | emotion, score | # add those all up too, weighted by relevance
 					if !emotions_summary[emotion]
-						emotions_summary[emotion] = value
+						emotions_summary[emotion] = score * keyword['relevance']
 					else
-						emotions_summary[emotion] += value
+						emotions_summary[emotion] += score * keyword['relevance']
 					end
 				end
 			end
-		end
+
+		end # end query_results['keywords'].each loop
+
+
 
 		emotions_summary.each do | emotion, score | # finally, average all the emotion scores
-			score = score / query_results['keywords'].length
+			emotions_summary[emotion] = (score / query_results['keywords'].length) * 10
 		end
 
 		return emotions_summary

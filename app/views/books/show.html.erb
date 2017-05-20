@@ -73,21 +73,36 @@
         <button type="submit" class="btn btn-danger book-button-short" style="">LIKE</button>
       <% end %>
 
-      <script>
-        d3.wordcloud()
-          .size([1180, 400])
-          .spiral('archimedean')
-          .scale('sqrt')
-          .font('Lucida-Sans-Unicode')
-          .fill(d3.scale.ordinal().range(["#00770c", "#0e661e", "#048c1c", "#1ebc3a", "#40ce59", "#1fb72e"])) // green
-          // .fill(d3.scale.ordinal().range(["#020202", "#2d2d2d", "#545454", "#7a7a7a", "#9e9e9e", "#aaaaaa"])) // grayscale
-          // .fill(d3.scale.ordinal().range(["#080063", "#180e87", "#2a1eb2", "#4236c4", "#5e53d1", "#8d83f7"])) // blue
-          // .fill(d3.scale.ordinal().range(["#4016fc", "#e2122d", "#136300", "#ad42f4", "#f77810", "#fc077d"])) // rainbow
-          .words(words)
-          .onwordclick(function(d, i) {
-            d3.tip().show();
-          })
-          .start();
-      </script>
+      <div class="text-center">
+        <span class="min-chart" id="chart-sales" data-percent="56"><span class="percent"></span></span>
+        <h5><span class="label green">Sales <i class="fa fa-arrow-circle-up"></i></span></h5>
+      </div>
+
     </div>
+    <script>
+      d3.wordcloud()
+        .size([1180, 400])
+        .spiral('archimedean')
+        .scale('sqrt')
+        .font('Lucida-Sans-Unicode')
+        .fill(d3.scale.ordinal().range(["#00770c", "#0e661e", "#048c1c", "#1ebc3a", "#40ce59", "#1fb72e"])) // green
+        // .fill(d3.scale.ordinal().range(["#020202", "#2d2d2d", "#545454", "#7a7a7a", "#9e9e9e", "#aaaaaa"])) // grayscale
+        // .fill(d3.scale.ordinal().range(["#080063", "#180e87", "#2a1eb2", "#4236c4", "#5e53d1", "#8d83f7"])) // blue
+        // .fill(d3.scale.ordinal().range(["#4016fc", "#e2122d", "#136300", "#ad42f4", "#f77810", "#fc077d"])) // rainbow
+        .words(words)
+        .onwordclick(function(d, i) {
+          d3.tip().show();
+        })
+        .start();
+    </script>
+
+    <script type="text/javascript">$(function () {
+        $('.min-chart#chart-sales').easyPieChart({
+            barColor: "#4caf50",
+            onStep: function (from, to, percent) {
+                $(this.el).find('.percent').text(Math.round(percent));
+            }
+        });
+      });
+    </script>
   </body>
