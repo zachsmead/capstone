@@ -34,6 +34,8 @@ class Book < ApplicationRecord
 	end
 
 	def self.nlu_analysis(book)
+		emotions_summary = {}
+
 		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
 		
 		if book.scraped_content_url != nil
@@ -46,7 +48,9 @@ class Book < ApplicationRecord
 		
 		full_query = api_location + read_location + api_params
 
-		return Unirest.get(full_query,	
+		puts full_query
+
+		query_results = Unirest.get(full_query,	
 			auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
 			headers: { "Accept" => "application/json"}
 			# parameters: [
@@ -54,6 +58,36 @@ class Book < ApplicationRecord
 			# 	# features: {:concepts => {:limit => 8}, :emotions => true}
 			# ]
 		).body
+
+		query_results['keywords'].each do | keyword | # loop through all keywords in the result
+
+
+			if !emotions_summary['sentiment'] # add up all the keywords' sentiment
+				emotions_summary['sentiment'] = keyword['sentiment']['score']
+			else
+				emotions_summary['sentiment'] = keyword['sentiment']['score']
+			end
+
+			puts "*" * 100
+			p emotions_summary
+			puts "*" * 100
+
+			if keyword['emotion'] # if the keyword has an emotion hash
+				keyword['emotion'].each do | emotion, value | # add those all up too
+					if !emotions_summary[emotion]
+						emotions_summary[emotion] = value
+					else
+						emotions_summary[emotion] += value
+					end
+				end
+			end
+		end
+
+		emotions_summary.each do | emotion, score | # finally, average all the emotion scores
+			score = score / query_results['keywords'].length
+		end
+
+		return emotions_summary
 
 	end # end method self.nlu_analysis
 
