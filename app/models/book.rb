@@ -33,14 +33,20 @@ class Book < ApplicationRecord
 
 	end
 
-	def self.nlu_analysis(comment_array_location)
+	def self.nlu_analysis(book)
 		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
-		read_location = "&url=https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/"
-		title = "alice_in_wonderland.txt"
-		api_params = "&features=keywords,entities&entities.emotion=true&entities.sentiment=true&keywords.emotion=true&keywords.sentiment=true"
-		full_query = api_location + read_location + title + api_params
+		
+		if book.scraped_content_url != nil
+			read_location = "&url=" + book.scraped_content_url 
+		else
+			read_location = "&url=" + book.url 
+		end
 
-		@test = Unirest.get(full_query,	
+		api_params = "&features=keywords,entities&entities.emotion=true&entities.sentiment=true&keywords.emotion=true&keywords.sentiment=true"
+		
+		full_query = api_location + read_location + api_params
+
+		return Unirest.get(full_query,	
 			auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
 			headers: { "Accept" => "application/json"}
 			# parameters: [
@@ -97,17 +103,15 @@ class Book < ApplicationRecord
 			s3_title = webpage.at('title').inner_text[0..45].parameterize('_') # set a title based on the webwebpage title
 		end
 
-			# next, make the webpage's wordcloud
-			# Run the breakdown method which converts the webpage to a word-count hash
-			# call breakdown with type = 'webpage', so we count every word on the webpage.
-			page_frequencies = Book.breakdown(webpage_text, 'page')
+		
+		page_frequencies = Book.breakdown(webpage_text, 'page')
 
-			# Make a javascript file in the bucket, give it a unique name using book object's id
-			frequency_count_json = S3_BUCKET.objects.create(
-				"book_clouds/" + s3_title + '_' + page.id.to_s + '.js', page_frequencies
-			)
-			frequency_count_json.acl = :public_read
-			return frequency_count_json.public_url # return the url of this wordcloud so we can update book in the controller
+		# Make a javascript file in the bucket, give it a unique name using book object's id
+		frequency_count_json = S3_BUCKET.objects.create(
+			"book_clouds/" + s3_title + '_' + page.id.to_s + '.js', page_frequencies
+		)
+		frequency_count_json.acl = :public_read
+		return frequency_count_json.public_url # return the url of this wordcloud so we can update book in the controller
 
 	end
 

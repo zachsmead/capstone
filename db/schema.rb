@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170518074327) do
+ActiveRecord::Schema.define(version: 20170520085158) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,10 +32,11 @@ ActiveRecord::Schema.define(version: 20170518074327) do
   create_table "books", force: :cascade do |t|
     t.string   "title"
     t.string   "url"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
     t.string   "book_cloud_url"
     t.string   "card_title"
+    t.string   "scraped_content_url"
   end
 
   create_table "follows", force: :cascade do |t|

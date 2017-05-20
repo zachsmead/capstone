@@ -14,31 +14,8 @@ class BooksController < ApplicationController
 
 	def show
 		@book = Book.find_by(id: params[:id])
-
-		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
 		
-		if @book.scraped_content_url != nil
-			read_location = "&url=" + @book.scraped_content_url 
-		else
-			read_location = "&url=" + @book.url 
-		end
-
-		api_params = "&features=keywords,entities&entities.emotion=true&entities.sentiment=true&keywords.emotion=true&keywords.sentiment=true"
-		
-		full_query = api_location + read_location + api_params
-
-
-		
-		@test = Unirest.get(full_query,	
-			auth: {:user => ENV['NLU_USERNAME'], :password => ENV['NLU_PASSWORD']}, 
-			headers: { "Accept" => "application/json"}
-			# parameters: [
-			# 	# url: 'https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/alice_in_wonderland.txt'
-			# 	# features: {:concepts => {:limit => 8}, :emotions => true}
-			# ]
-		).body
-
-		# Book.nlu_analysis(@book.url)
+		@test = Book.nlu_analysis(@book)
 	end
 
 	def new
