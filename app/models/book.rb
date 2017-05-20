@@ -134,14 +134,28 @@ class Book < ApplicationRecord
 	def self.twitter_get_tweets(username)
 		# @twitter_client.user_timeline(username)
 
-		url_endpoint = 'https://api.twitter.com/1.1/statuses/user_timeline.json'
+		base_url = 'https://api.twitter.com/1.1/statuses/user_timeline.json'
 		username_to_grab = '?screen_name=' + username
-		full_query = url_endpoint + username_to_grab
+		full_query = base_url + username_to_grab
+
+		auth = {
+			'oauth_consumer_key' => ENV['TWITTER_CONSUMER_KEY'], 
+			'oauth_nonce' => [*('a'..'z'),*('0'..'9')].shuffle[0,50].join, # just a random string to distinguish calls.
+			# ^ Twitter will use this value to determine whether a request has been submitted multiple times.
+			# 'oauth_signature' => 'go here -> https://dev.twitter.com/oauth/overview/creating-signatures',
+			'oauth_signature_method' => 'HMAC-SHA1',
+			'oauth_timestamp' => Time.now.to_i, # gives a special time format - google 'Unix Epoch'
+			'oauth_token' => ENV['TWITTER_ACCESS_TOKEN'],
+			'oauth_version' => '1.0'	
+		}
+
 
 		tweets = Unirest.get(full_query, 
 			auth: {
+				:include_entities => true,
 				:oauth_consumer_key => ENV['TWITTER_CONSUMER_KEY'], 
-				:oauth_nonce => [*('a'..'z'),*('0'..'9')].shuffle[0,50].join, # just a random string to distinguish calls
+				:oauth_nonce => [*('a'..'z'),*('0'..'9')].shuffle[0,50].join, # just a random string to distinguish calls.
+				# ^ Twitter will use this value to determine whether a request has been submitted multiple times.
 				:oauth_signature => 'go here -> https://dev.twitter.com/oauth/overview/creating-signatures',
 				:oauth_signature_method => 'HMAC-SHA1',
 				:oauth_timestamp => Time.now.to_i, # gives a special time format - google 'Unix Epoch'
@@ -149,6 +163,23 @@ class Book < ApplicationRecord
 				:oauth_version => '1.0'
 			}
 		).body
+	end
+
+	def self.twitter_build_auth_string(auth) # creates a parameter string for all auth params, this will be converted again.
+		output_string = ""
+
+		auth.each_with_index do |(key, value), index|
+			encoded_key = CGI.escape(key)
+			encoded_value = CGI.escape(value.to_s)
+			output_string += encoded_key
+			output_string += '='
+			output_string += encoded_value
+			unless index == auth.length - 1
+				output_string += '&'
+			end
+		end
+
+		return output_string
 	end
 
 
