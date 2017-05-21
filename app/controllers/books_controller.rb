@@ -20,8 +20,7 @@ class BooksController < ApplicationController
 		if !@book.analysis_url
 			analysis_url = Book.store_nlu_analysis(@book)
 			Book.update(analysis_url: analysis_url)
-			# @emotions_summary = Book.nlu_analysis(@book)
-			redirect_to "/books/#{@book.id}", success: 'File successfully uploaded'
+			redirect_to "/books/#{@book.id}"
 		else
 			@emotions_summary = Book.nlu_analysis(@book)
 		end

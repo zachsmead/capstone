@@ -142,7 +142,7 @@ class Book < ApplicationRecord
 																				# => NOTE: also saves a s3 text file for scraped content
 
 		url = page.url # the url we're going to scrape from
-		s3_title = page.title
+		s3_title = page.title[0..45].parameterize('_')
 		attributes = {}
 
 		if url.starts_with?("https://www.reddit.com") || url.starts_with?("www.reddit.com") && url.include?("/comments/")
