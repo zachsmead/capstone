@@ -67,7 +67,7 @@ class Book < ApplicationRecord
 
 
 		# finally, average all the emotion scores
-		(emotions_summary.reject {|emotion, score | emotion == 'sentiment' }).each do | emotion, score | 
+		emotions_summary.each do | emotion, score | 
 			emotions_summary[emotion] = (score / query_results['keywords'].length)
 		end
 
