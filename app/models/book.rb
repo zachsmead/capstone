@@ -95,12 +95,10 @@ class Book < ApplicationRecord
 			# 	# url: 'https://s3-us-west-1.amazonaws.com/projectgutenbergtest/books/alice_in_wonderland.txt'
 			# 	# features: {:concepts => {:limit => 8}, :emotions => true}
 			# ]
-		).body
-
-		puts query_results
+		).body.to_json
 
 		analysis_json = S3_BUCKET.objects.create(
-			"analysis/" + book.title.parameterize('_') + '_' + book.id.to_s + '.js', query_results
+			"analysis/" + book.title.parameterize('_') + '_' + book.id.to_s + '.json', query_results
 		)
 		analysis_json.acl = :public_read
 
