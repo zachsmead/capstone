@@ -14,7 +14,7 @@ gem 'd3-rails', '~> 4.1'
 gem 'd3-tip-rails'
 gem 'nokogiri'
 gem 'seed_dump'
-# gem 'twitter'
+gem 'twitter'
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 0.18'
 # Use Puma as the app server
@@ -53,7 +53,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
   gem 'dotenv-rails'#, require: 'dotenv/rails-now'
-  gem 'pry-rails'
+  # gem 'pry-rails'
 end
 
 group :development do

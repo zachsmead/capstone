@@ -32,7 +32,8 @@ class Book < ApplicationRecord
 		return uploaded_book.public_url # 2nd important thing to return
 	end
 
-	def self.nlu_analysis(book)
+	def self.nlu_analysis(book) # this method grabs the stored nlu analysis json and turns it into another json
+															# which sums or averages all the elements from that json.
 		emotions_summary = {
 			'sentiment' => 0,
 			'sadness' => 0,
@@ -41,32 +42,45 @@ class Book < ApplicationRecord
 			'disgust' => 0,
 			'anger' => 0
 		}
+		all_emotions_total = 0
 
 		query_results = Unirest.get(book.analysis_url).body
 
 		query_results['keywords'].each do | keyword | # loop through all keywords in the result
-			if !emotions_summary['sentiment'] # add up all the keywords' relevance-weighted sentiment
-				emotions_summary['sentiment'] = keyword['sentiment']['score'] * keyword['relevance']
+			if !emotions_summary['sentiment']					  # add up all the keywords' un-relevance-weighted sentiment
+				emotions_summary['sentiment'] = keyword['sentiment']['score'] #* keyword['relevance']
 			else
-				emotions_summary['sentiment'] += keyword['sentiment']['score'] * keyword['relevance']
+				emotions_summary['sentiment'] += keyword['sentiment']['score'] #* keyword['relevance']
 			end
 
 
 			if keyword['emotion'] 													# if the keyword has an emotion hash,
-				keyword['emotion'].each do | emotion, score | # add those all up too, weighted by relevance
+				keyword['emotion'].each do | emotion, score | # add those up weighted by relevance
 					if !emotions_summary[emotion]
-						emotions_summary[emotion] = score * keyword['relevance']
+						emotions_summary[emotion] = score #* keyword['relevance']
 					else
-						emotions_summary[emotion] += score * keyword['relevance']
+						emotions_summary[emotion] += score #* keyword['relevance']
 					end
 				end
 			end
 		end # end query_results['keywords'].each loop
 
 
-
-		emotions_summary.each do | emotion, score | # finally, average all the emotion scores
+		# finally, average all the emotion scores
+		(emotions_summary.reject {|emotion, score | emotion == 'sentiment' }).each do | emotion, score | 
 			emotions_summary[emotion] = (score / query_results['keywords'].length)
+		end
+
+		# or express emotion scores as % total of the whole document
+		# start by adding all the emotions up for a total score												
+		(emotions_summary.reject {|emotion, score | emotion == 'sentiment' }).each do | emotion, score | 
+			all_emotions_total += score
+		end
+
+		# emotions_summary['all_emotions_total'] = all_emotions_total
+
+		(emotions_summary.reject {|emotion, score | emotion == 'sentiment' }).each do | emotion, score | # next, change the scores to their percent of the total
+			emotions_summary[emotion] = (score / all_emotions_total).round(4) * 100
 		end
 
 		return emotions_summary
