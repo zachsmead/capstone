@@ -18,11 +18,11 @@ class BooksController < ApplicationController
 		# this method .updates @book.analysis_url if it doesn't already have a value
 
 		if !@book.analysis_url
-			analysis_url = Book.store_nlu_analysis(@book)
+			analysis_url = Nlu.store_analysis(@book)
 			Book.update(analysis_url: analysis_url)
 			redirect_to "/books/#{@book.id}"
 		else
-			@emotions_summary = Book.nlu_analysis(@book)
+			@emotions_summary = Nlu.analysis(@book)
 		end
 		
 	end
