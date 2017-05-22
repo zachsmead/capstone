@@ -113,7 +113,7 @@ class BooksController < ApplicationController
 				scraped_content_url: attributes[:scraped_content_url]
 			)
 		elsif params[:url] == "" # this means a reddit or twitter username was given
-			if params[:twitter_username] != ""
+			if params[:twitter_username] != "" && params[:reddit_username] == ""
 				title = params[:title]
 				twitter_username = params[:twitter_username]
 				url = 'https://twitter.com/' + twitter_username
@@ -122,6 +122,24 @@ class BooksController < ApplicationController
 					title: title, 
 					card_title: params[:card_title], 
 					twitter_username: twitter_username)
+				@book.save
+
+				attributes = Book.s3_web_content_json(@book)
+
+				@book.update(
+					url: url,
+					book_cloud_url: attributes[:book_cloud_url],
+					scraped_content_url: attributes[:scraped_content_url]
+				)
+			elsif params[:reddit_username] != "" && params[:twitter_username] == ""
+				title = params[:title]
+				reddit_username = params[:reddit_username]
+				url = 'https://reddit.com/u/' + reddit_username
+
+				@book = Book.new(
+					title: title, 
+					card_title: params[:card_title], 
+					reddit_username: reddit_username)
 				@book.save
 
 				attributes = Book.s3_web_content_json(@book)

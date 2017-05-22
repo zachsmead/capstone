@@ -86,12 +86,15 @@ class Book < ApplicationRecord
 			tweets = twitter_client.get_all_tweets(twitter_username) # get all the tweets from the user
 			webpage_text = twitter_client.tweets_into_string(tweets)
 
-			if webpage_text.length > 10000
+			if webpage_text.length > 20000
 				type = 'book'
 			else
 				type = 'page'
 			end
-
+		elsif reddit_username
+			# grab all the user's comments
+			webpage_text = Reddit.grab_user_comments(reddit_username, '')
+			type = 'page'
 		else
 			webpage = Nokogiri::HTML(open url)
 			webpage_text = webpage.at('body').inner_text

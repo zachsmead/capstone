@@ -27,4 +27,25 @@ class Reddit
 
 		return local_string
 	end
+
+	def self.grab_user_comments(username, next_page) # recursively grab all user comments
+		comment_json = Unirest.get(
+			'https://reddit.com/u/' + username + '/comments.json?sort=top&count=200&after=' + next_page
+		).body
+		comment_array = comment_json['data']['children']
+
+		comment_counter = 0
+		output_string = ""
+
+		comment_array.each do |comment|
+			output_string += comment['data']['body']
+		end
+
+		if comment_json['data']['after']
+			output_string += Reddit.grab_user_comments(username, comment_json['data']['after'])
+		end
+
+		return output_string
+
+	end
 end
