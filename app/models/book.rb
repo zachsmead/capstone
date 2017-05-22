@@ -162,7 +162,7 @@ class Book < ApplicationRecord
 
 		if url
 			if url.starts_with?("https://www.reddit.com") || url.starts_with?("www.reddit.com") && url.include?("/comments/")
-				webpage_text = Book.reddit_start_get_recursion(url)
+				webpage_text = Reddit.start_comment_recursion(url)
 				type = 'page'
 				# s3_title = page.title.gsub(/[^a-z\s]/i, '').parameterize('_')
 			end
@@ -171,7 +171,13 @@ class Book < ApplicationRecord
 			twitter_client = TwitterGrab.new
 			tweets = twitter_client.get_all_tweets(twitter_username) # get all the tweets from the user
 			webpage_text = twitter_client.tweets_into_string(tweets)
-			type = 'book'
+
+			if webpage_text.length > 10000
+				type = 'book'
+			else
+				type = 'page'
+			end
+
 		else
 			webpage = Nokogiri::HTML(open url)
 			webpage_text = webpage.at('body').inner_text
@@ -202,37 +208,6 @@ class Book < ApplicationRecord
 		stored_string.acl = :public_read
 		return stored_string.public_url 
 	end
-
-	def self.reddit_start_get_recursion(url) # get the main comment and start recursively grabbing comments
-
-		input = Unirest.get(url + '.json').body
-		output_string = ""
-
-		if input[0]["data"]["children"][0]["data"]["selftext"]
-			self_post = input[0]["data"]["children"][0]["data"]["selftext"]
-			output_string += self_post
-		end
-
-		output_string += Book.reddit_comments(input[1]["data"]["children"])
-
-		return output_string
-	end
-
-	def self.reddit_comments(comment_array)
-		local_string = ""
-
-		comment_array.each do |comment|
-			local_string += (comment["data"]["body"] + " ") if comment["data"]["body"]
-
-			if comment["data"]["replies"] && !(comment["data"]["replies"].empty?)
-				local_string += Book.reddit_comments(comment["data"]["replies"]["data"]["children"])
-			end
-		end
-
-		return local_string
-	end
-
-
 
 
 	def self.breakdown(text, type)

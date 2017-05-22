@@ -116,13 +116,18 @@ class BooksController < ApplicationController
 			if params[:twitter_username] != ""
 				title = params[:title]
 				twitter_username = params[:twitter_username]
+				url = 'https://twitter.com/' + twitter_username
 
-				@book = Book.new(title: title, card_title: params[:card_title], twitter_username: twitter_username)
+				@book = Book.new(
+					title: title, 
+					card_title: params[:card_title], 
+					twitter_username: twitter_username)
 				@book.save
 
 				attributes = Book.s3_web_content_json(@book)
 
 				@book.update(
+					url: url,
 					book_cloud_url: attributes[:book_cloud_url],
 					scraped_content_url: attributes[:scraped_content_url]
 				)
