@@ -164,7 +164,11 @@ class Book < ApplicationRecord
 		if url.starts_with?("https://www.reddit.com") || url.starts_with?("www.reddit.com") && url.include?("/comments/")
 			webpage_text = Book.reddit_start_get_recursion(url)
 			# s3_title = page.title.gsub(/[^a-z\s]/i, '').parameterize('_')
-		elsif
+		elsif twitter_username
+			# perform the text grab on all the username's tweets
+			twitter_client = TwitterGrab.new
+			tweets = twitter_client.get_all_tweets(twitter_username) # get all the tweets from the user
+			webpage_test = twitter_client.tweets_into_string(tweets)
 		else
 			webpage = Nokogiri::HTML(open url)
 			webpage_text = webpage.at('body').inner_text

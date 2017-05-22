@@ -31,8 +31,14 @@ class TwitterGrab
 	  end
 	end
 
-	def self.save_all_tweets
-		
+	def tweets_into_string(tweets) # takes an array of tweet objects and makes them 1 string for analysis
+		output_string = ''
+
+		tweets.each do |tweet|
+			output_string += tweet.full_text
+		end
+
+		return output_string
 	end
 
 end
