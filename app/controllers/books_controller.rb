@@ -36,11 +36,20 @@ class BooksController < ApplicationController
 		# checks if there is a file or url present. uses hidden_field_tag :form_identifier in new.html.erb
 		if params[:form_identifier] == "url"
 			puts "Conditional URL identifier"
-			if params[:url] == ""
-				puts "URL isnt here"
-				flash[:danger] = "Please choose a url or file"
-				redirect_to "/books/new"
-				return
+			if (params[:reddit_username] != "" || params[:twitter_username] != "")
+				if params[:url] == ""
+					puts "URL isnt here"
+					flash[:danger] = "Please choose a url or file"
+					redirect_to "/books/new"
+					return
+				end
+			else
+				if (params[:reddit_username] == "" && params[:twitter_username] == "")
+					puts "username isnt here"
+					flash[:danger] = "Please give a username or url"
+					redirect_to "/books/new"
+					return
+				end
 			end
 		elsif params[:form_identifier] == "file"
 			puts "Conditional File identifier"
@@ -68,6 +77,9 @@ class BooksController < ApplicationController
 				webpage = Nokogiri::HTML(open params[:url])
 				params[:title] = webpage.at('title').inner_text
 			end
+		elsif params[:url] == "" && (params[:reddit_username] != "" || params[:twitter_username] != "")
+			params[:title] = params[:reddit_username] if params[:reddit_username] != ""
+			params[:title] = params[:reddit_username] if params[:twitter_username] != ""
 		end
 
 
@@ -86,7 +98,7 @@ class BooksController < ApplicationController
 
 			@book.update(book_cloud_url: book_json_url)
 
-		elsif params[:url] # this means that a webpage url was given
+		elsif params[:url] && params[:url] != "" # this means that a webpage url was given
 			title = params[:title]
 			url = params[:url]
 
@@ -101,7 +113,21 @@ class BooksController < ApplicationController
 				book_cloud_url: attributes[:book_cloud_url],
 				scraped_content_url: attributes[:scraped_content_url]
 			)
+		elsif params[:url] == "" # this means a reddit or twitter username was given
+			if params[:twitter_username] != ""
+				title = params[:title]
+				twitter_username = params[:twitter_username]
 
+				@book. = Book.new(title: title, card_title: params[:card_title], twitter_username: twitter_username)
+				@book.save
+
+				attributes = Book.s3_web_content_json(@book)
+
+				@book.update(
+					book_cloud_url: attributes[:book_cloud_url],
+					scraped_content_url: attributes[:scraped_content_url]
+				)
+			end
 		end # end if statement
 		
 		if @book.save
