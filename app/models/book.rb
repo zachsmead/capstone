@@ -77,8 +77,6 @@ class Book < ApplicationRecord
 			all_emotions_total += score
 		end
 
-		# emotions_summary['all_emotions_total'] = all_emotions_total
-
 		(emotions_summary.reject {|emotion, score | emotion == 'sentiment' }).each do | emotion, score | # next, change the scores to their percent of the total
 			emotions_summary[emotion] = (score / all_emotions_total).round(4) * 100
 		end
@@ -161,14 +159,16 @@ class Book < ApplicationRecord
 		s3_title = page.title[0..45].parameterize('_')
 		attributes = {}
 
-		if url.starts_with?("https://www.reddit.com") || url.starts_with?("www.reddit.com") && url.include?("/comments/")
-			webpage_text = Book.reddit_start_get_recursion(url)
-			# s3_title = page.title.gsub(/[^a-z\s]/i, '').parameterize('_')
+		if url
+			if url.starts_with?("https://www.reddit.com") || url.starts_with?("www.reddit.com") && url.include?("/comments/")
+				webpage_text = Book.reddit_start_get_recursion(url)
+				# s3_title = page.title.gsub(/[^a-z\s]/i, '').parameterize('_')
+			end
 		elsif twitter_username
 			# perform the text grab on all the username's tweets
 			twitter_client = TwitterGrab.new
 			tweets = twitter_client.get_all_tweets(twitter_username) # get all the tweets from the user
-			webpage_test = twitter_client.tweets_into_string(tweets)
+			webpage_text = twitter_client.tweets_into_string(tweets)
 		else
 			webpage = Nokogiri::HTML(open url)
 			webpage_text = webpage.at('body').inner_text

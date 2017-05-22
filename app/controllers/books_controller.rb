@@ -36,10 +36,10 @@ class BooksController < ApplicationController
 		# checks if there is a file or url present. uses hidden_field_tag :form_identifier in new.html.erb
 		if params[:form_identifier] == "url"
 			puts "Conditional URL identifier"
-			if (params[:reddit_username] != "" || params[:twitter_username] != "")
+			if (params[:reddit_username] == "" && params[:twitter_username] == "")
 				if params[:url] == ""
 					puts "URL isnt here"
-					flash[:danger] = "Please choose a url or file"
+					flash[:danger] = "Please pick a url or file"
 					redirect_to "/books/new"
 					return
 				end
@@ -63,7 +63,7 @@ class BooksController < ApplicationController
 
 		if params[:file] && params[:title] == "" # check for title. if there isn't one, make one.
 			params[:title] = File.basename(params[:file].original_filename, '.txt').parameterize('_')
-		elsif params[:url] && params[:title] == ""
+		elsif params[:url] && params[:url] != "" && params[:title] == "" # url was given
 			if params[:url].starts_with?("https://www.reddit.com") || (params[:url].starts_with?("www.reddit.com") && params[:url].include?("/comments/"))
 				webpage = Nokogiri::HTML(
 					open(
@@ -71,15 +71,14 @@ class BooksController < ApplicationController
 						"User-Agent" => "OpenBooks"
 					) 
 				)
-				webpage = Nokogiri::HTML(open params[:url])
 				params[:title] = webpage.at('title').inner_text
 			else
 				webpage = Nokogiri::HTML(open params[:url])
 				params[:title] = webpage.at('title').inner_text
 			end
 		elsif params[:url] == "" && (params[:reddit_username] != "" || params[:twitter_username] != "")
-			params[:title] = params[:reddit_username] if params[:reddit_username] != ""
-			params[:title] = params[:reddit_username] if params[:twitter_username] != ""
+			params[:title] = '/u/' + params[:reddit_username] if params[:reddit_username] != ""
+			params[:title] = '@' + params[:twitter_username] if params[:twitter_username] != ""
 		end
 
 
@@ -118,7 +117,7 @@ class BooksController < ApplicationController
 				title = params[:title]
 				twitter_username = params[:twitter_username]
 
-				@book. = Book.new(title: title, card_title: params[:card_title], twitter_username: twitter_username)
+				@book = Book.new(title: title, card_title: params[:card_title], twitter_username: twitter_username)
 				@book.save
 
 				attributes = Book.s3_web_content_json(@book)
