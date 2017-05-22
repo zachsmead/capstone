@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170520234721) do
+ActiveRecord::Schema.define(version: 20170522051650) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -38,6 +38,8 @@ ActiveRecord::Schema.define(version: 20170520234721) do
     t.string   "card_title"
     t.string   "scraped_content_url"
     t.string   "analysis_url"
+    t.string   "reddit_username"
+    t.string   "twitter_username"
   end
 
   create_table "follows", force: :cascade do |t|

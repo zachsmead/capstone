@@ -31,4 +31,8 @@ class TwitterGrab
 	  end
 	end
 
+	def self.save_all_tweets
+		
+	end
+
 end

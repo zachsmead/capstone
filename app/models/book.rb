@@ -1,5 +1,3 @@
-load 'twitter_config.rb'
-
 class Book < ApplicationRecord
 
 	# book likes
@@ -158,12 +156,15 @@ class Book < ApplicationRecord
 																				# => NOTE: also saves a s3 text file for scraped content
 
 		url = page.url # the url we're going to scrape from
+		reddit_username = page.reddit_username
+		twitter_username = page.twitter_username
 		s3_title = page.title[0..45].parameterize('_')
 		attributes = {}
 
 		if url.starts_with?("https://www.reddit.com") || url.starts_with?("www.reddit.com") && url.include?("/comments/")
 			webpage_text = Book.reddit_start_get_recursion(url)
 			# s3_title = page.title.gsub(/[^a-z\s]/i, '').parameterize('_')
+		elsif
 		else
 			webpage = Nokogiri::HTML(open url)
 			webpage_text = webpage.at('body').inner_text
