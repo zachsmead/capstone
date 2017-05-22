@@ -16,18 +16,35 @@
 			            <%= form_tag "/books", method: :post do %>
 				            <%= hidden_field_tag "form_identifier", "url" %>
 			            	<div class="md-form book-url-md-form">
-											<i class="fa fa-edit prefix" aria-hidden="true"></i>
+											<i class="fa fa-edit prefix" style="color: #a5a5a5" aria-hidden="true"></i>
 											<input type="text" name="title" id="title-form" class="">
 											<label for="title-form">Title</label>
 										</div>
 
+
 										<div class="md-form book-url-md-form">
-											<i class="fa fa-at prefix" aria-hidden="true"></i>
+											<i class="fa fa-at prefix" style="color: #a5a5a5"  aria-hidden="true"></i>
 											<input type="text" name="url" id="url-form" class="">
 											<label for="url-form">URL</label>
 										</div>
 
-										<button type="submit" class="btn btn-lime">Go!</button>
+										<div style="padding-top: 8px;">
+											<h3 style="color: #b7b7b7;">or</h3>
+										</div>
+
+				            <div class="md-form book-url-md-form">
+											<i class="fa fa-reddit-alien prefix" style="color: #e5e3e3;" aria-hidden="true"></i>
+											<input type="text" name="reddit_username" id="reddit-form" class="">
+											<label for="reddit-form">reddit</label>
+										</div>
+
+										<div class="md-form book-url-md-form">
+											<i class="fa fa-twitter prefix" style="color: #758cff;" aria-hidden="true"></i>
+											<input type="text" name="twitter_username" id="twitter-form" class="">
+											<label for="twitter-form">twitter</label>
+										</div>
+
+										<button type="submit" class="btn btn-lime" style="margin-top: 40px;">Go!</button>
 									<% end %>
 			        </div>
 			    </div>
@@ -51,7 +68,7 @@
 			            	<div class="md-form book-upload-md-form">
 			            		<%= hidden_field_tag "form_identifier", "file" %>
 											<!-- <input type="text" name="title" placeholder="Title"><br /> -->
-											<i class="fa fa-edit prefix" aria-hidden="true"></i>
+											<i class="fa fa-edit prefix" style="color: #a5a5a5" aria-hidden="true"></i>
 											<input type="text" name="title" id="file-title-form" class="">
 											<label for="file-title-form">Title</label>
 										</div>
