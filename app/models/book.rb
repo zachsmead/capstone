@@ -86,7 +86,8 @@ class Book < ApplicationRecord
 	end # end method self.nlu_analysis
 
 	def self.store_nlu_analysis(book)
-		api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
+		# api_location = "https://gateway.watsonplatform.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
+		api_location = "https://watson-api-explorer.mybluemix.net/natural-language-understanding/api/v1/analyze?version=2017-02-27"
 		
 		if book.scraped_content_url
 			read_location = "&url=" + book.scraped_content_url 
@@ -162,6 +163,7 @@ class Book < ApplicationRecord
 		if url
 			if url.starts_with?("https://www.reddit.com") || url.starts_with?("www.reddit.com") && url.include?("/comments/")
 				webpage_text = Book.reddit_start_get_recursion(url)
+				type = 'page'
 				# s3_title = page.title.gsub(/[^a-z\s]/i, '').parameterize('_')
 			end
 		elsif twitter_username
@@ -169,13 +171,15 @@ class Book < ApplicationRecord
 			twitter_client = TwitterGrab.new
 			tweets = twitter_client.get_all_tweets(twitter_username) # get all the tweets from the user
 			webpage_text = twitter_client.tweets_into_string(tweets)
+			type = 'book'
 		else
 			webpage = Nokogiri::HTML(open url)
 			webpage_text = webpage.at('body').inner_text
+			type = 'page'
 			# s3_title = webpage.at('title').inner_text[0..45].parameterize('_') # set a title based on the webpage title
 		end
 		
-		page_frequencies = Book.breakdown(webpage_text, 'page')
+		page_frequencies = Book.breakdown(webpage_text, type)
 
 		# Make a javascript file in the bucket, give it a unique name using book object's id
 		frequency_count_json = S3_BUCKET.objects.create(
