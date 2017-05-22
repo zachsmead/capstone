@@ -38,7 +38,7 @@ class Reddit
 		output_string = ""
 
 		comment_array.each do |comment|
-			output_string += comment['data']['body']
+			output_string += comment['data']['body'] + ' '
 		end
 
 		if comment_json['data']['after']

@@ -1,3 +1,58 @@
-<%= @followees.each do |followee| %>
-	<%= # display index of followees' likes here %>
-<% end %>
+<div class="index-header-box">
+	<h1>Featured wordclouds</h1>
+</div>
+
+	<div class="col-md-12" style="margin-bottom: 100px;">
+		<% @followees.each do |followee| %>
+
+			<% if followee.books.length > 0 %>
+
+				<div class="index-header-box">
+					<h4><%= followee.email %> liked:</h4>
+				</div>
+
+				<% followee.books.each_slice(3) do |three_books| %>
+					<div class="row">
+						<% three_books.each do |book| %>
+
+							<div class="col-md-4">
+									<!--Card-->
+									<div class="card card-block book-card" style="margin-top: 0px;">
+									    <!--Card content-->
+									    <div>
+									        <!--Title-->
+									        <h4 class="card-title book-title"><a href="<%= book.url %>"><%= book.card_title %></a></h4>
+									        <!--Text-->
+									        <!-- <p class="card-text"></p> -->
+									        <!-- <a href="/books/<%= book.id %>" class="btn btn-primary btn-lg">WORDCLOUD</a> -->
+									        <%= form_tag "/books/#{book.id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
+														<button type="submit" class="btn btn-lime book-button-long">WORDCLOUD</button>
+									        <% end %>
+									        <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px;", method: :post do %>
+														<input type="hidden" name="book_id" value="<%= book.id %>">
+														<button type="submit" class="btn btn-danger book-button-short">LIKE</button>
+													<% end %>
+
+									        <!-- <a href="#" class="btn btn-primary">LIKE</a> -->
+									    </div>
+									    <!--/.Card content-->
+
+									</div>
+									<!--/.Card-->
+							</div>
+
+						<% end %>
+
+					</div>
+
+				<% end %>
+			<% end %> <!-- end 'if followee.books' conditional -->
+		<% end %>
+	</div>
+
+
+
+
+
+
+

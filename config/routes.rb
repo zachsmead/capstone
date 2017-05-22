@@ -4,7 +4,10 @@ Rails.application.routes.draw do
 
   root to: "books#new"
 
+  get '/books/featured' => 'books#featured'
+  
   resources :books
+
 
   # get "/books" => "books#index"
   # get "/books/new" => "books#new"
