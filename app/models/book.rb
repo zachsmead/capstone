@@ -1,3 +1,5 @@
+load 'twitter_config.rb'
+
 class Book < ApplicationRecord
 
 	# book likes
@@ -221,122 +223,7 @@ class Book < ApplicationRecord
 		return local_string
 	end
 
-	def self.twitter_get_tweets(username)
-		# @twitter_client.user_timeline(username)
 
-		base_url = 'https://api.twitter.com/1.1/statuses/user_timeline.json'
-		username_to_grab = '?screen_name=' + username
-		full_query = base_url + username_to_grab
-
-
-
-		tweets = Unirest.get(full_query, 
-			headers: {'Authorization' => Book.twitter_request_auth_header}
-		).body
-	end
-
-	def self.twitter_request_auth_header # builds authorization header string for Unirest get request
-		output_string = 'OAuth '
-
-		auth = {
-			'oauth_consumer_key' => ENV['TWITTER_CONSUMER_KEY'], 
-			'oauth_nonce' => [*('a'..'z'),*('0'..'9')].shuffle[0,50].join,
-			'oauth_signature' => Book.twitter_create_oauth_signature,
-			'oauth_signature_method' => 'HMAC-SHA1',
-			'oauth_timestamp' => Time.now.to_i,
-			'oauth_token' => ENV['TWITTER_ACCESS_TOKEN'],
-			'oauth_version' => '1.0'	
-		}
-
-		auth.each_with_index do |(key, value), index|
-			encoded_key = CGI.escape(key)
-			encoded_value = CGI.escape(value.to_s)
-
-			output_string += encoded_key
-			output_string += '='
-			output_string += '"'
-			output_string += encoded_value
-			output_string += '"'
-
-			unless index == auth.length - 1
-				output_string += ', '
-			end
-		end
-
-		return output_string
-	end
-
-	def self.twitter_create_oauth_signature
-		url = 'https://api.twitter.com/1.1/statuses/user_timeline.json'
-
-		auth = {
-			'include_entities' => true,
-			'oauth_consumer_key' => ENV['TWITTER_CONSUMER_KEY'], 
-			'oauth_nonce' => [*('a'..'z'),*('0'..'9')].shuffle[0,50].join, # just a random string to distinguish calls.
-			# ^ Twitter will use this value to determine whether a request has been submitted multiple times.
-			# 'oauth_signature' => 'go here -> https://dev.twitter.com/oauth/overview/creating-signatures',
-			'oauth_signature_method' => 'HMAC-SHA1',
-			'oauth_timestamp' => Time.now.to_i, # gives a special time format - google 'Unix Epoch'
-			'oauth_token' => ENV['TWITTER_ACCESS_TOKEN'],
-			'oauth_version' => '1.0'	
-		}
-
-		auth_string = Book.twitter_auth_string(auth)
-		signature_base_string = Book.twitter_signature_base_string(url, auth_string)
-		signing_key = Book.twitter_signing_key
-		oauth_signature = Book.twitter_oauth_signature(signature_base_string, signing_key)
-
-		return oauth_signature
-	end
-
-
-	# https://dev.twitter.com/oauth/overview/creating-signatures
-	def self.twitter_auth_string(auth) # creates a parameter string for all auth params, this will be converted again.
-		output_string = ""
-
-		auth.each_with_index do |(key, value), index|
-			encoded_key = CGI.escape(key)
-			encoded_value = CGI.escape(value.to_s)
-			output_string += encoded_key
-			output_string += '='
-			output_string += encoded_value
-			unless index == auth.length - 1
-				output_string += '&'
-			end
-		end
-
-		return output_string
-	end
-
-	def self.twitter_signature_base_string(url, auth_string)
-		output_string = ""
-		http_method = "GET"
-
-		output_string += http_method
-		output_string += "&"
-		output_string += CGI.escape(url)
-		output_string += "&"
-		output_string += CGI.escape(auth_string)
-
-		return output_string
-	end
-
-	def self.twitter_signing_key
-		encoded_consumer_secret = CGI.escape(ENV['TWITTER_CONSUMER_SECRET'])
-		encoded_token_secret = CGI.escape(ENV['TWITTER_ACCESS_SECRET']) # aka token secret
-
-		signing_key = encoded_consumer_secret + '&' + encoded_token_secret
-
-		return signing_key
-	end
-
-	def self.twitter_oauth_signature(signature_base_string, signing_key)
-		digest = OpenSSL::Digest.new('sha1')
-		oauth_signature = OpenSSL::HMAC.digest(digest, signing_key, signature_base_string)
-		oauth_signature = Base64.strict_encode64(oauth_signature)
-
-		return oauth_signature
-	end
 
 
 	def self.breakdown(text, type)
