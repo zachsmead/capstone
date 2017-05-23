@@ -76,7 +76,7 @@ body {
 	padding-bottom: 10px;
 	padding-left: 15px;
 	padding-right: 10px;
-	margin: 20px;
+	margin: 5px;
 	margin-top: 10px;
 }
 
@@ -220,4 +220,19 @@ input {
 	margin-right: 5px;
 }
 
+.stats-bar-chart {
+	width: 300px;
+	max-height: 200px;
+	/*display: inline-block;*/
+	text-align: left;
+	margin-left: 0px;
+}
+
+.stats-doughnut-chart {
+	width: 300px;
+	max-height: 200px;
+	/*display: inline-block;*/
+	margin-left: 200px;
+
+}
 

@@ -1,13 +1,16 @@
 <head>
     <title><%= @book.title %></title>
     <script src="<%= @book.book_cloud_url %>"></script>
-    <script src="Chart.js"></script>
+    <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.js'></script> -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.bundle.min.js'></script>
+    <!-- <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.js'></script> -->
 
     
     <!-- <script src="https://s3-us-west-1.amazonaws.com/projectgutenbergtest/book_clouds/pride_and_prejudice.js"></script> -->
 </head>
 
-<body>
+<div class='row'>
   <div class="col-md-12" style="margin-bottom: 100px;">
 
     <div class="header-box" style="padding-bottom: 0px; margin-top: 30px;">
@@ -21,68 +24,87 @@
           </div>
       </h3>
     </div>
-
-    <div class="example_div"></div>
-
-    <script type="text/javascript">
-      // var tooltip = d3.select("body")
-      //   .append("div")
-      //   .style("position", "absolute")
-      //   .style("z-index", "10")
-      //   .style("visibility", "hidden")
-      //   .text("a simple tooltip");
-        
-      // var sampleSVG = d3.select(".example_div")
-      //   .append("svg:svg")
-      //   .attr("class", "sample")
-      //   .attr("width", 300)
-      //   .attr("height", 300);    
-        
-      // d3.select(".example_div svg")
-      //   .append("svg:circle")
-      //   .attr("stroke", "black")
-      //   .attr("fill", "aliceblue")
-      //   .attr("r", 50)
-      //   .attr("cx", 52)
-      //   .attr("cy", 52)
-      //   .on("mouseover", function(){return tooltip.style("visibility", "visible");})
-      //   .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-      //   .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
-    </script>
-
-
-
-    <div class="card" id="wordcloud" style="margin-top: 30px;"></div>
-
-    <div class="header-box" style="padding-bottom: 10px; margin-top: 100px;"> <!-- stats header-->
-      <h3>
-        <a class="header-link" href="<%= @book.url %>"><%= @book.title %></a>
-          <div class="header-subsection-divider">
-            |
-          </div>
-          <div class="header-subsection">
-            stats
-          </div>
-      </h3>
-    </div> <!-- end stats header -->
-
-
-    <chartjs-doughnut></chartjs-doughnut>
-
-    <div id="text-analysis">
-        <%= @emotions_summary %>
-    </div>
-
-    
-
-    <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px; padding-left: 100px;", method: :post do %>
-      <input type="hidden" name="book_id" value="<%= @book.id %>">
-      <button type="submit" class="btn btn-danger book-button-short" style="">LIKE</button>
-    <% end %>
-
   </div>
+</div>
+
+  <div class="example_div"></div>
+
+  <script type="text/javascript">
+    // var tooltip = d3.select("body")
+    //   .append("div")
+    //   .style("position", "absolute")
+    //   .style("z-index", "10")
+    //   .style("visibility", "hidden")
+    //   .text("a simple tooltip");
+      
+    // var sampleSVG = d3.select(".example_div")
+    //   .append("svg:svg")
+    //   .attr("class", "sample")
+    //   .attr("width", 300)
+    //   .attr("height", 300);    
+      
+    // d3.select(".example_div svg")
+    //   .append("svg:circle")
+    //   .attr("stroke", "black")
+    //   .attr("fill", "aliceblue")
+    //   .attr("r", 50)
+    //   .attr("cx", 52)
+    //   .attr("cy", 52)
+    //   .on("mouseover", function(){return tooltip.style("visibility", "visible");})
+    //   .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+    //   .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+  </script>
+
+
+  <div class='row'>
+    <div class='col-lg-12'>
+      <div class="card" id="wordcloud" style="margin-top: 0px;"></div>
+    </div>
+  </div>
+
+
+
+  <div class="header-box" style="padding-bottom: 10px; margin-top: 100px;"> <!-- stats header-->
+    <h3>
+      <a class="header-link" href="<%= @book.url %>"><%= @book.title %></a>
+        <div class="header-subsection-divider">
+          |
+        </div>
+        <div class="header-subsection">
+          stats
+        </div>
+    </h3>
+  </div> <!-- end stats header -->
+
+
+  <div id="text-analysis">
+    <%= @emotions_summary %>
+  </div>
+
   
-</body>
+
+  <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px; padding-left: 100px;", method: :post do %>
+    <input type="hidden" name="book_id" value="<%= @book.id %>">
+    <button type="submit" class="btn btn-danger book-button-short" style="">LIKE</button>
+  <% end %>
+
+
+
+<div class='row'>
+  <div class='col-md-6'>
+    <div class='stats-doughnut-chart'>
+      <canvas id='myChart' style=""></canvas>
+    </div>
+  </div>
+
+
+  <div class='col-md-6'>
+    <div class='stats-bar-chart'>
+      <canvas id='myBarChart' style=""></canvas>
+    </div>
+  </div>
+
+</div>
 
 <script>
   d3.wordcloud()
@@ -101,12 +123,70 @@
     .start();
 </script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.js"></script>
-<script src="https://raw.githubusercontent.com/hchstera/vue-charts/master/dist/vue-charts.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.min.js"></script>
+
+
 <script>
-    Vue.use(VueCharts);
-    const app = new Vue({
-        el: '#app'
-    });
+  var ctx = document.getElementById("myChart").getContext('2d');
+  var myChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: [
+        "joy", 
+        "fear", 
+        "anger",
+        "disgust", 
+        "sadness"
+      ],
+      datasets: [{
+        backgroundColor: [
+
+          "#f1c40f",
+          "#3498db",
+          "#e8b796",
+          "#9b59b6",
+          "#858796"
+        ],
+        data: [
+          <%= @emotions_summary['joy'] %>, 
+          <%= @emotions_summary['fear'] %>, 
+          <%= @emotions_summary['anger'] %>,
+          <%= @emotions_summary['disgust'] %>, 
+          <%= @emotions_summary['sadness'] %> 
+        ]
+      }],
+      options: {
+        responsive: true,
+        legend: {
+            display: false
+         }
+      }
+    }
+  });
+</script>
+
+<script>
+  var data = {
+    labels: ["Sentiment"],
+    datasets: [
+        {
+            label: "Overall sentiment",
+            fillColor: "rgba(220,220,220,0.5)",
+            strokeColor: "rgba(220,220,220,0.8)",
+            highlightFill: "rgba(220,220,220,0.75)",
+            highlightStroke: "rgba(220,220,220,1)",
+            data: [<%= @emotions_summary['sentiment'] %>]
+        }
+    ]
+  };
+
+  var options = {
+      scaleBeginAtZero: false,
+      responsive: true
+  };
+
+  var ctx2 = document.getElementById("myBarChart").getContext("2d");
+  var myBarChart = Chart.Bar(ctx, {
+    data: data,
+    options: options
+});
 </script>

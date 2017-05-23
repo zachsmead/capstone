@@ -15,7 +15,8 @@ gem 'd3-tip-rails'
 gem 'nokogiri'
 gem 'seed_dump'
 gem 'twitter'
-gem 'chartjs-ror'
+gem 'chart-js-rails'
+gem 'gon', '~> 6.1'
 # Use postgresql as the database for Active Record
 gem 'pg', '0.19.0'
 # Use Puma as the app server
