@@ -19,7 +19,7 @@ class BooksController < ApplicationController
 
 		if !@book.analysis_url
 			analysis_url = Nlu.store_analysis(@book)
-			Book.update(analysis_url: analysis_url)
+			@book.update(analysis_url: analysis_url)
 			redirect_to "/books/#{@book.id}"
 		else
 			@emotions_summary = Nlu.analysis(@book)
