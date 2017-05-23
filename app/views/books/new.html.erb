@@ -2,6 +2,41 @@
 	<h1>Create a new wordcloud</h1>
 </div>
 
+<div class="book-new-row" style="padding-top: 10px; padding-bottom: 40px;">
+		<div class="col-md-5 book-new-column">
+			<div class="card">
+			    <div class="card-block book-upload-card">
+			        <!--Header-->
+			        <div class="text-center">
+			            <h3><i class=""></i>Upload text</h3>
+			            <hr class="mt-2 mb-2">
+
+			            <%= form_tag books_path, enctype: 'multipart/form-data' do %>
+
+			            	<div class="md-form book-upload-md-form">
+			            		<%= hidden_field_tag "form_identifier", "file" %>
+											<!-- <input type="text" name="title" placeholder="Title"><br /> -->
+											<i class="fa fa-edit prefix" style="color: #a5a5a5" aria-hidden="true"></i>
+											<input type="text" name="title" id="file-title-form" class="">
+											<label for="file-title-form">Title</label>
+										</div>
+											
+										<div class="hidden-file-div">
+											<input type="file" name="file" class="hidden-file" id="choose-file" value="hidden file button">
+										</div>
+
+										<button type="button" class="btn btn-default" id="activate-file-choose">Choose a file</button>
+										<button type="submit" class="btn btn-lime">Go!</button>
+
+									<% end %>
+			        </div>
+			    </div>
+			    <!--Footer-->
+			</div>
+			<!--/Form without header-->
+		</div>
+	</div>
+<!-- </section> -->
 
 <!-- <section style="padding-bottom: 0px;"> -->
 	<div class="book-new-row" style="">
@@ -54,41 +89,7 @@
 		</div>
 	</div>
 
-	<div class="book-new-row" style="padding-top: 10px; padding-bottom: 40px;">
-		<div class="col-md-5 book-new-column">
-			<div class="card">
-			    <div class="card-block book-upload-card">
-			        <!--Header-->
-			        <div class="text-center">
-			            <h3><i class=""></i>Upload text</h3>
-			            <hr class="mt-2 mb-2">
-
-			            <%= form_tag books_path, enctype: 'multipart/form-data' do %>
-
-			            	<div class="md-form book-upload-md-form">
-			            		<%= hidden_field_tag "form_identifier", "file" %>
-											<!-- <input type="text" name="title" placeholder="Title"><br /> -->
-											<i class="fa fa-edit prefix" style="color: #a5a5a5" aria-hidden="true"></i>
-											<input type="text" name="title" id="file-title-form" class="">
-											<label for="file-title-form">Title</label>
-										</div>
-											
-										<div class="hidden-file-div">
-											<input type="file" name="file" class="hidden-file" id="choose-file" value="hidden file button">
-										</div>
-
-										<button type="button" class="btn btn-default" id="activate-file-choose">Choose a file</button>
-										<button type="submit" class="btn btn-lime">Go!</button>
-
-									<% end %>
-			        </div>
-			    </div>
-			    <!--Footer-->
-			</div>
-			<!--/Form without header-->
-		</div>
-	</div>
-<!-- </section> -->
+	
 
 
 <!-- trigger the file chooser -->

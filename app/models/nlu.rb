@@ -45,7 +45,7 @@ class Nlu # Natural Language Understanding
 		end
 
 		(emotions_summary.reject {|emotion, score | emotion == 'sentiment' }).each do | emotion, score | # next, change the scores to their percent of the total
-			emotions_summary[emotion] = (score / all_emotions_total).round(4) * 100
+			emotions_summary[emotion] = ((score / all_emotions_total) * 100).round(2)
 		end
 
 		return emotions_summary

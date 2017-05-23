@@ -12,19 +12,8 @@
 
 
   <div class='row'>
-    <div class="col-md-12" style="margin-bottom: 20px;">
-
-      <div class="header-box" style="padding-bottom: 0px; margin-top: 15px;">
-        <h4>
-          <a class="header-link" href="<%= @book.url %>"><%= @book.title %></a>
-            <div class="header-subsection-divider">
-              |
-            </div>
-            <div class="header-subsection">
-              wordcloud
-            </div>
-        </h4>
-      </div>
+    <div class="col-md-12" style="/*margin-bottom: 20px;*/">
+      
     </div>
   </div>
 
@@ -59,17 +48,28 @@
 
     <div class='row'>
       <div class='col-lg-12'>
-        <div class="card wordcloud-card" id="wordcloud" style="margin-top: 0px;"></div>
+        <div class='card header-card' style="">
+          <h4>
+            <a class="header-link" href="<%= @book.url %>"><%= @book.title %></a>
+            <div class="header-subsection-divider hidden-lg-down">
+              |
+            </div>
+            <div class="header-subsection">
+              wordcloud
+            </div>
+          </h4>
+        </div>
+        <div class="card-block wordcloud-card" id="wordcloud" style="margin-top: 0px;"></div>
       </div>
     </div>
 
 
-    <div class='row'>
+    <div class='row' style="margin-top: 100px;">
       <div class='col-md-12'>
-        <div class="header-box" style="padding-bottom: 10px; margin-top: 100px;"> <!-- stats header-->
+        <div class="card header-card" style=""> <!-- stats header-->
           <h4>
             <a class="header-link" href="<%= @book.url %>"><%= @book.title %></a>
-              <div class="header-subsection-divider">
+              <div class="header-subsection-divider hidden-lg-down">
                 |
               </div>
               <div class="header-subsection">
@@ -77,8 +77,29 @@
               </div>
           </h4>
         </div> <!-- end stats header -->
+        <div class='card-block stats-card'>
+          <div class='stats-doughnut-chart'>
+            <canvas id='myChart' style=""></canvas>
+          </div>
+          <div class='stats-bar-chart'>
+            <canvas id='myBarChart' style=""></canvas>
+          </div>
+        </div>
       </div>
     </div>
+
+    
+
+
+
+
+  <div class='row'>
+    <div class='col-md-12'>
+      
+    </div>
+  </div>
+
+
 
      <div class='row'>
       <div class='col-md-12'>
@@ -94,28 +115,10 @@
       </div>
     </div>
 
-    
-
-
-
-<div class='container'>
-  <div class='row'>
-      <div class='col-md-12'>
-        <div class='card wordcloud-card'>
-          <div class='stats-doughnut-chart'>
-            <canvas id='myChart' style=""></canvas>
-          </div>
-          <div class='stats-bar-chart'>
-            <canvas id='myBarChart' style=""></canvas>
-          </div>
-      </div>
-    </div>
-  </div>
-</div>
 
 <script>
   d3.wordcloud()
-    .size([1180, 400])
+    .size([1180, 420])
     .spiral('archimedean')
     .scale('sqrt')
     .font('Lucida-Sans-Unicode')
