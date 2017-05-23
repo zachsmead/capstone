@@ -6,14 +6,18 @@ body {
 	background-color: #8db3ef;
 }
 
+.container {
+	margin: 0px;
+	padding: 0px;
+}
 
 .header-box {
 	/*color: #4a4777;*/
 	word-wrap: break-word;
-	padding-left: 70px;
-	padding-right: 70px;
-	margin-top: 30px;
-	margin-bottom: 10px;
+	padding-left: 0px;
+	padding-right: 0px;
+	margin-top: 0px;
+	margin-bottom: 0px;
 }
 
 .index-header-box {
@@ -69,6 +73,10 @@ body {
 	color: #eaeaea;
 }
 
+.wordcloud-card {
+	margin-top: 0px;
+}
+
 #wordcloud {
 	background-color: #f7f7f7;
 	padding: 0px;
@@ -77,7 +85,7 @@ body {
 	padding-left: 15px;
 	padding-right: 10px;
 	margin: 5px;
-	margin-top: 10px;
+	margin-top: 0px;
 }
 
 .flex-center {
@@ -222,17 +230,17 @@ input {
 
 .stats-bar-chart {
 	width: 300px;
-	max-height: 200px;
+
 	/*display: inline-block;*/
-	text-align: left;
-	margin-left: 0px;
+	/*text-align: left;*/
+	/*margin-left: 0px;*/
 }
 
 .stats-doughnut-chart {
 	width: 300px;
-	max-height: 200px;
+
 	/*display: inline-block;*/
-	margin-left: 200px;
+	/*margin-left: 200px;*/
 
 }
 
