@@ -25,6 +25,33 @@ class BooksController < ApplicationController
 			stats = Nlu.analysis(@book)
 			@emotions_summary = stats[:emotions_summary]
 			@keywords = stats[:keywords]
+
+
+
+			@blank_keyword = {
+				
+					"text": "",
+					"sentiment": {
+						"score": 0
+					},
+					"relevance": 0,
+					"emotion": {
+						"sadness": 0,
+						"joy": 0,
+						"fear": 0,
+						"disgust": 0,
+						"anger": 0
+					}
+					
+				}
+
+
+
+			(5 - @keywords.length).times do
+				@keywords << 'none'
+			end
+
+
 			@score = @emotions_summary['sentiment'].round(2)
 			
 			if @score < -0.30 
