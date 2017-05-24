@@ -11,10 +11,14 @@ class Nlu # Natural Language Understanding
 		}
 		all_emotions_total = 0
 
+		stats = {}
+
 		query_results = Unirest.get(book.analysis_url).body
+		stats[:keywords] = query_results['keywords'][0..4]
+
 
 		query_results['keywords'].each do | keyword | # loop through all keywords in the result
-			if !emotions_summary['sentiment']					  # add up all the keywords' un-relevance-weighted sentiment
+			if !emotions_summary['sentiment']					  # add up all the keywords' relevance-weighted sentiment
 				emotions_summary['sentiment'] = keyword['sentiment']['score'] #* keyword['relevance']
 			else
 				emotions_summary['sentiment'] += keyword['sentiment']['score'] #* keyword['relevance']
@@ -48,7 +52,9 @@ class Nlu # Natural Language Understanding
 			emotions_summary[emotion] = ((score / all_emotions_total) * 100).round(2)
 		end
 
-		return emotions_summary
+		stats[:emotions_summary] = emotions_summary
+
+		return stats
 
 	end # end method self.nlu_analysis
 

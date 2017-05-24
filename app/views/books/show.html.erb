@@ -81,7 +81,7 @@
 
         <div class='card-block stats-card'>
           <div class='row stats-row'>
-            <div class='col-md-3'>
+            <div class='col-md-4 stats-column stats-column-first'>
               <div class='stats-doughnut-chart-container'>
                 <h4>Emotional Summary</h4>
                 <div class='stats-doughnut-chart'>
@@ -90,16 +90,39 @@
               </div>
             </div>
 
-            <div class='col-md-3'>
+
+            <div class='col-md-4 stats-column'>
               <div class="stats-bar-chart-container">
                 <h4>Sentiment Analysis</h4>
                 <div class='stats-bar-chart'>
                   <canvas id='myBarChart' height="250"></canvas>
 
-                  <%= @sentiment_word %> 
+                  <%= @sentiment_word %>
                 </div>
               </div>
             </div>
+
+            <div class='col-md-4 stats-column'>
+              <div class='stats-key-phrases-container'>
+                <h4>Top 5 Keywords</h4>
+                <div class='stats-key-phrases'>
+                  <canvas id="myHorizontalBar" width="800" height="450"></canvas>
+                  <ol>
+                    <% @keywords.each do |keyword| %>
+
+                      <div class='stats-key-phrases-list-div'>
+                        <li>
+                          Keyword: '<%= keyword['text'] %>'
+                        </li>
+                        Relevance: <%= keyword['relevance'] %>
+                      </div>
+
+                    <% end %>
+                  </ol>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -189,10 +212,10 @@
     datasets: [
         {
             label: "Overall sentiment",
-            fillColor: "rgba(220,220,220,0.5)",
-            strokeColor: "rgba(220,220,220,0.8)",
-            highlightFill: "rgba(220,220,220,0.75)",
-            highlightStroke: "rgba(220,220,220,1)",
+            fillColor: "rgba(51,71,135,0.5)",
+            strokeColor: "rgba(51,71,135,0.8)",
+            highlightFill: "rgba(51,71,135,0.75)",
+            highlightStroke: "rgba(51,71,135,1)",
             data: [<%= @emotions_summary['sentiment'] %>]
         }
     ]
@@ -207,5 +230,40 @@
   var myBarChart = Chart.Bar(ctx2, {
     data: data,
     options: options
+  });
+</script>
+
+<script>
+  var myHorizontalBar = new Chart(document.getElementById("myHorizontalBar"), {
+      type: 'horizontalBar',
+      data: {
+        labels: [
+          '<%= @keywords[0]['text'] %>', 
+          '<%= @keywords[1]['text'] %>', 
+          '<%= @keywords[2]['text'] %>', 
+          '<%= @keywords[3]['text'] %>', 
+          '<%= @keywords[4]['text'] %>'
+        ],
+        datasets: [
+          {
+            label: "Relevance",
+            backgroundColor: ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"],
+            data: [
+              <%= @keywords[0]['relevance'] %>, 
+              <%= @keywords[1]['relevance'] %>, 
+              <%= @keywords[2]['relevance'] %>, 
+              <%= @keywords[3]['relevance'] %>, 
+              <%= @keywords[4]['relevance'] %>
+            ]
+          }
+        ]
+      },
+      options: {
+        legend: { display: false },
+        title: {
+          display: true,
+          text: ''
+        }
+      }
   });
 </script>

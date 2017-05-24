@@ -22,7 +22,9 @@ class BooksController < ApplicationController
 			@book.update(analysis_url: analysis_url)
 			redirect_to "/books/#{@book.id}"
 		else
-			@emotions_summary = Nlu.analysis(@book)
+			stats = Nlu.analysis(@book)
+			@emotions_summary = stats[:emotions_summary]
+			@keywords = stats[:keywords]
 			@score = @emotions_summary['sentiment'].round(2)
 			
 			if @score < -0.30 

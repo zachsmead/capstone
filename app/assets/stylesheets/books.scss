@@ -264,6 +264,17 @@ input {
 	background-color: #f7f7f7;
 }
 
+.stats-column {
+	text-align: center;
+	margin-left: 0px;
+	margin-right: 0px;
+}
+
+.stats-column-first {
+	padding-left: 20px;
+	margin-right: 0px;
+}
+
 .stats-doughnut-chart-container {
 	vertical-align: bottom;
 	display: inline-block;
@@ -276,8 +287,9 @@ input {
 	/*margin-left: 200px;*/
 }
 
-.stats-bar-chart-container {
+.stats-key-phrases-container {
 	height: 100%;
+	width: 100%;
 	vertical-align: bottom;
 	display: inline-block;
 	text-align: center;
@@ -285,8 +297,35 @@ input {
 	/*padding-top: 100px;*/
 }
 
+.stats-key-phrases {
+	color: #2f3a8e;
+	font-size: .75em;
+	text-align: left;
+	padding-right: 0px;
+	padding-left: 20px;
+	padding-top: 20px;
+	ol li {
+		text-align: left;
+	};
+}
+
+.stats-key-phrases-list-div {
+	padding-top: 0px;
+	padding-bottom: 10px;
+}
+
+.stats-bar-chart-container {
+	height: 100%;
+	vertical-align: bottom;
+	display: inline-block;
+	text-align: center;
+	/*margin-left: 20px;*/
+	/*text-align: left;*/
+	/*padding-top: 100px;*/
+}
+
 .stats-bar-chart {
-	font-size: 0.8em;
+	font-size: 0.75em;
 	font-family: Arial;
 	color: #848484;
 	padding-top: 20px;
