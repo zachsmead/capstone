@@ -107,23 +107,21 @@
                 <h4>Top 5 Keywords</h4>
                 <div class='stats-key-phrases'>
                   <canvas id="myHorizontalBar" width="800" height="450"></canvas>
-                  <ol>
-                    <% @keywords.each do |keyword| %>
-
-                      <div class='stats-key-phrases-list-div'>
-                        <li>
-                          Keyword: '<%= keyword['text'] %>'
-                        </li>
-                        Relevance: <%= keyword['relevance'] %>
-                      </div>
-
-                    <% end %>
-                  </ol>
                 </div>
               </div>
             </div>
 
           </div>
+
+          <div class='row'>
+            <div>
+              <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px; padding-left: 100px;", method: :post do %>
+                <input type="hidden" name="book_id" value="<%= @book.id %>">
+                <button type="submit" class="btn btn-primary book-button-short like-button">LIKE</button>
+              <% end %>
+            </div>
+          </div>
+          
         </div>
       </div>
     </div>
@@ -136,16 +134,7 @@
 
 
 
-     <div class='row'>
-      <div class='col-md-12'>
-        <div>
-          <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px; padding-left: 100px;", method: :post do %>
-            <input type="hidden" name="book_id" value="<%= @book.id %>">
-            <button type="submit" class="btn btn-primary book-button-short like-button">LIKE</button>
-          <% end %>
-        </div>
-      </div>
-    </div>
+    
 
 
 <script>
