@@ -23,7 +23,26 @@ class BooksController < ApplicationController
 			redirect_to "/books/#{@book.id}"
 		else
 			@emotions_summary = Nlu.analysis(@book)
+			@score = @emotions_summary['sentiment'].round(2)
+			
+			if @score < -0.30 
+				@sentiment_word = 'Negative'
+			elsif -0.30 <= @score && @score < -0.10
+				@sentiment_word = 'Somewhat negative'
+			elsif -0.10 <= @score && @score < -0.07
+				@sentiment_word = 'Slightly negative'
+			elsif -0.07 <= @score && @score < 0.07
+				@sentiment_word = 'Neutral'
+			elsif 0.07 <= @score && @score < 0.10
+				@sentiment_word = 'Slightly positive'
+			elsif 0.10 <= @score && @score < 0.30
+				@sentiment_word = 'Fairly positive'
+			elsif @score >= 0.30
+				@sentiment_word = 'Positive'
+			end
 		end
+
+
 		
 	end
 

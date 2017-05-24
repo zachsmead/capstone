@@ -22,7 +22,9 @@
 						        <% end %>
 						        <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px;", method: :post do %>
 											<input type="hidden" name="book_id" value="<%= book.id %>">
-											<button type="submit" class="btn btn-danger book-button-short">LIKE</button>
+											<button type="submit" class="btn btn-primary book-button-short like-button">
+												<i class="fa fa-thumbs-o-up prefix" aria-hidden="true"></i> LIKE
+											</button>
 										<% end %>
 
 						        <!-- <a href="#" class="btn btn-primary">LIKE</a> -->

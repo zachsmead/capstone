@@ -117,6 +117,10 @@ body {
 	float: right;
 }
 
+.like-button {
+	background-color: #5379ed;
+}
+
 input {
 	font-family: Roboto,sans-serif;
 }
@@ -170,6 +174,11 @@ input {
 	padding-left: 30px;
 	padding-right: 0px;
 	margin-top: 10px;
+}
+
+
+.stats-row {
+	padding-left: 0px;
 }
 
 .col-md-4 {
@@ -249,23 +258,43 @@ input {
 .stats-card {
 	margin-left: 5px;
 	margin-right: 5px;
-	padding: 20px;
+	padding-top: 10px;
+	padding-left: 0px;
+	/*padding: 0px;*/
 	background-color: #f7f7f7;
 }
 
-.stats-bar-chart {
-	width: 300px;
-
-	/*display: inline-block;*/
-	/*text-align: left;*/
-	/*margin-left: 0px;*/
+.stats-doughnut-chart-container {
+	vertical-align: bottom;
+	display: inline-block;
+	text-align: center;
 }
 
 .stats-doughnut-chart {
 	width: 300px;
-
 	/*display: inline-block;*/
 	/*margin-left: 200px;*/
-
 }
+
+.stats-bar-chart-container {
+	height: 100%;
+	vertical-align: bottom;
+	display: inline-block;
+	text-align: center;
+	/*text-align: left;*/
+	/*padding-top: 100px;*/
+}
+
+.stats-bar-chart {
+	font-size: 0.8em;
+	font-family: Arial;
+	color: #848484;
+	padding-top: 20px;
+	/*padding-bottom: 40px;*/
+	/*width: 100px;*/
+	/*min-height: 210px;*/
+	/*display: inline-block;*/
+	/*text-align: left;*/
+}
+
 
