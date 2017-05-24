@@ -14,7 +14,15 @@ class Nlu # Natural Language Understanding
 		stats = {}
 
 		query_results = Unirest.get(book.analysis_url).body
-		stats[:keywords] = query_results['keywords'][0..4]
+
+		if query_results['keywords']
+			stats[:keywords] = query_results['keywords'][0..4]
+		else
+			stats[:keywords] = []
+			stats[:emotions_summary] = emotions_summary
+
+			return stats
+		end
 
 
 		query_results['keywords'].each do | keyword | # loop through all keywords in the result

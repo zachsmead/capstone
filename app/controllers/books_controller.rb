@@ -28,8 +28,7 @@ class BooksController < ApplicationController
 
 
 
-			@blank_keyword = {
-				
+			blank_keyword = {
 					"text": "",
 					"sentiment": {
 						"score": 0
@@ -42,14 +41,14 @@ class BooksController < ApplicationController
 						"disgust": 0,
 						"anger": 0
 					}
-					
 				}
 
 
 
-			(5 - @keywords.length).times do
+			(5 - @keywords.length).times do # if the keywords json has less than 5, add blank keywords until it has 5
 				@keywords << 'none'
 			end
+
 
 
 			@score = @emotions_summary['sentiment'].round(2)
