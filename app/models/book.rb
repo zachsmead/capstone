@@ -79,6 +79,11 @@ class Book < ApplicationRecord
 				webpage_text = Reddit.start_comment_recursion(url)
 				type = 'page'
 				# s3_title = page.title.gsub(/[^a-z\s]/i, '').parameterize('_')
+			else
+				webpage = Nokogiri::HTML(open url)
+				webpage_text = webpage.at('body').inner_text
+				type = 'page'
+				# s3_title = webpage.at('title').inner_text[0..45].parameterize('_') # set a title based on the webpage title
 			end
 		elsif twitter_username
 			# perform the text grab on all the username's tweets
@@ -96,11 +101,6 @@ class Book < ApplicationRecord
 			# grab all the user's comments
 			webpage_text = Reddit.grab_user_comments(reddit_username, '')
 			type = 'page'
-		else
-			webpage = Nokogiri::HTML(open url)
-			webpage_text = webpage.at('body').inner_text
-			type = 'page'
-			# s3_title = webpage.at('title').inner_text[0..45].parameterize('_') # set a title based on the webpage title
 		end
 		
 

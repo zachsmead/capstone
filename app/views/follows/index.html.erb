@@ -19,7 +19,7 @@
 							        <!--Text-->
 							        <!-- <p class="card-text"></p> -->
 							        <% if !(user.id == @current_user_id) %>
-												<%= form_tag "/users/#{user.id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
+												<%= form_tag "/users/list", style:"display: inline-block; padding-top: 15px;", method: :get do %>
 													<button type="submit" class="btn btn-primary user-button-long">PROFILE</button>
 												<% end %>
 												<%= form_tag "/follows", style:"display: inline-block; padding-top: 15px;", method: :post do %>
@@ -27,7 +27,7 @@
 													<button type="submit" class="btn btn-danger user-button-short">FOLLOW</button>
 												<% end %>
 											<% else %>
-												<%= form_tag "/users/#{@current_user_id}", style:"display: inline-block; padding-top: 15px;", method: :get do %>
+												<%= form_tag "/users/list", style:"display: inline-block; padding-top: 15px;", method: :get do %>
 													<button type="submit" class="btn btn-primary user-button-long">PROFILE</button>
 												<% end %>
 											<% end %>

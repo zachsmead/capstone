@@ -170,10 +170,10 @@ class BooksController < ApplicationController
 			end
 
 		elsif params[:url] && params[:url] != "" # this means that a webpage url was given
-			title = params[:title]
-			url = params[:url]
 
 			begin
+				title = params[:title]
+				url = params[:url]
 				fixed_url = Book.fix_url(url)
 
 				@book = Book.new(title: title, card_title: params[:card_title], url: fixed_url)
@@ -192,15 +192,16 @@ class BooksController < ApplicationController
 			end
 		elsif params[:url] == "" # this means a reddit or twitter username was given
 			if params[:twitter_username] != "" && params[:reddit_username] == ""
-				title = params[:title]
-				twitter_username = params[:twitter_username]
-				url = 'https://twitter.com/' + twitter_username
 
 				begin 
+					title = params[:title]
+					twitter_username = params[:twitter_username]
+					url = 'https://twitter.com/' + twitter_username
 					@book = Book.new(
 						title: title, 
 						card_title: params[:card_title], 
-						twitter_username: twitter_username)
+						twitter_username: twitter_username
+					)
 					@book.save
 
 					attributes = Book.s3_web_content_json(@book)
@@ -216,11 +217,11 @@ class BooksController < ApplicationController
 					return
 				end
 			elsif params[:reddit_username] != "" && params[:twitter_username] == ""
-				title = params[:title]
-				reddit_username = params[:reddit_username]
-				url = 'https://reddit.com/u/' + reddit_username
 
 				begin
+					title = params[:title]
+					reddit_username = params[:reddit_username]
+					url = 'https://reddit.com/u/' + reddit_username
 					@book = Book.new(
 						title: title, 
 						card_title: params[:card_title], 
