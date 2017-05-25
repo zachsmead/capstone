@@ -16,6 +16,9 @@ class BooksController < ApplicationController
 		@book = Book.find_by(id: params[:id])
 		@number_of_likes = @book.users.length
 
+
+		# @created_at = (Time.now - @book.created_at.to_time)/1.hour
+
 		# this method .updates @book.analysis_url if it doesn't already have a value
 
 		if !@book.analysis_url

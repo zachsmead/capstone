@@ -107,15 +107,22 @@
 
           </div>
 
-          <div class='row'>
-            <div>
-              <%= @number_of_likes %>
-            </div>
-            <div>
-              <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px; padding-left: 100px;", method: :post do %>
-                <input type="hidden" name="book_id" value="<%= @book.id %>">
-                <button type="submit" class="btn btn-primary book-button-short like-button">LIKE</button>
-              <% end %>
+          <div class='row footer-row'>
+            <div class='col-md-6' style='margin: auto;'>
+              <!-- <div class='stats-footer-container'>
+                <h4>Created: <%= @created_at %> </h4>
+              </div> -->
+
+              <div class='stats-footer-container'>
+                <h4>Number of likes: <%= @number_of_likes %></h4>
+              </div>
+
+              <div class='stats-like-button'>
+                <%= form_tag "/book_likes", style:"", method: :post do %>
+                  <input type="hidden" name="book_id" value="<%= @book.id %>">
+                  <button type="submit" class="btn btn-primary book-button-short like-button">LIKE</button>
+                <% end %>
+              </div>
             </div>
           </div>
 
