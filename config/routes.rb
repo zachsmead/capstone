@@ -21,6 +21,8 @@ Rails.application.routes.draw do
 
   get "/aws-test" => "books#aws_test"
 
+  get '/about' => 'pages#about'
+
 
 
 
