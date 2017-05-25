@@ -14,130 +14,130 @@
 
     <!-- <div class="example_div"></div> tooltip div -->
 
-    <script type="text/javascript">
-      // var tooltip = d3.select("body")
-      //   .append("div")
-      //   .style("position", "absolute")
-      //   .style("z-index", "10")
-      //   .style("visibility", "hidden")
-      //   .text("a simple tooltip");
-        
-      // var sampleSVG = d3.select(".example_div")
-      //   .append("svg:svg")
-      //   .attr("class", "sample")
-      //   .attr("width", 300)
-      //   .attr("height", 300);    
-        
-      // d3.select(".example_div svg")
-      //   .append("svg:circle")
-      //   .attr("stroke", "black")
-      //   .attr("fill", "aliceblue")
-      //   .attr("r", 50)
-      //   .attr("cx", 52)
-      //   .attr("cy", 52)
-      //   .on("mouseover", function(){return tooltip.style("visibility", "visible");})
-      //   .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-      //   .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
-    </script>
+<script type="text/javascript">
+  // var tooltip = d3.select("body")
+  //   .append("div")
+  //   .style("position", "absolute")
+  //   .style("z-index", "10")
+  //   .style("visibility", "hidden")
+  //   .text("a simple tooltip");
+    
+  // var sampleSVG = d3.select(".example_div")
+  //   .append("svg:svg")
+  //   .attr("class", "sample")
+  //   .attr("width", 300)
+  //   .attr("height", 300);    
+    
+  // d3.select(".example_div svg")
+  //   .append("svg:circle")
+  //   .attr("stroke", "black")
+  //   .attr("fill", "aliceblue")
+  //   .attr("r", 50)
+  //   .attr("cx", 52)
+  //   .attr("cy", 52)
+  //   .on("mouseover", function(){return tooltip.style("visibility", "visible");})
+  //   .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
+  //   .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
+</script>
 
 
-    <div class='row wordcloud-row'>
-      <div class='col-lg-12'>
-        <div class='card header-card' style="">
-          <h4>
-            <a class="header-link" href="<%= @book.url %>"><%= @book.title %></a>
-            <div class="header-subsection-divider hidden-lg-down">
-              |
-            </div>
-            <div class="header-subsection">
-              wordcloud
-            </div>
-          </h4>
+<div class='row wordcloud-row'>
+  <div class='col-lg-12'>
+    <div class='card header-card' style="">
+      <h4>
+        <a class="header-link" href="<%= @book.url %>"><%= @book.title %></a>
+        <div class="header-subsection-divider hidden-lg-down">
+          |
         </div>
-        <div class="card-block wordcloud-card" id="wordcloud" style="margin-top: 0px;"></div>
-      </div>
+        <div class="header-subsection">
+          wordcloud
+        </div>
+      </h4>
     </div>
+    <div class="card-block wordcloud-card" id="wordcloud" style="margin-top: 0px;"></div>
+  </div>
+</div>
 
 
-    <div class='row' style="margin-top: 100px;">
-      <div class='col-md-12'>
-        <div class="card header-card" style=""> <!-- stats header-->
-          <h4>
-            <a class="header-link" href="<%= @book.url %>"><%= @book.title %></a>
-              <div class="header-subsection-divider hidden-lg-down">
-                |
-              </div>
-              <div class="header-subsection">
-                stats
-              </div>
-          </h4>
-        </div> <!-- end stats header -->
+<div class='row' style="margin-top: 100px;">
+  <div class='col-md-12'>
+    <div class="card header-card" style=""> <!-- stats header-->
+      <h4>
+        <a class="header-link" href="<%= @book.url %>"><%= @book.title %></a>
+          <div class="header-subsection-divider hidden-lg-down">
+            |
+          </div>
+          <div class="header-subsection">
+            stats
+          </div>
+      </h4>
+    </div> <!-- end stats header -->
 
-        <div class='card-block stats-card'>
-          <div class='row stats-row'>
-            <div class='col-md-4 stats-column stats-column-first'>
-              <div class='stats-doughnut-chart-container'>
-                <h4>Emotional Summary</h4>
-                <div class='stats-doughnut-chart'>
-                  <canvas id='myDoughnutChart' style=""></canvas>
-                </div>
-              </div>
+    <div class='card-block stats-card'>
+      <div class='row stats-row'>
+        <div class='col-md-4 stats-column stats-column-first'>
+          <div class='stats-doughnut-chart-container'>
+            <h4>Emotional Summary</h4>
+            <div class='stats-doughnut-chart'>
+              <canvas id='myDoughnutChart' style=""></canvas>
             </div>
+          </div>
+        </div>
 
 
-            <div class='col-md-4 stats-column'>
-              <div class="stats-bar-chart-container">
-                <h4>Sentiment Analysis</h4>
-                <div class='stats-bar-chart'>
-                  <canvas id='myBarChart' height="250"></canvas>
+        <div class='col-md-4 stats-column'>
+          <div class="stats-bar-chart-container">
+            <h4>Sentiment Analysis</h4>
+            <div class='stats-bar-chart'>
+              <canvas id='myBarChart' height="250"></canvas>
 
-                  <%= @sentiment_word %>
-                </div>
-              </div>
+              <%= @sentiment_word %>
             </div>
+          </div>
+        </div>
 
-            <div class='col-md-4 stats-column'>
-              <div class='stats-key-phrases-container'>
-                <h4>Top 5 Keywords</h4>
-                <div class='stats-key-phrases'>
-                  <canvas id="myHorizontalBar" width="800" height="450"></canvas>
-                </div>
-              </div>
+        <div class='col-md-4 stats-column'>
+          <div class='stats-key-phrases-container'>
+            <h4>Top 5 Keywords</h4>
+            <div class='stats-key-phrases'>
+              <canvas id="myHorizontalBar" width="800" height="450"></canvas>
             </div>
+          </div>
+        </div>
 
+      </div>
+
+      <div class='row footer-row'>
+        <div class='col-md-6' style='margin: auto;'>
+          <!-- <div class='stats-footer-container'>
+            <h4>Created: <%= @created_at %> </h4>
+          </div> -->
+
+          <div class='stats-footer-container'>
+            <h4>Number of likes: <%= @number_of_likes %></h4>
           </div>
 
-          <div class='row footer-row'>
-            <div class='col-md-6' style='margin: auto;'>
-              <!-- <div class='stats-footer-container'>
-                <h4>Created: <%= @created_at %> </h4>
-              </div> -->
-
+          <div class='stats-like-button'>
+            <% if @like_button %>
+              <%= form_tag "/book_likes", style:"", method: :post do %>
+                <input type="hidden" name="book_id" value="<%= @book.id %>">
+                <button type="submit" class="btn btn-primary book-button-short like-button">
+                  <i class="fa fa-thumbs-o-up prefix" aria-hidden="true"></i>  LIKE
+                </button>
+              <% end %>
+            <% elsif @already_liked %>
               <div class='stats-footer-container'>
-                <h4>Number of likes: <%= @number_of_likes %></h4>
+                <h5>You already liked this book.</h5>
               </div>
-
-              <div class='stats-like-button'>
-                <% if @like_button %>
-                  <%= form_tag "/book_likes", style:"", method: :post do %>
-                    <input type="hidden" name="book_id" value="<%= @book.id %>">
-                    <button type="submit" class="btn btn-primary book-button-short like-button">
-                      <i class="fa fa-thumbs-o-up prefix" aria-hidden="true"></i>  LIKE
-                    </button>
-                  <% end %>
-                <% elsif @already_liked %>
-                  <div class='stats-footer-container'>
-                    <h5>You already liked this book.</h5>
-                  </div>
-                <% else %>
-                <% end %>
-              </div>
-            </div>
+            <% else %>
+            <% end %>
           </div>
-
         </div>
       </div>
+
     </div>
+  </div>
+</div>
 
     
 
