@@ -74,6 +74,12 @@ class BooksController < ApplicationController
 			end
 		end
 
+		if current_user
+			@like_button = true
+		else
+			@like_button = false
+		end
+
 
 		
 	end
@@ -90,14 +96,14 @@ class BooksController < ApplicationController
 			if (params[:reddit_username] == "" && params[:twitter_username] == "")
 				if params[:url] == ""
 					puts "URL isnt here"
-					flash[:danger] = "Please pick a url or username"
+					flash[:danger] = "Please pick 1 url or username"
 					redirect_to "/books/new"
 					return
 				end
 			else
 				if (params[:reddit_username] == "" && params[:twitter_username] == "")
 					puts "username isnt here"
-					flash[:danger] = "Please give a username or url"
+					flash[:danger] = "Please give 1 username or url"
 					redirect_to "/books/new"
 					return
 				end
@@ -106,7 +112,7 @@ class BooksController < ApplicationController
 			puts "Conditional File identifier"
 			if params[:file] == nil
 				puts "File not there"
-				flash[:danger] = "Please choose a url, file or username"
+				flash[:danger] = "Please choose 1 url, file or username"
 				redirect_to "/books/new"
 				return
 			end
@@ -267,9 +273,17 @@ class BooksController < ApplicationController
 		puts current_user.id
 		puts "*" * 100
 
-		if !BookLike.find_by(book_id: book_id, user_id: user_id)
-			@book_like = BookLike.create(book_id: book_id, user_id: user_id)
-		end
+		# if current_user
+		# 	begin
+				if !BookLike.find_by(book_id: book_id, user_id: user_id)
+					@book_like = BookLike.new(book_id: book_id, user_id: user_id)
+					@book_like.save(book_id: book_id, user_id: user_id)
+				end
+		# 	rescue
+		# 		p 'error'
+		# 		flash[:error] = "You can't like books unless you are logged in."
+		# 	end
+		# end
 
 	end
 

@@ -118,11 +118,18 @@
               </div>
 
               <div class='stats-like-button'>
-                <%= form_tag "/book_likes", style:"", method: :post do %>
-                  <input type="hidden" name="book_id" value="<%= @book.id %>">
-                  <button type="submit" class="btn btn-primary book-button-short like-button">
-                    <i class="fa fa-thumbs-o-up prefix" aria-hidden="true"></i>  LIKE
-                  </button>
+                <% if @like_button %>
+                  <%= form_tag "/book_likes", style:"", method: :post do %>
+                    <input type="hidden" name="book_id" value="<%= @book.id %>">
+                    <button type="submit" class="btn btn-primary book-button-short like-button">
+                      <i class="fa fa-thumbs-o-up prefix" aria-hidden="true"></i>  LIKE
+                    </button>
+                  <% end %>
+                <% elsif @already_liked %>
+                  <div class='stats-footer-container'>
+                    <h5>You already liked this book.</h5>
+                  </div>
+                <% else %>
                 <% end %>
               </div>
             </div>

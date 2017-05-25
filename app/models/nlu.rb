@@ -17,13 +17,13 @@ class Nlu # Natural Language Understanding
 
 		if query_results['keywords']
 			stats[:keywords] = query_results['keywords'][0..4]
-			puts "*" * 100
-			puts 'if was triggered'
-			puts "*" * 100
+			# puts "*" * 100
+			# puts 'if was triggered'
+			# puts "*" * 100
 		else # if the analysis was not performed, return blank objects
-			puts "*" * 100
-			puts 'else was triggered'
-			puts "*" * 100
+			# puts "*" * 100
+			# puts 'else was triggered'
+			# puts "*" * 100
 			stats[:keywords] = []
 			stats[:emotions_summary] = emotions_summary
 			return stats
@@ -91,13 +91,13 @@ class Nlu # Natural Language Understanding
 		# or express emotion scores as % total of the whole document
 		# start by adding all the emotions up for a total score												
 		(emotions_summary.reject {|emotion, score | emotion == 'sentiment' }).each do | emotion, score | 
-			puts "*" * 100
-			puts emotions_summary
-			puts "*" * 100
+			# puts "*" * 100
+			# puts emotions_summary
+			# puts "*" * 100
 			all_emotions_total += score
 		end
 
-		puts all_emotions_total
+		# puts all_emotions_total
 
 		(emotions_summary.reject {|emotion, score | emotion == 'sentiment' }).each do | emotion, score | # next, change the scores to their percent of the total
 			emotions_summary[emotion] = ((score / all_emotions_total) * 100).round(2)
