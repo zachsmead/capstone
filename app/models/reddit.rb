@@ -4,6 +4,10 @@ class Reddit
 		input = Unirest.get(url + '.json').body
 		output_string = ""
 
+		if input['error']
+			return input['error']
+		end
+
 		if input[0]["data"]["children"][0]["data"]["selftext"]
 			self_post = input[0]["data"]["children"][0]["data"]["selftext"]
 			output_string += self_post
@@ -32,6 +36,8 @@ class Reddit
 		comment_json = Unirest.get(
 			'https://reddit.com/u/' + username + '/comments.json?sort=top&count=200&after=' + next_page
 		).body
+
+
 		comment_array = comment_json['data']['children']
 
 		comment_counter = 0

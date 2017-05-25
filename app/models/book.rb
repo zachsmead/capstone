@@ -83,14 +83,15 @@ class Book < ApplicationRecord
 		elsif twitter_username
 			# perform the text grab on all the username's tweets
 			twitter_client = TwitterGrab.new
+			
 			tweets = twitter_client.get_all_tweets(twitter_username) # get all the tweets from the user
 			webpage_text = twitter_client.tweets_into_string(tweets)
-
 			if webpage_text.length > 20000
 				type = 'book'
 			else
 				type = 'page'
 			end
+
 		elsif reddit_username
 			# grab all the user's comments
 			webpage_text = Reddit.grab_user_comments(reddit_username, '')
@@ -102,6 +103,7 @@ class Book < ApplicationRecord
 			# s3_title = webpage.at('title').inner_text[0..45].parameterize('_') # set a title based on the webpage title
 		end
 		
+
 		page_frequencies = Book.breakdown(webpage_text, type)
 
 		# Make a javascript file in the bucket, give it a unique name using book object's id
@@ -115,6 +117,8 @@ class Book < ApplicationRecord
 		# ^ run the method s3_store_scraped_content to store the scraped content, which also returns the public url of that stored object
 
 		return attributes
+
+
 	end
 
 

@@ -56,7 +56,7 @@ class BooksController < ApplicationController
 			if @score < -0.30 
 				@sentiment_word = 'Negative'
 			elsif -0.30 <= @score && @score < -0.10
-				@sentiment_word = 'Somewhat negative'
+				@sentiment_word = 'Fairly negative'
 			elsif -0.10 <= @score && @score < -0.07
 				@sentiment_word = 'Slightly negative'
 			elsif -0.07 <= @score && @score < 0.07
@@ -86,7 +86,7 @@ class BooksController < ApplicationController
 			if (params[:reddit_username] == "" && params[:twitter_username] == "")
 				if params[:url] == ""
 					puts "URL isnt here"
-					flash[:danger] = "Please pick a url or file"
+					flash[:danger] = "Please pick a url or username"
 					redirect_to "/books/new"
 					return
 				end
@@ -102,30 +102,42 @@ class BooksController < ApplicationController
 			puts "Conditional File identifier"
 			if params[:file] == nil
 				puts "File not there"
-				flash[:danger] = "Please choose a url or file"
+				flash[:danger] = "Please choose a url, file or username"
 				redirect_to "/books/new"
 				return
 			end
 		end
 
-		if params[:file] && params[:title] == "" # check for title. if there isn't one, make one.
-			params[:title] = File.basename(params[:file].original_filename, '.txt').parameterize('_')
-		elsif params[:url] && params[:url] != "" && params[:title] == "" # url was given
-			if params[:url].starts_with?("https://www.reddit.com") || (params[:url].starts_with?("www.reddit.com") && params[:url].include?("/comments/"))
-				webpage = Nokogiri::HTML(
-					open(
-						params[:url],
-						"User-Agent" => "OpenBooks"
-					) 
-				)
-				params[:title] = webpage.at('title').inner_text
-			else
-				webpage = Nokogiri::HTML(open params[:url])
-				params[:title] = webpage.at('title').inner_text
+		begin
+			if params[:file] && params[:title] == "" # check for title. if there isn't one, make one.
+				params[:title] = File.basename(params[:file].original_filename, '.txt').parameterize('_')
+			elsif params[:url] && params[:url] != "" && params[:title] == "" # url was given
+				if params[:url].starts_with?("https://www.reddit.com") || (params[:url].starts_with?("www.reddit.com") && params[:url].include?("/comments/"))
+					webpage = Nokogiri::HTML(
+						open(
+							params[:url],
+							"User-Agent" => "OpenBooks"
+						) 
+					)
+					params[:title] = webpage.at('title').inner_text
+				else
+					begin
+						webpage = Nokogiri::HTML(open params[:url])
+						params[:title] = webpage.at('title').inner_text
+					rescue
+						flash[:error] = "The URL didn't give a response."
+						redirect_to "/"
+						return
+					end
+				end
+			elsif params[:url] == "" && (params[:reddit_username] != "" || params[:twitter_username] != "")
+				params[:title] = '/u/' + params[:reddit_username] if params[:reddit_username] != ""
+				params[:title] = '@' + params[:twitter_username] if params[:twitter_username] != ""
 			end
-		elsif params[:url] == "" && (params[:reddit_username] != "" || params[:twitter_username] != "")
-			params[:title] = '/u/' + params[:reddit_username] if params[:reddit_username] != ""
-			params[:title] = '@' + params[:twitter_username] if params[:twitter_username] != ""
+		rescue
+			flash[:error] = "The title or URL was not acceptable"
+			redirect_to "/"
+			return
 		end
 
 
@@ -135,67 +147,98 @@ class BooksController < ApplicationController
 
 
 		if params[:file] # this means that a file was uploaded
-			book_url = Book.s3_text_upload(params) # takes in params, stores text as s3 obj, returns a url for the obj
 
-			@book = Book.new(title: params[:title], card_title: params[:card_title], url: book_url)
-			@book.save # save the book so it has an id when we pass it to the wordcount json builder
+			begin
+				book_url = Book.s3_text_upload(params) # takes in params, stores text as s3 obj, returns a url for the obj
+			rescue
+				flash[:error] = "Upload failed."
+				redirect_to "/"
+				return
+			end
 
-			book_json_url = Book.s3_text_upload_json(@book)
+			begin
+				@book = Book.new(title: params[:title], card_title: params[:card_title], url: book_url)
+				@book.save # save the book so it has an id when we pass it to the wordcount json builder
 
-			@book.update(book_cloud_url: book_json_url)
+				book_json_url = Book.s3_text_upload_json(@book)
+
+				@book.update(book_cloud_url: book_json_url)
+			rescue
+				flash[:error] = "The analysis failed for this text."
+				redirect_to "/"
+				return
+			end
 
 		elsif params[:url] && params[:url] != "" # this means that a webpage url was given
 			title = params[:title]
 			url = params[:url]
 
-			fixed_url = Book.fix_url(url)
+			begin
+				fixed_url = Book.fix_url(url)
 
-			@book = Book.new(title: title, card_title: params[:card_title], url: fixed_url)
-			@book.save
+				@book = Book.new(title: title, card_title: params[:card_title], url: fixed_url)
+				@book.save
 
-			attributes = Book.s3_web_content_json(@book)
+				attributes = Book.s3_web_content_json(@book)
 
-			@book.update(
-				book_cloud_url: attributes[:book_cloud_url],
-				scraped_content_url: attributes[:scraped_content_url]
-			)
+				@book.update(
+					book_cloud_url: attributes[:book_cloud_url],
+					scraped_content_url: attributes[:scraped_content_url]
+				)
+			rescue
+				flash[:error] = "URL wordgrab failed."
+				redirect_to "/"
+				return
+			end
 		elsif params[:url] == "" # this means a reddit or twitter username was given
 			if params[:twitter_username] != "" && params[:reddit_username] == ""
 				title = params[:title]
 				twitter_username = params[:twitter_username]
 				url = 'https://twitter.com/' + twitter_username
 
-				@book = Book.new(
-					title: title, 
-					card_title: params[:card_title], 
-					twitter_username: twitter_username)
-				@book.save
+				begin 
+					@book = Book.new(
+						title: title, 
+						card_title: params[:card_title], 
+						twitter_username: twitter_username)
+					@book.save
 
-				attributes = Book.s3_web_content_json(@book)
+					attributes = Book.s3_web_content_json(@book)
 
-				@book.update(
-					url: url,
-					book_cloud_url: attributes[:book_cloud_url],
-					scraped_content_url: attributes[:scraped_content_url]
-				)
+					@book.update(
+						url: url,
+						book_cloud_url: attributes[:book_cloud_url],
+						scraped_content_url: attributes[:scraped_content_url]
+					)
+				rescue
+					flash[:error] = "Twitter failed, probably because of a typo or the user doesn't exist."
+					redirect_to "/"
+					return
+				end
 			elsif params[:reddit_username] != "" && params[:twitter_username] == ""
 				title = params[:title]
 				reddit_username = params[:reddit_username]
 				url = 'https://reddit.com/u/' + reddit_username
 
-				@book = Book.new(
-					title: title, 
-					card_title: params[:card_title], 
-					reddit_username: reddit_username)
-				@book.save
+				begin
+					@book = Book.new(
+						title: title, 
+						card_title: params[:card_title], 
+						reddit_username: reddit_username)
+					@book.save
 
-				attributes = Book.s3_web_content_json(@book)
+					attributes = Book.s3_web_content_json(@book)
 
-				@book.update(
-					url: url,
-					book_cloud_url: attributes[:book_cloud_url],
-					scraped_content_url: attributes[:scraped_content_url]
-				)
+					@book.update(
+						url: url,
+						book_cloud_url: attributes[:book_cloud_url],
+						scraped_content_url: attributes[:scraped_content_url]
+					)
+				rescue
+					flash[:error] = "Reddit failed, probably because of a typo or the user doesn't exist."
+					redirect_to "/"
+					return
+				end
 			end
 		end # end if statement
 		
