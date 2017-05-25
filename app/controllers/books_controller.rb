@@ -14,6 +14,7 @@ class BooksController < ApplicationController
 
 	def show
 		@book = Book.find_by(id: params[:id])
+		@number_of_likes = @book.users.length
 
 		# this method .updates @book.analysis_url if it doesn't already have a value
 

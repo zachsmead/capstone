@@ -109,6 +109,9 @@
 
           <div class='row'>
             <div>
+              <%= @number_of_likes %>
+            </div>
+            <div>
               <%= form_tag "/book_likes", style:"display: inline-block; padding-top: 15px; padding-left: 100px;", method: :post do %>
                 <input type="hidden" name="book_id" value="<%= @book.id %>">
                 <button type="submit" class="btn btn-primary book-button-short like-button">LIKE</button>
