@@ -1,5 +1,10 @@
 <div class="index-header-box">
-	<h1>Books &amp; wordclouds</h1>
+	<% if @title %>
+		<h1><%= @title %></h1>
+	<% else %>
+		<h1>Books &amp; wordclouds</h1>
+	<% end %>
+
 </div>
 
 <div class="" style="margin-bottom: 100px;">

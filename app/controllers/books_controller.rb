@@ -2,6 +2,7 @@ class BooksController < ApplicationController
 
 	def index
 		if params[:liked] == 'self'
+			@title = 'Your Books Profile'
 			@books = current_user.books
 		else
 			@books = Book.all
