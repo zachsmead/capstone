@@ -4,9 +4,6 @@ class Reddit
 		input = Unirest.get(url + '.json').body
 		output_string = ""
 
-		if input['error']
-			return input['error']
-		end
 
 		if input[0]["data"]["children"][0]["data"]["selftext"]
 			self_post = input[0]["data"]["children"][0]["data"]["selftext"]

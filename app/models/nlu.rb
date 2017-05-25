@@ -29,50 +29,58 @@ class Nlu # Natural Language Understanding
 			return stats
 		end
 
-
-		query_results['keywords'].each do | keyword | # loop through all keywords in the result
-			
-			if keyword['sentiment']
-				if !emotions_summary['sentiment']					  # add up all the keywords' relevance-weighted sentiment
-					emotions_summary['sentiment'] = keyword['sentiment']['score'] #* keyword['relevance']
-				else
-					emotions_summary['sentiment'] += keyword['sentiment']['score'] #* keyword['relevance']
-				end
-			end
+		if !query_results['entities']
+			query_results['entities'] = []
+		end
 
 
-			if keyword['emotion'] 													# if the keyword has an emotion hash,
-				keyword['emotion'].each do | emotion, score | # add those up weighted by relevance
-					if !emotions_summary[emotion]
-						emotions_summary[emotion] = score #* keyword['relevance']
+		if query_results['keywords']
+			query_results['keywords'].each do | keyword | # loop through all keywords in the result
+				
+				if keyword['sentiment']
+					if !emotions_summary['sentiment']					  # add up all the keywords' relevance-weighted sentiment
+						emotions_summary['sentiment'] = keyword['sentiment']['score'] #* keyword['relevance']
 					else
-						emotions_summary[emotion] += score #* keyword['relevance']
+						emotions_summary['sentiment'] += keyword['sentiment']['score'] #* keyword['relevance']
 					end
 				end
-			end
-		end # end query_results['keywords'].each loop
-
-		query_results['entities'].each do | entity | # loop through all entities in the result
-			
-			if entity['sentiment']
-				if !emotions_summary['sentiment']					  # add up all the entities' relevance-weighted sentiment
-					emotions_summary['sentiment'] = entity['sentiment']['score'] #* entity['relevance']
-				else
-					emotions_summary['sentiment'] += entity['sentiment']['score'] #* entity['relevance']
-				end
-			end
 
 
-			if entity['emotion'] 													# if the entity has an emotion hash,
-				entity['emotion'].each do | emotion, score | # add those up weighted by relevance
-					if !emotions_summary[emotion]
-						emotions_summary[emotion] = score #* entity['relevance']
-					else
-						emotions_summary[emotion] += score #* entity['relevance']
+				if keyword['emotion'] 													# if the keyword has an emotion hash,
+					keyword['emotion'].each do | emotion, score | # add those up weighted by relevance
+						if !emotions_summary[emotion]
+							emotions_summary[emotion] = score #* keyword['relevance']
+						else
+							emotions_summary[emotion] += score #* keyword['relevance']
+						end
 					end
 				end
-			end
-		end # end query_results['entities'].each loop
+			end # end query_results['keywords'].each loop
+		end
+
+		if query_results['entities']
+			query_results['entities'].each do | entity | # loop through all entities in the result
+				
+				if entity['sentiment']
+					if !emotions_summary['sentiment']					  # add up all the entities' relevance-weighted sentiment
+						emotions_summary['sentiment'] = entity['sentiment']['score'] #* entity['relevance']
+					else
+						emotions_summary['sentiment'] += entity['sentiment']['score'] #* entity['relevance']
+					end
+				end
+
+
+				if entity['emotion'] 													# if the entity has an emotion hash,
+					entity['emotion'].each do | emotion, score | # add those up weighted by relevance
+						if !emotions_summary[emotion]
+							emotions_summary[emotion] = score #* entity['relevance']
+						else
+							emotions_summary[emotion] += score #* entity['relevance']
+						end
+					end
+				end
+			end # end query_results['entities'].each loop
+		end
 
 
 		# finally, average all the emotion scores
