@@ -108,10 +108,14 @@
       </div>
 
       <div class='row footer-row'>
-        <div class='col-md-6' style='margin: auto;'>
+        <div class='col-md-12' style='text-align: center;'>
           <!-- <div class='stats-footer-container'>
             <h4>Created: <%= @created_at %> </h4>
           </div> -->
+
+          <div class='stats-footer-container'>
+            <h4><a href='<%= @book.analysis_url %>'>View full stats</a></h4>
+          </div>
 
           <div class='stats-footer-container'>
             <h4>Number of likes: <%= @number_of_likes %></h4>
