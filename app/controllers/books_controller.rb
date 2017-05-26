@@ -31,6 +31,10 @@ class BooksController < ApplicationController
 			@emotions_summary = stats[:emotions_summary]
 			@keywords = stats[:keywords]
 
+			@keywords.each do |keyword| # truncate extra-long keywords so they dont mess up the keyword chart
+				keyword['text'] = keyword['text'].truncate(20)
+			end
+
 
 
 			blank_keyword = {
