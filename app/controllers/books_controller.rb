@@ -241,7 +241,10 @@ class BooksController < ApplicationController
 						title: title, 
 						card_title: params[:card_title], 
 						reddit_username: reddit_username)
-					@book.save
+
+					if @book.save
+						puts 'Book got saved'
+					end
 
 					attributes = Book.s3_web_content_json(@book)
 
