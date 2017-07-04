@@ -100,6 +100,7 @@ class Book < ApplicationRecord
 		elsif reddit_username
 			# grab all the user's comments
 			webpage_text = Reddit.grab_user_comments(reddit_username, '')
+			puts webpage_text
 			type = 'page'
 		end
 		
