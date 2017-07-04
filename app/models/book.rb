@@ -100,12 +100,13 @@ class Book < ApplicationRecord
 		elsif reddit_username
 			# grab all the user's comments
 			webpage_text = Reddit.grab_user_comments(reddit_username, '')
-			puts webpage_text
+			# puts webpage_text
 			type = 'page'
 		end
 		
 
 		page_frequencies = Book.breakdown(webpage_text, type)
+		puts page_frequencies
 
 		# Make a javascript file in the bucket, give it a unique name using book object's id
 		frequency_count_json = S3_BUCKET.objects.create(
