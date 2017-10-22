@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>OpenBooks</title>
+    <title>BookSkip</title>
     <%= csrf_meta_tags %>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.0/css/font-awesome.min.css">
@@ -28,7 +28,7 @@
               <span class="navbar-toggler-icon"></span>
           </button>
           <a class="navbar-brand" href="/">
-              <strong>OpenBooks</strong>
+              <strong>BookSkip</strong>
           </a>
           <div class="collapse navbar-collapse" id="navbarNav1">
               <ul class="navbar-nav mr-auto">
@@ -52,11 +52,11 @@
                       </li>
 
                   <% else %>
+                      <!-- <li class="nav-item"> -->
+                          <!-- <a class="nav-link" href="/users/sign_in">Login</a> -->
+                      <!-- </li> -->
                       <li class="nav-item">
-                          <a class="nav-link" href="/users/sign_in">Login</a>
-                      </li>
-                      <li class="nav-item">
-                          <a class="nav-link" href="<%=user_facebook_omniauth_authorize_path%>">Facebook Login</a>
+                          <a class="nav-link" href="<%=user_facebook_omniauth_authorize_path%>">Login with Facebook</a>
                       </li>
                       <li class="nav-item dropdown btn-group">
                           <a class="nav-link dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Books</a>
